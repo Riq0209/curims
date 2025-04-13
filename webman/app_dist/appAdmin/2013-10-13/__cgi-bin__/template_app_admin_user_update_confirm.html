@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Untitled Document</title>
+</head>
+
+<body>
+<!-- start_view_ //-->
+<b>Update User</b>
+<br/><br/>
+<table width="640" border="0" align="center" cellpadding="1" cellspacing="1" bgcolor="#CCCCCC">
+  <tr>
+    <td align="center" bgcolor="#FFFFFF"><br>
+        <form method="POST" action="./index.cgi">
+          <!-- dynamic_content_ name=form_hidden_field //-->
+		  <strong><font color="#990000" size="2">Update user information as below:</font></strong><br>
+		  <br>
+          <table width="480" border="0" cellpadding="1" cellspacing="1" bgcolor="#CCCCCC">
+            <tr bgcolor="#FFFFFF">
+              <td width="100" align="right"><strong><font size="2">
+              <!-- start_datahtml_ name=form_db_field //-->Login Name: </font></strong></td>
+              <td><font size="2">$db_login_name_<font></td>
+            </tr>
+            <tr bgcolor="#FFFFFF">
+              <td width="100" align="right"><strong><font size="2">Password:</font></strong></td>
+              <td><font size="2">*******</font></td>
+            </tr>
+            <tr bgcolor="#FFFFFF">
+              <td width="100" align="right"><strong><font size="2">User Full Name: </font></strong></td>
+              <td><font size="2">$db_full_name_</font></td>
+            </tr>
+            <tr valign="top" bgcolor="#FFFFFF">
+              <td width="100" align="right"><strong><font size="2">Description:</font></strong></td>
+              <td><font size="2">$db_description_<strong><font size="2">
+                <!-- end_datahtml_ //-->
+              </font></strong></font></td>
+            </tr>
+            <tr bgcolor="#FFFFFF">
+              <td width="100">&nbsp;</td>
+              <td>
+                <input name="button_submit" type="submit" id="button_submit" value="Confirm">
+                <input name="button_submit" type="submit" id="button_submit" value="Edit">
+                <input name="button_submit" type="submit" id="button_submit" value="Cancel">
+              </td>
+            </tr>
+          </table>
+        </form>
+        <br>
+    </td>
+  </tr>
+</table>
+<!-- end_view_ //-->
+</body>
+</html>

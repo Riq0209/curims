@@ -1,0 +1,262 @@
+#_title_
+DB_Utilities
+#_end_
+
+#_des_
+The core module to simplify database operations based on CPAN's DBI module. 
+#_end_
+
+#_dep_
+### <b>CPAN's Modules:</b><br />
+### <ul>
+### <li>DBI (Composition)</li>
+### </ul>
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>GMM_CGI (Composition)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. Instantiation and Basic Parameter Setting</b><p /> 
+### The <c>$db_conn</c> is an instance of database connection created using  
+### DBI module.
+#_end_
+my $dbu = new DB_Utilities;
+$dbu->set_DBI_Conn($db_conn);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. DB Connection Configuration File</b><p /> 
+### An alternative to create <c>$db_conn</c> instance via configuration file. 
+#_end_
+my $db_conn = $dbu->make_DBI_Conn("dbi_connection.conf");
+#_doc_
+### The <c>dbi_connection.conf</c> configuration file is simply a text based 
+### file contains database connection information as follows:<p />
+### <c>
+### db_host      = localhost <br />
+### db_driver    = mysql <br />
+### db_name      = ??? <br />
+### db_user_name = ??? <br />
+### db_password  = ??? <p />
+### </c> 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. HTML Tag Characters Escape</b><p />
+### Set <c>$num</c> to '1' to escape basic HTML's tag characters ('&', 
+### '<', '>', '"') for database item fields values acquired using 
+### <c>$dbu->get_Item(...)</c> and <c>$dbu->get_Items(...)</c> member 
+### functions (see section 6). These basic HTML's tag characters set will be 
+### converted to ("&amp;amp;", "&amp;lt;", "&amp;gt;", "&amp;quot;") 
+### respectively.
+#_end_
+$dbu->set_Escape_HTML_Tag($num);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Database Table Selection</b><p />
+### Table name that will be affected by the database operations made via  
+### DB_Utilities moudule member functions.
+#_end_
+$dbu->set_Table($table_name);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>5. Basic Insert/Update/Delete Operations</b><p />
+### Functions to simplified insert/update/delete operations. The 
+### <c>$exec_opt</c> can be set to '0' to only prepare the sql statement. If 
+### left unset the default is '1'.
+#_end_
+
+$dbu->insert_Row($fields, $values, $exec_opt);
+$dbu->update_Item($fields, $values, $key_fields, $key_values, $exec_opt);
+$dbu->delete_Item($key_fields, $key_values, $exec_opt);
+
+#_doc_
+### The arguments <c>$fields</c>, <c>$values</c>, <c>$key_fields</c>, and 
+### <c>$key_values</c> are string to represent database item fields and values 
+### separated by single space characters. Below is an example of update 
+### function call and its equivalent SQL statement:
+### <p>
+### <c>
+### $dbu->set_Table("registration");<br />
+### $dbu->update_Item("programme course", "Computer\\ Science SCK", 
+###                   "session semester", "2011/2012 1");<br />
+### </c>
+### </p>
+### <b>SQL:</b> 
+### <sql>update registration set programme='Computer Science', course='SCK' 
+### where session='2011/2012' and semester='1'</sql>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>6. Database Items Retrieval</b><p />
+### The function <c>$dbu->get_Item(...)</c> will return single row/field 
+### database item. Use <c>$dbu->get_Items(...)</c> function for multi 
+### rows/fields database items retrieval.
+#_end_
+my $field_value = $dbu->get_Item($field_name, $key_fields, $key_values);
+
+my @ahr = $dbu->get_Items($fields, $key_fields, $key_values, $order_fields, $distinct_mode);
+#_doc_
+### The argument <c>$field_name</c> is a string of single field name while 
+### <c>$fields</c>, <c>$key_fields</c>, and <c>$key_values</c> are fields 
+### names and values separated by single space characters. The argument
+### <c>$order_fields</c> is part of complete SQL statement that normally   
+### placed just after the <sql>"order by"</sql> sentence. 
+### The <c>$distinct_mode</c> can be set to '1' or '0' (default is 0). The 
+### arguments <c>$key_fields</c>, <c>$key_values</c>, <c>$order_fields</c>, 
+### and <c>$distinct_mode</c> are optional. <p />
+### 
+### The <c>@ahr</c> list variable is an array of hash reference. The code    
+### line: <c>$ahr[0]->{course};</c> is an example to get the value of item 
+### field <c>course</c> at the first row of the returned list. 
+### 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>7. Other Item's Information Queries</b><p />
+#_end_
+my $max_val = $dbu->get_MAX_Item($field_name, $key_fields, $key_values);
+my $min_val = $dbu->get_MIN_Item($field_name, $key_fields, $key_values);
+
+my $found = $dbu->find_Item($key_fields, $key_values);
+my $total = $dbu->count_Item($key_fields, $key_values, $distinct_mode);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>8. SQL String Information</b><p />
+### Return the exact SQL string generated when/after functions explained in 
+### sections 5, 6, and 7 are called.
+#_end_
+my $sql_str = $dbu->get_SQL;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>9. SQL Keys Strings</b><p />
+### The <c>$key_fields</c> and <c>$key_values</c> arguments passed to member 
+### functions describe in sections 5, 6, and 7 are used to generate simple 
+### SQL conditional keys strings coresspond to intended database operations. 
+### If there are more than single field-value pairs represent by these two 
+### arguments then they are combined using <sql>"and"</sql> SQL conditional 
+### statement (see example in section 5).<p />
+### Users can provide more complex keys strings inside the generated SQL 
+### command by using <c>$dbu->set_Keys_Str($key_str)</c> function. The 
+### <c>$key_str</c> is any possible valid SQL conditional statements not 
+### including the SQL's <sql>"where"</sql> clause.
+
+### 
+#_end_
+$dbu->set_Keys_Str($keys_str);
+### next is to call the database operations functions
+...
+...
+$dbu->set_Keys_Str(undef); 
+#_doc_
+### The line <c>$dbu->set_Keys_Str(undef)</c> must be called after each call 
+### to <c>$dbu->set_Keys_Str($keys_str)</c> to reset the key string value or
+### it will be bring forward and effect the next different functions call.
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>10. Unique number/key generator functions</b><p />
+### The argument <c>$field_name</c> is table's primary key type of integer. 
+### If ignored, by default <c>$min_num</c> is set to 100000 and 
+### <c>$max_num</c> is set to 999999
+#_end_
+my $rndnum = $dbu->get_Unique_Random_Num($field_name, $min_num, $max_num);
+
+#_doc_
+### The argument <c>$field_name</c> is table's primary key type of 
+### <sql>varchar($length)</sql> with suggested minimum length is 6, if ignored 
+### <c>$length</c> by default is set to 6. The returned result 
+### <c>$rnd36base</c> is a string represent 32 based number constructed by the
+### combination of 32 characters (<c>0,...,9,A,...,Z</c>).
+#_end_
+my $rnd36base = $dbu->get_Unique_Random_36Base($field_name, $length);
+
+#_doc_
+### The argument <c>$field_name</c> is table's primary key type of
+### <sql>binary($length)</sql> with suggested minimum length is 6, if ignored 
+### <c>$length</c> by default is set to 6. The returned result 
+### <c>$rnd62base</c> is a string represent 62 based number constructed by the
+### combination of 62 characters (<c>0,...,9,A,...,Z,a,...,z</c>).
+#_end_
+my $rnd62base = $dbu->get_Unique_Random_62Base($field_name, $length); 
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>11. Miscellaneous functions on Database Table and Field</b><p />
+### Get the list of all tables from current connected database.
+#_end_
+my @table_list = $dbu->get_Table_List;
+
+#_doc_
+### Check the existence of current selected table.
+#_end_
+my $exist = $dbu->table_Exist;
+
+#_doc_
+### Get detail structure/schema of current selected table.
+#_end_
+my @ahr = $dbu->get_Table_Structure;
+
+#_doc_
+### Check if field <c>$field_name</c> exist in current selected table.
+#_end_
+my $var_ = $dbu->field_Exist($field_name);
+
+#_doc_
+### Drop current selected table.
+#_end_
+$dbu->drop_Table;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>12. Item Access Control</b><p />
+### Functions to enable database item access control based on user's 
+### authentication via framework's "Convention over Configurations" (CoC) 
+### implementation.
+#_end_
+$dbu->set_DB_Item_Auth_Info($login_name, \@groups, "webman_???_db_item_auth", "webman_???_user_group");
+$dbu->set_Error_Back_Link($error_back_link_content_);
+
+#_doc_
+### Check if database item access control is applied on particular field with 
+### name <c>$field_name</c> and value <c>$field_value</c> for operation type
+### <c>$operation</c>. The <c>$operation</c> can be "INSERT", "UPDATE", or 
+### "DELETE".
+#_end_
+my %field_nv = ($field_name => $field_value);               
+my $db_auth = $dbu->check_DB_Item_Auth($operation, \%field_nv);
+
+if (!$db_auth) {
+    $db_item_access_error = $dbu->get_Auth_Error_Message;
+    
+    ### display and handle item access control error
+    ...
+    ...
+    ...
+}
+
+#_doc_
+### Check and handle database item access control after database  
+### operation (delete) is executed.
+#_end_
+$dbu->delete_Item("key_1 ... key_n", "val_1 ... val_n");   
+
+$db_item_access_error = $dbu->get_Auth_Error_Message;
+
+if ($db_item_access_error ne "") {
+    ### display and handle item access control error
+    ...
+    ...
+    ...
+}

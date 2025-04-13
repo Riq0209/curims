@@ -1,0 +1,451 @@
+#_title_
+webman_calendar_weekly_timerow
+#_end_
+
+#_des_
+### Component-type module that provides interactive navigation (weekly) on  
+### calendar data and facilities to detail date's content at time level.
+### 
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>Calendar (Composition)</li>
+### <li>Table_List_Data (Composition)</li>
+### <li>TLD_HTML_Map (Composition)</li>
+### </ul>
+### <br />
+### <b>Webman-framework's Component-type Modules:</b><br />
+### <ul>
+### <li>CGI_Component::webman_CGI_component::webman_calendar_weekly (Inheritance)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. CGI Parameters</b>
+### <p />
+### Below are CGI parameters that provide control to and passed by 
+### webman_calendar_interactive instance at application run-time. 
+#_end_
+calendar_key_date => "yyyy-mm-dd"
+calendar_ymd_selected => "yyyy-mm-dd" 
+calendar_day => 1, 2, ... , 7
+calendar_hms_start => "hh:mm:ss" 
+calendar_hms_end => "hh:mm:ss"
+#_doc_
+### Default active week selected is system's current active week. Changes on 
+### selected active week can be done by passing, any date ranges inside the 
+### intended week to the module via <c>calendar_key_date</c> CGI parameter. 
+### The CGI parameters <c>calendar_ymd_selected</c>, <c>calendar_day</c>, 
+### <c>calendar_hms_start</c>, and <c>calendar_hms_end</c> are used to store 
+### the picked date, day number, start-time, and end-time when the module is 
+### used as calendar's date-time information picker through customization inside 
+### <c>customize_TLD</c> function (read section 5, code lines 156-171 and 
+### 176-205).
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. View Template</b>
+### <p />
+### Generally the template contains DYNAMIC_CONTENT template-elements, LIST 
+### template-elements, and a single standard HTML-form.
+### <p />
+### The first two DYNAMIC_CONTENT template-elements (lines 12 and 14) named 
+### <c>cal_prev_week</c> and <c>cal_prev_week</c> are used as place-holders 
+### for HTTP-GET links attribute to navigate calendar's weeks forward and 
+### backward. 
+### <p />
+### The next two LIST template-elements (lines 24 and 29-38) named 
+### <c>col_view_day</c> and <c>row_view_content</c> together with the word 
+### patterns <c>$tld_week_day_</c>, <c>$tld_week_date_</c>, 
+### <c>$tld_time_start_</c>, <c>$tld_time_end_</c>, <c>$tld_day1_content_</c> 
+### , <c>...</c>, and <c>$tld_day7_content_</c> are used as place-holders for 
+### selected week's days and date, date's time, and date-time's content. The 
+### word pattern <c>$tld_column_style_</c>, <c>$tld_day1_column_style_</c>, 
+### <c>...</c>, and  <c>$tld_day7_column_style_</c> are used to control 
+### days/date, date's time, and date-time's content columns presentation style  
+### using CSS. The <c>row_view_content</c> LIST template-element will becomes  
+### the row of times set by the hour ranges using code at line 14 in 
+### section 3. 
+### <p />
+### The standard HTML-form (lines 42-51) can be used by users to quickly jump 
+### to specific week by passing week's key date to the module via 
+### <c>calendar_key_date</c> CGI parameter (line 45). Inside the HTML-form 
+### there is also CGI template-element (line 48) with the word pattern 
+### <c>$cgi_link_id_</c> as a place-holder for the value of <c>link_id</c> 
+### input element. This input element is used as an entity to pass the parameter 
+### named <c>link_id</c> (via POST-method) which is the standard CGI parameter 
+### name used to refer nodes' IDs that construct the overall application's link 
+### structure. The logic is to use again node's link-id which is used to call 
+### webman_calendar_weekly_timerow component-type module previously.
+#_end_
+#_code_num_ 12-12,14-14,24-24,29-38,42-44:#ffdddd,45-45:#ddffdd,46-47:#ffdddd,48-48,49-51:#ffdddd 1
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<!-- start_view_ //-->
+<table border="1">
+  <tr>
+    <th colspan="8" align="center">
+      <a href="<!-- dynamic_content_ name=cal_prev_week //-->">&lt;&lt;</a>
+      | Weekly Calendar Title |
+      <a href="<!-- dynamic_content_ name=cal_next_week //-->">&gt;&gt;</a>
+    </th>
+  </tr>
+
+  <tr>
+    <td align="center" style="background-color:#b4c0f2;">
+    Time
+    </td>
+
+    <!-- start_list_ name=col_view_day //-->
+    <td align="center" style="$tld_column_style_">$tld_week_day_<br />$tld_week_date_</td>
+    <!-- end_list_ //-->
+  </tr>
+
+  <!-- start_list_ name=row_view_content //-->
+  <tr style="$tld_row_style_">
+    <td valign="top" style="$tld_time_column_style_" align="center">$tld_time_start_ - $tld_time_end_</td>
+    <td valign="top" style="$tld_day1_column_style_">$tld_day1_content_ </td>
+    <td valign="top" style="$tld_day2_column_style_">$tld_day2_content_ </td>
+    <td valign="top" style="$tld_day3_column_style_">$tld_day3_content_ </td>
+    <td valign="top" style="$tld_day4_column_style_">$tld_day4_content_ </td>
+    <td valign="top" style="$tld_day5_column_style_">$tld_day5_content_ </td>
+    <td valign="top" style="$tld_day6_column_style_">$tld_day6_content_ </td>
+    <td valign="top" style="$tld_day7_column_style_">$tld_day7_content_ </td>
+  </tr>
+  <!-- end_list_ //-->
+
+  <tr>
+    <form method="POST" action="./index.cgi">
+    <th colspan="8" align="center">
+        Week's Date (yyyy-mm-dd):
+        <input type="text" size="10" name="calendar_key_date">
+        <input type="submit" name="button_submit" value="Go">
+        <!-- start_cgihtml_ //-->
+        <input type="hidden" name="link_id" value="$cgi_link_id_">
+        <!-- end_cgihtml_ //-->
+    </th>
+    </form>
+  </tr>
+</table>
+<!-- end_view_ //-->
+</body>
+</html>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Instantiation and Basic Parameter Setting</b><p />
+### The arguments <c>$all</c>, <c>$odd</c>, <c>$even</c>, <c>$current</c>,
+### and <c>$selected</c> (lines 16-19) are CSS's strings code to control the 
+### presentation of HTML-table columns and rows used to arrange week's 
+### days/date/times and date-time's content.
+### The <c>$time_start</c> and <c>$time_end</c> arguments at 
+### lines 21 is times in the format of <c>"hh:mm:ss"</c>.
+#_end_
+#_code_num_ 16-19,21-21 1
+my $component = new webman_calendar_weekly_timerow;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+        
+#$component->set_Script_Ref_Name("index.cgi");
+#$component->set_Template_Default("template_???.html");
+
+### If key date is ignored the default would be the the current date.
+#$component->set_Key_Date("yyyy-mm-dd");
+
+### If ignored the default would be 8 for the $hour_start and 17 for
+### the $hour_end.
+#$component->set_Default_Hour_Range($hour_start, $hour_end);
+
+#$component->set_Default_Date_Column_Style($all, $odd, $even, $current, $selected);
+#$component->set_Default_Content_Column_Style($all, $odd, $even, $current, $selected);
+#$component->set_Default_Row_Style($all, $odd, $even, $current, $selected);
+#$component->set_Default_Cell_Style($current, $selected);
+
+#$component->add_Date_Time_Content("yyyy-mm-mm", $time_start, $time_end, $content);
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Component-type Generic Function Calls</b><p />
+#_end_
+$component->run_Task;
+$component->process_Content;
+$component->end_Task;
+
+my $content = $component->get_Content;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>5. Child Module for Customization</b><p />  
+### Most basic customization is to add content into specific calendar's 
+### date-time-cell, done inside the overriden <c>run_Task</c> hook function 
+### (line 57). Other more advanced and complex customization tasks are 
+### involving calendar's data-structure manipulations inside 
+### <c>customize_TLD</c> function.
+### <p />
+### Calendar's data-structure instance (<c>$tld</c>) passed to 
+### <c>customize_TLD</c> function (line 139) is actually Table_List_Data core 
+### module instance. There are four Table_List_Data instances involved. The 
+### first two instances are inherited from the base module 
+### (webman_calendar_weekly) of current base module 
+### (webman_calendar_weekly_timerow) and referenced internally by  
+### <c>$this->{tld_col_date}</c> and <c>$this->{tld_col_content}</c> 
+### scalars. Only <c>$this->{tld_col_date}</c> is manipulated as shown at 
+### lines 156-171. It's used to feed data to LIST template-element named 
+### <c>col_view_day</c> (see section 2).
+### <p />
+### The other two instances are locally from the current base module 
+### referenced internally by <c>$this->{tld_dtrc_data}</c> and 
+### <c>$this->{tld_dtrc_view}</c> scalars. Both are manipulated as shown at 
+### lines 150-152, 176-205, and 213-215. The <c>$this->{tld_dtrc_data}</c> is 
+### the real instance that holds the complete week's date-time information 
+### data structure before it's synchronized and mapped to 
+### <c>$this->{tld_dtrc_view}</c> (lines 213-215) for view purpose. Instance 
+### referenced by <c>$this->{tld_dtrc_view}</c> scalar is later used as data 
+### feeder to LIST template-element named <c>row_view_content</c> 
+### (see section 2).
+### <p />
+### To manipulate all these Table_List_Data's instances, <c>customize_TLD</c> 
+### function is called via <c>run_Task</c> hook function recalls while it was 
+### overriden (line 61). The mechanisms is actually the same chained from base 
+### module of current base module.
+### <p />
+### Read the comments included inside the skeleton code to get more detailed 
+### explanations for all possible customizations that could be made. 
+#_end_
+#_code_num_ 61-61,57-57,139-139,150-152:#ffdddd,156-171:ddffdd,176-205:#ffdddd,213-215:#ffffdd 1
+package <trp><i>child_module_name</i></trp>;
+
+use webman_calendar_weekly_timerow;
+
+@ISA=("webman_calendar_weekly_timerow");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    #$this->set_Key_Date("yyyy-mm-dd");
+
+    #$this->set_Default_Hour_Range("hour_start_", "hour_end_");
+
+    ### The CSS code $selected effect the implementation at lines 156-171. 
+    #$this->set_Default_Date_Column_Style($all, $odd, $even, $current, $selected);
+    #$this->set_Default_Content_Column_Style($all, $odd, $even, $current, $selected);
+    #$this->set_Default_Row_Style($all, $odd, $even, $current, $selected);
+    #$this->set_Default_Cell_Style($current, $selected);
+
+    ### Adding content to particular date and time ranges must be done before  
+    ### $this->generate_DTRC_TLD is called by $this->SUPER::run_Task().
+    #$this->add_Date_Time_Content("yyyy-mm-mm", $time_start, $time_end, $content);        
+    
+    ### Recalls run_Task from parent and grandparent modules will generate $this->{tld_col_data}, 
+    ### $this->{tld_col_content}, $this->{tld_dtrc_data}, and $this->{tld_dtrc_view} references.
+    $this->SUPER::run_Task();
+    
+    ### Enable the next two lines to really know how the instances
+    ### $this->{tld_col_date} & $this->{tld_col_content} are look like.
+    #$cgi->add_Debug_Text($this->{tld_col_date}->get_Table_List, __FILE__, __LINE__);
+    #$cgi->add_Debug_Text($this->{tld_col_content}->get_Table_List, __FILE__, __LINE__);
+    
+    ### Enable the next two lines to really know how the instances
+    ### $this->{tld_dtrc_data} & $this->{tld_dtrc_view} are look like.
+    #$cgi->add_Debug_Text($this->{tld_dtrc_data}->get_Table_List, __FILE__, __LINE__);
+    #$cgi->add_Debug_Text($this->{tld_dtrc_view}->get_Table_List, __FILE__, __LINE__);
+}
+
+sub process_Content {
+    $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    $this->set_Template_File($this->{template_default});
+    
+    #print "\$this->{template_default} = " . $this->{template_default} . "<br>";
+    
+    $this->SUPER::process_Content;  
+}
+
+sub process_so_type_ { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    $this->add_Content($te_content);
+    
+    #if ($this->get_Error eq "") {
+    #   $this->add_Content($te_content);
+        
+    #} else {
+    #   $this->add_Content($this->get_Error);
+    #}
+}
+
+### The next function will be mainly used to customize three types of table 
+### list data (TLD) instances' sructure which are $this->{tld_col_date}, 
+### $this->{tld_dtrc_data}, and $this->{tld_dtrc_view}. The instance 
+### $this->{tld_dtrc_data} has its basic columns values copied from 
+### $this->{tld_col_content}. The instances $this->{tld_col_date} and 
+### $this->{tld_col_content} have five identical column names which 
+### are 'column_style', 'current_date', 'week_day', 'week_date' and 'date_iso'.
+### The instance $this->{tld_col_content} has one extra column which is 
+### 'week_date_content' and will not involved in the customization since it 
+### only be used as a basic data feeder to $this->{tld_dtrc_data} instance. 
+### Next is the columns names exist inside $this->{tld_dtrc_data} and
+### $this->{tld_dtrc_view} TLD's instances
+###
+### $this->{tld_dtrc_data}: 'column_style', 'current_date', 'current_time', 
+###                         'week_day', 'week_date', 'week_date_time_content', 
+###                         'date_iso', 'time_start', and 'time_end'
+###
+### $this->{tld_dtrc_view}: 'row_style', 'current_time', 'time_start', 
+###                         'time_end', 'day1_content', ... , 'day7_content', 
+###                         'day1_column_style', ... , 'day7_column_style'
+
+sub customize_TLD {
+    my $this = shift @_;
+    
+    my $tld = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $std_get_data = $cgi->generate_GET_Data("link_id");
+  
+    my $column_color = "#fbfbeb";
+    
+    ### Add other new column inside $this->{tld_dtrc_data}.
+    if ($tld == $this->{tld_dtrc_data}) {
+        $tld->add_Column("link");
+    }   
+    
+    for (my $i = 0; $i < $tld->get_Row_Num; $i++) {               
+        ### Make date columns are selectable via week_date link.
+        if ($tld eq $this->{tld_col_date}) {                                    
+            ### Make week_date as links to select/deselect date. 
+            my $date_iso = $tld->get_Data($i, "date_iso");
+            my $link_properties = "title=\"Click to select date\"";
+                  
+            if ($date_iso eq $cgi->param("calendar_ymd_selected")) {
+                $date_iso = "";
+                $link_properties = "title=\"Click to deselect date\" style=\"color: #ff0000;\"";
+            }
+            
+            my $deselect_cell_data = "calendar_day=&calendar_hms_start=&calendar_hms_end=";
+            
+            $tld->set_Data_Get_Link($i, "week_date", 
+                                    "index.cgi?$std_get_data&calendar_ymd_selected=$date_iso&$deselect_cell_data", 
+                                    "$link_properties");            
+        }
+        
+        ### Next possible operations on new column "link" inside 
+        ### $this->{tld_dtrc_data} (use it as link to select/deselect 
+        ### cell on particular date & time).
+        if ($tld == $this->{tld_dtrc_data}) {
+            my $date_iso = $tld->get_Data($i, "date_iso");
+            my $day = $this->{calendar}->{day_num}->{$tld->get_Data($i, "week_day")};
+            my $time_start = $tld->get_Data($i, "time_start");
+            my $time_end = $tld->get_Data($i, "time_end");
+            
+            ### Basic CGI data should be passed when intended to use module as  
+            ### calendar's date-time information picker.
+            my $ymd_selected = "calendar_ymd_selected=$date_iso";
+            my $day = "calendar_day=$day";
+            my $hms_start = "calendar_hms_start=$time_start";
+            my $hms_end = "calendar_hms_end=$time_end";
+            my $link_properties = "title=\"Click to select cell\"";
+            
+            if ($date_iso eq $cgi->param("calendar_ymd_selected") &&
+                $time_start eq $cgi->param("calendar_hms_start") && 
+                $time_end eq $cgi->param("calendar_hms_end")) {
+                
+                #$ymd_selected = "calendar_ymd_selected=";
+                $day = "calendar_day=";
+                $hms_start = "calendar_hms_start=";
+                $hms_end = "calendar_hms_end=";
+                $link_properties = "title=\"Click to deselect cell\"";
+            }
+            
+            $tld->set_Data($i, "link", "Link to...?");
+            $tld->set_Data_Get_Link($i, "link", 
+                                    "index.cgi?$std_get_data&$ymd_selected&$day&$hms_start&$hms_end", 
+                                    "$link_properties");
+        }
+    }
+    
+    ### Synchronize $this->{tld_dtrc_view} with $this->{tld_dtrc_data} 
+    ### to support view of new column added to $this->{tld_dtrc_data}.
+    ### The instance $this->{tld_dtrc_view} will have new columns named  
+    ### 'link1', ... , 'link7' with columns' data are mapped from the 
+    ### 'link' column set inside $this->{tld_dtrc_data}.
+    if ($tld == $this->{tld_dtrc_view}) {
+        $this->synchronize_Data_View("link");
+    }     
+    
+    #$cgi->add_Debug_Text($tld->get_Table_List, __FILE__, __LINE__);
+    
+    return $tld;
+}
+
+1;
+#_end_
+#_doc_
+<a href="./txtsrc/webman_calendar_weekly_timerow_child.txt">Get code...</href>
+#_end_

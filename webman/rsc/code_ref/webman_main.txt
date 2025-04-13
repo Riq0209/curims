@@ -1,0 +1,139 @@
+#_title_
+webman_main
+#_end_
+
+#_des_
+### Component type module that inherits webman_CGI_Component module. It acts 
+### as a main controller for web applications developed using the framework.
+### It's not directly used but inherited by application's main module. The 
+### application's main module is the actual one that instantiated inside 
+### application's main CGI script.
+### <p />
+### Being a generic module of main controller inside applications, webman_main 
+### module provides the basic logical structure and facilities to dynamically 
+### compose other components to build up a complete system.
+### The logical structure is actually the control mechanisms that are in 
+### tandem with component's specifications as explained in CGI_Component and 
+### webman_CGI_component. 
+### The facilities are functions to support framework's concepts and its 
+### development strategies to provide most generic, semi-complete design of 
+### web applications that are mainly constructed from hierarchical connected 
+### nodes implemented as HTML links structure and heavily rely on database. 
+### Support from database technology not limited to domain problem content but 
+### further extended to application's logic control elements.
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>DB_Utilities (Composition)</li>
+### <li>Template_Element_Extractor (Composition)</li>
+### <li>CGI_HTML_Map (Composition)</li>
+### </ul>
+### <b>Webman-framework's Component-type Modules:</b><br />
+### <ul>
+### <li>CGI_Component::webman_CGI_component (Inheritance)</li>
+### <li>All available component-type modules (Composition)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template</b><p />
+### The view template assigned to webman_main type modules normally is the 
+### main template of the application. Below is an example of most simple main 
+### template proposed by the framework.
+#_end_
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body>
+<!-- start_view_ //-->
+<table border="1" width="100%">
+  <tr>
+    <td>
+      <div align="center"><h2>$app_name_ Application Header</h2></div>
+      <div align="right"><b>You are login as:</b> $user_full_name_ </div>
+    </td>
+  </tr>
+
+  <tr height="30">
+    <td align="center">
+      <!-- dynamic_content_ name=link_main //-->
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="top">
+      <br />
+      <!-- dynamic_content_ name=content_main //-->
+    </td>
+  </tr>
+
+  <tr height="30">
+    <td align="center">
+      Copyright &copy; 2010 - $current_year_ Your organization name.
+    </td>
+  </tr>
+</table>
+
+<div id="popup_div_onmove" class="popup" onMouseOut="popup_hide(this);">
+</div>
+
+<div id="popup_div_onclick" class="popup_onclick">
+</div>
+<!-- end_view_ //-->
+</body>
+</html>
+#_doc_
+### Inside the above template file the paired type template tags 
+### <c>&lt;!-- start_view_ //--&gt;</c> and 
+### <c>&lt;!-- end_view_ //--&gt;</c> are used to mark the parts of template 
+### content that will be processed by the application's main module (the  
+### main controller). The single dynamic type template tags
+### <c>&lt;!-- dynamic_content_ name=link_main //--&gt;</c> and 
+### <c>&lt;!-- dynamic_content_ name=content_main //--&gt;</c> with different 
+### tags names are used as a placeholders for other dynamic contents generated 
+### by other sub controllers (components). The main controller not only used 
+### to compose other application's components but also to associate them with 
+### these particular content placeholders. The simple tags <c>$app_name_</c>, 
+### <c>$user_full_name_</c>, and <c>$current_year_</c> are referring to 
+### scalars  that only exist and available inside the main controller to 
+### facilitate developers to easily print out basic information of application  
+### inside the main template page.
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Instantiation and Basic Parameter Setting</b><p /> 
+### The passed arguments <c>$cgi</c> and <c>$db_conn</c> are other 
+### Webman-framework core modules instances. The <c>$cgi</c> is an instance of 
+### GMM_CGI module and the <c>$db_conn</c> is an instance of database connection 
+### created using DBI module.<p />
+### 
+#_end_
+my $component = new webman_main;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Component-type Generic Function Calls</b><p /> 
+### Other generic functions to be called following Webman-framework 
+### specificatons to run the module as a framework's component. There is no 
+### access control applied since its run as a main controller for the 
+### application.
+#_end_
+### Set component specific parameters from database table. Overrides the 
+### original one from the parent (webman_CGI_component) to fulfill its roles 
+### as main controller.
+$component->set_Module_DB_Param;
+
+$component->run_Task;
+$component->process_Content;
+$component->end_Task;
+
+my $content = $component->get_Content;

@@ -1,0 +1,105 @@
+    ### keys to change: __table_name__, __field_multi_row__
+    
+    ### must be here before some of them reset by $this->SUPER::run_Task()
+    my @cgi_var_list = $cgi->var_Name;
+    
+    ###########################################################################
+    
+    ### num. based order
+    #__item_order_get_new_num__
+
+    ### code based order
+    #__item_order_get_new_code__
+    
+    my $spliter = "\n\n";
+    my @__field_multi_row___list = ();    
+    
+    if ($this->init_Phase) {
+        ### init. phase extra tasks
+        my $txt_fmt_input = "Row item no. n" . $spliter . "Row item no. n+1" . $spliter . "Row item no. n+2";
+        $cgi->push_Param("\$db___field_multi_row__", $txt_fmt_input);
+        
+        #$cgi->add_Debug_Text("init_Phase", __FILE__, __LINE__, "TRACING");
+        
+    } elsif ($this->confirm_Phase) {
+        ### confirm phase extra tasks
+        $cgi->add_Debug_Text("confirm_Phase", __FILE__, __LINE__, "TRACING");
+        
+    } elsif ($this->edit_Phase) {
+        ### edit phase extra tasks
+        $cgi->add_Debug_Text("edit_Phase", __FILE__, __LINE__, "TRACING");
+        
+    } elsif($this->last_Phase) {
+        ### last phase extra tasks
+        
+        my $__field_multi_row__ = $cgi->param("\$db___field_multi_row__");
+        
+        if ($spliter eq "\n\n") {
+            while ($__field_multi_row__ =~ / \n/ || $__field_multi_row__ =~ /\n /) {
+                $__field_multi_row__ =~ s/ \n/\n/g;
+                $__field_multi_row__ =~ s/\n /\n/g;
+            }
+        }
+        
+        if ($__field_multi_row__ ne "") {
+            @__field_multi_row___list = split(/$spliter/, $__field_multi_row__);
+        }
+        
+        ### if it's multi row input, just take the first row first 
+        $cgi->push_Param("\$db___field_multi_row__", shift(@__field_multi_row___list));
+        
+        $cgi->add_Debug_Text("last_Phase", __FILE__, __LINE__, "TRACING");
+    }
+    
+    ########################################################################### 
+    
+    my $status = $this->SUPER::run_Task();
+    
+    if ($status) {
+        ### extra tasks after insert operation is succeed     
+    }
+    
+    ###########################################################################   
+    
+    ### support for multi line __field_multi_row__ input
+    foreach my $__field_multi_row__ (@__field_multi_row___list) { 
+        foreach my $var (@cgi_var_list) {
+            ### push back all previous CGI variables since some of them have
+            ### been reset after $this->SUPER::run_Task() is called
+            $cgi->push_Param($var, $cgi->param($var));
+        }
+        
+        while ($__field_multi_row__ =~ /^ / || $__field_multi_row__ =~ / $/) {
+            $__field_multi_row__ =~ s/^ //;
+            $__field_multi_row__ =~ s/ $//;
+        }
+        
+        if ($__field_multi_row__ ne "") {
+            ### make sure $db___field_multi_row__ CGI variable get
+            ### the next multi row item from @__field_multi_row___list
+            $cgi->push_Param("\$db___field_multi_row__", $__field_multi_row__);
+
+            ###################################################################
+
+            ### also for $db___field_order__ CGI variable
+            
+            ### num. based order
+            #__item_order_get_new_num__
+            
+            ### code based order
+            #__item_order_get_new_code__
+            
+            
+            ###################################################################
+            
+            ### next is to repeat the insert operation 
+            my $status = $this->SUPER::run_Task();
+
+            if ($status) {
+                ### extra tasks after insert operation is succeed    
+            }            
+            
+        }
+
+        #$cgi->add_Debug_Text("\$__field_multi_row__ = $__field_multi_row__", __FILE__, __LINE__, "TRACING");
+    }    

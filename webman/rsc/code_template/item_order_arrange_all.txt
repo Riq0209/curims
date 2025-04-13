@@ -1,0 +1,24 @@
+    ### keys to change: __table_name__, __field_pk__, __field_fk__, __field_order__
+
+    $dbu->set_Table("__table_name__");
+    my @ahr = $dbu->get_Items("__field_pk__", "__field_fk__", $cgi->param("__field_fk__"), "__field_order__", undef);
+    
+    #$cgi->add_Debug_Text("SQL = " . $dbu->get_SQL, __FILE__, __LINE__, "DATABASE");
+    
+    my $order_num = 1;
+    
+    foreach my $item (@ahr) {
+        my $__field_order__ = $order_num;
+
+        ### example of extra order field formatting
+        #if ($__field_order__ < 10) { 
+        #    $__field_order__ = "0" . $order_num; 
+        #}
+
+        $dbu->set_Table("__table_name__");
+        $dbu->update_Item("__field_order__", $__field_order__, "__field_pk__", "$item->{__field_pk__}");
+        
+        #$cgi->add_Debug_Text("SQL = " . $dbu->get_SQL, __FILE__, __LINE__, "DATABASE");
+
+        $order_num++;
+    }

@@ -1,0 +1,53 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<!-- start_view_ //-->
+<b><font size="2">Required External Object File Upload</font></b>:<br>
+<br>
+<form name="form1" method="post" action="index.cgi" enctype="multipart/form-data">
+  
+  <!-- dynamic_content_ //-->
+  <input type="hidden" name="root_filename_blob_id" value="$root_filename_blob_id_">
+  <input type="hidden" name="$db_blob_id">
+  <input type="hidden" name="$db_filename">
+  <input type="hidden" name="$db_extension">
+  <input type="hidden" name="$db_upload_date">
+  <input type="hidden" name="$db_upload_time">
+  <input type="hidden" name="$db_mime_type">
+  <input type="hidden" name="$db_owner_entity_id">
+  <input type="hidden" name="$db_owner_entity_name">
+  <input type="hidden" name="$db_content">
+  <table width="100%" border="1" cellpadding="1" cellspacing="1">
+    <tr> 
+      <td width="25"><font size="2">&nbsp;</font></td>
+      <td><b><font size="2">File Name</font></b></td>
+      <td><b><font size="2">Type</font></b></td>
+      <td><b><font size="2">Resource</font></b></td>
+    </tr>
+    <!-- start_list_ //-->
+    <tr> 
+      <td align="right" width="25"><font size="2">$tld_num_.</font></td>
+      <td><font size="2">$tld_file_name_</font></td>
+      <td><font size="2">$tld_file_type_</font></td>
+      <td> <font size="2"> 
+        <input type="file" name="file" size="50">
+        </font></td>
+    </tr>
+    <!-- end_list_ //-->
+    <tr> 
+      <td width="25">&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td> 
+        <input type="submit" name="Submit" value="Upload">
+      </td>
+    </tr>
+  </table>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

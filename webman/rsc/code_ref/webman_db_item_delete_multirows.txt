@@ -1,0 +1,360 @@
+#_title_
+webman_db_item_delete_multirows
+#_end_
+
+#_des_
+### Multi phases component-type module that provides dynamic control on 
+### database table items for multi-rows delete operation.
+### 
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>CGI_HTML_Map (Composition)</li>
+### <li>Data_HTML_Map (Composition)</li>
+### <li>DBI_HTML_Map (Composition)</li>
+### </ul>
+### <br />
+### <b>Webman-framework's Component-type Modules:</b><br />
+### <ul>
+### <li>CGI_Component::webman_CGI_component (Inheritance)</li>
+### <li>webman_link_path_generator (Composition)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template</b>
+### <p />
+### The proposed view template is mainly used as confirmation form page for 
+### delete operation by displaying a rows of item's fields and values 
+### involved. If there is no view template assigned to the module the 
+### confirmation phase will be skipped.
+### <p />
+### The DYNAMIC_CONTENT template-element (line 4) named <c>link_path</c> will 
+### be processed by <c>webman_link_path_generator</c> module inside  
+### <c>process_DYNAMIC</c> hook function. It's used as place-holder to render 
+### current application's link path when webman_db_item_delete_multirows 
+### module is called. The next DYNAMIC_CONTENT template-element (line 7) named 
+### <c>form_hidden_field</c> is used as place-holder for HTML-form's hidden 
+### input element. This hidden input element is used as an entity to pass the 
+### parameter named <c>link_id</c> (via POST-method) which is the standard CGI 
+### parameter name used to refer nodes' IDs that construct the overall 
+### application's link structure. The logic is to use again node's link-id 
+### which is used to call webman_db_item_delete_multirows module previously.
+### <p />
+### The DATAHTML template-element (lines 18-24) named <c>form_db_field</c> is 
+### the place where the current rows of database item fields values to be 
+### deleted will be rendered. Inside the <c>process_DATAHTML</c> hook function, 
+### this template-element will be manipulated by Data_HTML_Map core module. 
+### Template-element's word patterns in the form of 
+### <c>$db_<i>field_name_1</i>_$row_idx_</c> till 
+### <c>$db_<i>field_name_n</i>_$row_idx_</c> treated by Data_HTML_Map module 
+### as place-holders to render the coresspond CGI parameters which used to 
+### hold the fields' values of database item rows to be deleted. This requires 
+### database item rows field names and values to be first injected as a CGI 
+### parameters in the form and series of parameter's names as follows:
+#_end_
+$db_<trp><i>field_name_1</i></trp>_0, ..., $db_<trp><i>field_name_n</i></trp>_0,
+$db_<trp><i>field_name_1</i></trp>_1, ..., $db_<trp><i>field_name_n</i></trp>_1,
+...
+$db_<trp><i>field_name_1</i></trp>_n, ..., $db_<trp><i>field_name_n</i></trp>_n
+#_doc_
+### Database item field names and values are retrieved from Table_List_Data 
+### instance, created by DBI_HTML_Map core module using SQL string command 
+### automatically or manually constructed via module's basic parameter 
+### settings that will be explained in the next main section (section 2, code 
+### lines 6-7 or line 9).
+### <p />
+### Two form's submit buttons (lines 29-30) with identical name 
+### <c>button_submit</c> but having two different values (<c>Proceed</c> and 
+### <c>Cancel</c>) are the default settings to provide users the options to 
+### proceed or cancel delete operation when confirmation phase is applied. In 
+### other word the module by default will check the input type element named 
+### <c>button_submit</c> and look at its value either <c>Proceed</c> or 
+### <c>Cancel</c> before decide to continue or cancel the delete operation.
+#_end_
+#_code_num_ 4-4:#ffdddd,7-7:#ddffdd,18-24:#ffddff,29-30:#ddffff 1
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //--> &gt; Delete Item(s)
+<p />
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+<table border="1">
+  <tr>
+    <td align="right" valign="top"><b>Num. </b></td>
+    <td valign="top">field_caption_1</td>
+    <td valign="top">field_caption_2</td>
+    ...
+    <td valign="top">field_caption_n</td
+  </tr>
+
+  <!-- start_datahtml_ name=form_db_field //-->
+  <tr>
+   <td align="right" valign="top"><b>$row_num_. </b></td>
+   <td>$db_field_name_1_$row_idx_</td>
+   <td>$db_field_name_2_$row_idx_</td>
+   ...
+   <td>$db_field_name_n_$row_idx_</td>
+  </tr>
+  <!-- end_datahtml_ //-->
+
+  <tr>
+    <td align="right" colspan="6">
+      <input name="button_submit" type="submit" id="button_submit" value="Proceed"/>
+      <input name="button_submit" type="submit" id="button_submit" value="Cancel"/>
+    </td>
+  </tr>
+</table>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Instantiation and Basic Parameter Setting</b><p />
+### SQL string to delete database item is automatically generated based on 
+### arguments passed at lines 6-7. SQL string to display database item fields 
+### values to be deleted will also automatically generated based on these 
+### arguments unless the optional function at line 9 is used. Key-field values
+### of item to be delete are passed to the module using CGI parameters and mapped 
+### to the string arguments using the word pattern in the form of 
+### <c>$cgi_<i>key_field_name</i>_</c>. This form of word pattern is actually 
+### following CGI_HTML_Map module implementation since the final SQL 
+### statements to be executed are constructed with the help of this core 
+### module. Since this module support multi-rows item deletion, the coressponds 
+### SQL strings constructed will be a series of strings depend on the number 
+### of series of items' key field passed as CGI parameters named in the form of 
+### <c><trp><i>key_field_name</i></trp>_0</c>, 
+### <c><trp><i>key_field_name</i></trp>_1</c>, ..., 
+### <c><trp><i>key_field_name</i></trp>_n</c>.
+### <p />
+### The framework implements CGI parameters database cache through GMM_CGI 
+### core module implementations and webman_db_item_delete_multirows module 
+### can automatically remove no longer required CGI parameters from the cache 
+### when the delete operation last phase has been reached. Obviously, 
+### key-field values for delete operation passed as CGI parameters are among 
+### which will be automatically removed from the cache. Other specific CGI 
+### parameters can also be forced to be removed by passing the CGI parameter's 
+### names to the <c>set_Last_Phase_CGI_Data_Reset</c> module's function 
+### (line 20).
+### <p />
+### After delete operation has reach its last phase, it's normal in many web 
+### applications, to bring back the users to the previous page that point to 
+### the delete's page. It can simply be done by telling the module the 
+### previous page's URL (line 24) that make a link to current delete 
+### page. Other options for doing this task can be done as explained in the 
+### next section (section 3, code line 47 or line 50);
+#_end_
+#_code_num_ 6-7:#ffdddd,9-9:ddffdd,20-20:#ffddff,24-24:#ddffff 1
+my $component = new webman_db_item_delete_multirows;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+$component->set_Table_Name("table_name_1_ ... table_name_n_");
+$component->set_Delete_Keys_Str("key_field_1='\$cgi_key_field_1_'  and ... and key_field_n='\$cgi_key_field_n_'");
+
+#$component->set_SQL_View("select * from table_name_ where key_field_1='\$cgi_key_field_1_' and ... and key_field_n='\$cgi_key_field_n_'");
+
+### Option to debug SQL satement generated by the module.
+#$component->set_SQL_Debug(1);
+
+#$component->set_Submit_Button_Name($submit_button_name_); ### Default is "button submit".
+#$component->set_Proceed_On_Submit($proceed_button_value); ### Default is "Proceed".
+#$component->set_Cancel_On_Submit($cancel_button_value);   ### Default is "Cancel".
+
+### Option to remove specific CGI parameters from being cache into database 
+### when the last phase of item delete operation is reached.
+#$component->set_Last_Phase_CGI_Data_Reset("param_name_1 param_name_2 ... param_name_n");
+
+### Option to automatically change the current active page by going 
+### to other URL when last phase has been reached.
+#$component->set_Last_Phase_URL_Redirect($url);
+
+### Don't assign view template if want to skip the confirmation phase.
+$component->set_Template_Default($template_file);
+ 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Component-type Generic Function Calls</b><p />
+### The proposed implementations below are slightly different from the basic 
+### generic function calls of standard component-type modules since 
+### webman_db_item_delete is categorized as multi phases component-type
+### module. The main differences are:<br >
+### <ul>
+### <li> Component's <c>run_Task</c> function (line 31) will return the status 
+### of true or false. It's true if the delete operation is proceed and 
+### succeed. Other extra tasks for handling this status condition is now 
+### considerable (lines 33-36).</li>
+### <li>There are requirements to accomplish other related tasks if delete  
+### operation has reach its last phase (lines 44-51).</li>
+### </ul>
+### When last phase has been reached there are options to change the current 
+### active page by directly change the content (line 47) or just redirect the 
+### page to other URL (line 50). However, within the context of framework's 
+### sub-controller implementation using webman_component_selector module, 
+### these last phase tasks options is not really necessary since the module 
+### will automatically reset some related CGI parameters when last phase has 
+### been reached causing the sub-controller running other correspond module for 
+### its next recursive module's function calling.
+#_end_
+#_code_num_ 31-31:#ffdddd,33-36:#ddffdd,44-46,47-47:#ffddff,48-49,50-50:#ddffff,51-51 29
+if ($component->authenticate) {
+    ### $status == 1 if delete operation is proceed and succeed.
+    my $status = $component->run_Task;
+    
+    if ($status) {
+        ### Do other extra tasks if delete operation is succeed.
+        ### ...
+    }    
+
+    $component->process_Content;
+}
+
+my $content = undef;
+
+if ($component->last_Phase) {
+    $component->end_Task;
+
+    ### Set to other related content .
+    #$content = "...";
+
+    ### Jump to other URL.
+    #$cgi->redirect_Page($url);
+
+} else {
+    $content = $component->get_Content;
+}
+#_end_
+#_doc_
+### The next proposed implementations is the more simple version but requires 
+### internal customizations inside child module implementations such as shown 
+### in the next section (section 4).
+#_end_
+#_code_num_ 0 29
+if ($component->authenticate) {
+    $component->run_Task; 
+    $component->process_Content;
+}
+
+if ($component->last_Phase) {
+    $component->end_Task;
+}
+
+my $content = $component->get_Content;
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Child Module for Customization</b><p />
+### Most of the customization tasks are reflect to multi phases component-type 
+### module featured by webman_db_item_delete_multirows as explained previously 
+### (section 3). Customizations inside child modules provide more fine-grained 
+### control on each phases involved (lines 46-53). An equivalents tasks from 
+### previous example (section 3) for handling succeed delete operation and 
+### last phase conditions are now done at lines 57-60 and lines 84-88.
+#_end_
+#_code_num_ 46-53:#ffdddd,57-60:#ddffdd,84-88:#ffddff 1
+package <trp><i>child_module_name</i></trp>;
+
+use webman_db_item_delete_multirows;
+
+@ISA=("webman_db_item_delete_multirows");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    ### Skeleton code to check if current user's groups are match with  
+    ### specific intended group name.
+    #my $group_name = "???";
+    #my $match_group = $this->match_Group($group_name, @groups);
+    
+    if ($this->confirm_Phase) {
+        ### Confirm phase extra tasks.
+        #$cgi->add_Debug_Text("confirm_Phase", __FILE__, __LINE__, "TRACING");
+        
+    } elsif($this->last_Phase) {
+        ### Last phase extra tasks.
+        #$cgi->add_Debug_Text("last_Phase", __FILE__, __LINE__, "TRACING");
+    }
+    
+    my $status = $this->SUPER::run_Task();
+    
+    if ($status) {
+        ### Do other extra tasks after delete operation is succeed.
+        ### ...
+    }
+}
+
+sub end_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    ### Skeleton code to check if current user's groups are match with  
+    ### specific intended group name.
+    #my $group_name = "???";
+    #my $match_group = $this->match_Group($group_name, @groups);
+    
+    ### It's mandatory to call this for multi phases modules
+    ### to reset some of the no longer required CGI data.
+    $this->SUPER::end_Task();
+    
+    ### Put other extra end-task jobs after this line.
+    
+    ### Set to other related content.
+    #$this->set_Content("...");
+    
+    ### Jump to other URL.
+    #$cgi->redirect_Page($url);
+}
+
+1;
+#_end_
+#_doc_
+<a href="./txtsrc/webman_db_item_delete_multirows_child.txt">Get code...</href>
+#_end_

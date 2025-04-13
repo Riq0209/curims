@@ -1,0 +1,158 @@
+
+Webman JSON based service.
+
+-------------------------------------------------------------------------------
+
+1. About: 
+
+This specific Webman framework JSON based service is run on http-text/plain 
+communication facility. Services provided are related to access of reusable  
+data from Webman framework based applications. Generally, the data to be 
+reused are in the form of entities that are further classified by their 
+attributes.
+
+-------------------------------------------------------------------------------
+
+2. Entities, attributes, and returned data format:
+
+To use the service, client must provide the entity name and its attributes
+passed via HTTP GET/POST method. It requires special CGI's variables to be
+included inside the GET/POST method to represent the entity and its attributes. 
+They are "entity" for the entity name and other possible valid variable name for 
+the attributes ("login", "password", etc.). 
+
+The attributes are normally used to filter the list of data that will be
+returned to the client. The returned results are generally in the form of JSON 
+formatted text structured as follows:
+
+[ { "sql":"...", "error":"...", "list":[...] } ]
+ 
+-------------------------------------------------------------------------------
+
+3. Entity "authentication":
+
+The entity "authentication" is the most basic data entity available from the  
+service. It mainly purpose to provide an entry point to authenticate users  
+who are registered to use the service and return a valid session id which  
+later be used as a privilege-key for successive access to other restricted 
+entities. The "authentication" entity might also be used on other types of 
+users who are registered out from the scope of JSON based service (users who 
+are registered to only use the main web application host by the Webman 
+framework).
+
+
+Below is an example of access to "authentication" entity via GET method:
+
+http://url_/index_json.cgi?entity=authentication&login=foo&password=???
+
+Note: "url_" is current active DNS and path of this documentation.
+
+The above example might return JSON formatted text as follows:
+
+[
+    {
+       "error":null,
+       "list":[
+          {
+             "session_id":"1661865234375",
+             "web_service_url":null,
+             "groups":[
+                "ADMIN",
+                "COM_JSON"
+             ],
+             "login_name":"foo",
+             "full_name":"FOO FULL NAME",
+             "description":"JASON Based Service Users"
+          }
+       ]
+    }
+]
+
+Note: Section 5 give an example on how to decode the returned JSON formatted 
+      text in PHP.
+      
+
+It's developers responsibility to pass valid generated session id to the next 
+successive access of authenticated data entities. Based on the above sample    
+returned data, access to authenticated "users" entity might be done as below:
+
+http://url_/index_json.cgi?entity=users&session_id=1661865234375
+
+
+To get back current user own information that already assigned with particular 
+session id to use the service, the next example can be simply used (also based 
+on the above example):
+
+http://url_/index_json.cgi?entity=authentication&session_id=1661865234375
+
+
+To get other users information, just pass their session id via "session_id_user"
+attribute as follows:
+
+http://url_/index_json.cgi?entity=authentication&session_id=1661865234375&session_id_user=???
+
+-------------------------------------------------------------------------------
+
+4. Current exist entities and their possible attributes for filtering purpose:
+
+authentication - login, password
+__entities_attributes__
+
+
+-------------------------------------------------------------------------------
+
+
+5. Example (PHP 5.2 & above)
+
+Note: "url_" inside "fopen()" function is current active DNS and path of this 
+      documentation.
+
+<?php
+$login = "???";
+$password = "???";
+
+$file = fopen("http://url_/index_json.cgi?entity=authentication&login=$login&password=$password", "r");
+if ($file) {
+    while (!feof($file)) {
+        $line = fgets ($file, 1024);
+        $json_text .= $line;
+    }
+    
+    fclose($file);    
+}
+
+//echo $json_text;
+
+$result = json_decode($json_text, true);
+
+$error = $result[0]["error"];
+$lists = $result[0]["list"];
+
+
+if ($error == null) {
+    echo " Session ID: " .  $lists[0]["session_id"] . "\n";
+    echo " Login name: " .  $lists[0]["login_name"] . "\n";
+    echo "  Full name: " .  $lists[0]["full_name"] . "\n";
+    echo "Description: " .  $lists[0]["description"] . "\n\n";
+    
+    echo "     Groups: ";
+    
+    foreach ($lists[0]["groups"] as $group) {
+        echo "$group ";
+    }
+    
+    echo "\n";
+
+} else {
+    echo "Error: $error \n";
+}
+?>
+
+-------------------------------------------------------------------------------
+
+Copyright 2011-2022, Webman Framework, FSKSM UTM.
+
+
+
+
+

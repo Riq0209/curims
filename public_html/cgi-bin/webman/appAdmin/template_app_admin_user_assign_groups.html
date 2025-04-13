@@ -1,0 +1,63 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<!-- start_view_ //-->
+<br>
+<form name="f" method="POST" action="index.cgi">
+
+<input name="task" type="hidden" id="task" value="user_add_group">
+<!-- dynamic_content_ name=form_hidden_field //-->
+
+<table width="800" border="0" align="center" cellpadding="1" cellspacing="1" bgcolor="#CCCCCC">
+  <tr bgcolor="#CCCCCC">
+    <td width="15" align="center" colspan="4">
+      <b><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Groups Assigned</font></b>
+    </td>
+  </tr>
+
+  <tr bgcolor="#FFFFCC">
+    <td width="15"><font size="1" face="Verdana, Arial, Helvetica, sans-serif"></font></td>
+    <!-- start_menu_ //-->
+    <td> <b><font size="2">Group Name </font></b></td>
+    <td><b><font size="2">Description</font></b></td>
+    <!-- end_menu_ //-->
+    <td align="center" bgcolor="#FFFFCC"><font size="2"><b>Operations</b></font></td>
+  </tr>
+  <!-- start_list_ //-->
+  <tr bgcolor="$tld_row_color_">
+    <td width="15" height="15" valign="top"><font size="2">$tld_num_.</font></td>
+    <td height="15" valign="top"><font size="2">$tld_group_name_</font></td>
+    <td height="15" valign="top"><font size="2">$tld_description_</font></td>
+    <td align="center" height="15" valign="top"><font size="2"><a href="./index.cgi?$caller_get_data_&task=user_remove_group&group_name=$tld_group_name_get_fmt_"><font color="#0099FF">Remove</font></a></font></td>
+  </tr>
+  <!-- end_list_ //-->
+  <tr bgcolor="#FFFFCC">
+    <td width="15" height="20"><font size="2">...</font></td>
+    <td height="20">
+      <input name="$db_group_name" type="text" id="$db_group_name" size="20"> |
+      <!-- start_cgihtml_ //-->
+      <a href="index.cgi?session_id=$cgi_session_id_&link_id=$cgi_link_id_&open_list=1"><font color="#0000FF" size="1">Open List</font></a>
+      <!-- end_cgihtml_ //-->
+    </td>
+    <td height="20"><font size="2">...</font></td>
+    <td align="center" height="20"><input name="button_submit" type="submit" id="button_submit" value="Add"></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td width="15">&nbsp;</td>
+    <td colspan="3">
+      <!-- start_menu_ name=list //-->
+      <font size="2">dynamic_menu_items_</font>
+      <!-- end_menu_ //-->
+    </td>
+  </tr>
+</table>
+<br/>
+<!-- dynamic_content_ name=group_multi_selection //-->
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

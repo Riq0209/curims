@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<!-- start_view_ //-->
+<br>
+<table width="100%" border="0">
+  <tr>
+    <td><font size="2"><b>Root LINK_PATH_ &gt; <a href="$caller_get_data_"><font color="#0099FF">Update Reference</font></a> &gt; </b>$dynamic_content_num_ : DYNAMIC_MODULE : $ref_name_ &gt; Change ID </font></td>
+  </tr>
+  <tr> 
+    <td> 
+	    <form name="form1" method="post" action="index.cgi">
+		<font size="1" face="Verdana, Arial, Helvetica, sans-serif">
+		<!-- dynamic_content_ //-->
+        <input type="hidden" name="task" value="update_ref_phase2_change_id">
+</font>        
+		<table width="480" border="1" cellpadding="1" cellspacing="1">
+          <tr>
+            <td colspan="2" align="center"><b><font size="2">Dynamic Content ID </font></b></td>
+            <td rowspan="2" align="center"><b><font size="2">Operation</font></b></td>
+          </tr>
+          <tr>
+            <td align="center"><font size="2"><b>Num.</b></font></td>
+            <td align="center"><font size="2"><b>Name</b></font></td>
+          </tr>
+          <!-- start_list_ //-->
+          <!-- end_list_ //-->
+          <tr>
+            <td align="center"><select name="$db_dynamic_content_num">
+                <!-- select_ //-->
+              </select>
+            </td>
+            <td align="center"><input name="$db_dynamic_content_name" type="text" id="$db_dynamic_content_name" value="$dynamic_content_name_"></td>
+            <td align="center"><input type="submit" name="Submit" value="Change ID"></td>
+          </tr>
+        </table>
+    </form></td>
+		
+  </tr>
+</table>
+<!-- end_view_ //-->
+</body>
+</html>

@@ -1,0 +1,243 @@
+#_title_
+CGI_Component
+#_end_
+
+#_des_
+### The core module used as a base module by webman_CGI_component module. 
+### It provide generic functions via inheritance for webman_CGI_component
+### module and its other sub-modules/clients to run as a framework's component 
+### following Webman-framework's component specifications. 
+### <p>
+### Below are the basics Webman-framework's component specifications. 
+### </p>
+### <ol>
+### <li>The major tasks of component is to internally solved the most 
+### generic problems in web application development involving the handling 
+### and managing of CGI-data, link structure, business logic and view 
+### (presentation) integrations, application resource access control, and 
+### coordinating access to other support elements such as database connection, 
+### CGI library, helper tools, etc.</li>
+### <br />
+### <li>Provides design that help developers separate the coding of business 
+### logic and content presentation at component function level.</li>
+### <br />
+### <li>To handle content presentation the components themselves implements 
+### the logical engine to extract template-elements from the application view 
+### template assigned to them. Application view template is standard HTML 
+### document written following view template structure specified by the 
+### framework.</li>
+### <br />
+### <li>Components can be used either as a black-box or white-box objects to 
+### handle business logic and view. For white-box approach, 
+### the components implementing "Template Method" software design pattern.</li>
+### <br />
+### <li>The components provide an internal mechanism to set component's  
+### parameters & values (module member functions) at application runtime by 
+### first registering the parameters & values inside the database (real 
+### implementation is done inside webman_CGI_component module).</li>
+### <br >
+### <li>Internally provide access control facilities at component name 
+### level.</li>
+### <br >
+### <li>Internally provide access control facilities at application link  
+### structure level (real implementation is done inside webman_CGI_component 
+### module).</li>
+### <br />
+### <li>Automatically handle CGI-data content presentation inside view 
+### template without need CGI's template-elements manipulation by developers 
+### via function overriding using "Template Method" approach.</li>
+### <br />
+### <li>At application runtime, component's functions, by their generic main 
+### tasks must be called in an order as follows: setting up CGI and database 
+### connection instances, component's specific parameters setting, access 
+### control authentication (link structure and component's name itself), run 
+### main business logic, process view template, run end-task function, and 
+### finally get the HTML content result. These flow of tasks are by default 
+### enforced inside framework's main controller (webman_main).</li>
+### <br />
+### </ol>
+### The next sections (1 and 2) describe how some of the tasks order specified 
+### in 9 could be implemented.
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>DB_Utilities (Composition)</li>
+### <li>CGI_HTML_Map (Composition)</li>
+### <li>GMM_CGI (Aggregation)</li>
+### <li>Session (Composition)</li>
+### <li>Template_Element_Extractor (Composition)</li> 
+### </ul>
+### 
+### Please note that the above module list are in the context of they are 
+### directly used by CGI_Component module itself. There are other core modules 
+### included but they are used in the context of the CGI_Component's clients. 
+### Below are the complete list of these modules:<p />
+### DB_HTML_Map, HTML_DB_Map, Text_DB_Map, DBI_HTML_Map, Data_HTML_Map, 
+### Select_Option, Checkbox_Selection, HTML_Table_Menu, HTML_Link_Menu, 
+### HTML_Dynamic_Link_Menu, HTML_Dynamic_Numbered_Link_Menu, Static_Content, 
+### Link_Structure_Content_Info, HTML_Object_Separator, Table_List_Data, 
+### TLD_HTML_Map, HTML_Link_Path, Link_Node, Calendar.
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. Instantiation and Basic Parameter Setting</b><p /> 
+### The passed arguments <c>$cgi</c> and <c>$db_conn</c> are other 
+### Webman-framework core modules instances. The <c>$cgi</c> is an instance of 
+### GMM_CGI module and the <c>$db_conn</c> is an instance of database connection 
+### created using CPAN's DBI module.<p />
+### 
+#_end_
+my $component = new CGI_Component;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Component-type Generic Functions Call</b><p /> 
+### Other generic functions to be called following Webman-framework 
+### specificatons to run the module as a framework's component.
+#_end_
+### Start set component specific parameters
+#$component->set_???;
+
+if ($component->authenticate) {
+    $component->run_Task;
+    $component->process_Content;
+    $component->end_Task;
+}
+
+my $content = $component->get_Content;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Child Module for Customization</b><p /> 
+### Basic skeleton code to use CGI_Component as a base module. Generally there 
+### are three main types of implementations or customizations as follows:
+### <ul>
+### <li>Handling and processing system/environment resources, application's 
+### domain data access and manipulation (mostly involving the database), and 
+### preparation of view's parameters or view's data-structure instances. All 
+### of these should be done inside the implementation of <c>run_Task</c> hook 
+### function.</li>
+### <li>Integrating view's parameters or view's data-structure instances with 
+### their coresspond template-elements through the implementation of template 
+### hook functions (<c>process_<i>TE_TYPE</i></c>).</li>
+### <li>Other relevant tasks of ending component-type module's runtime such 
+### as releasing resources, CGI parameters cache clearance, page redirect, 
+### etc. (inside <c>end_Task</c> 
+### hook function)</li>
+### </ul>
+#_end_
+#_code_num_ 31-43:#ffdddd,67-81:#ddffdd,85-101:#ffddff 1
+package <trp><i>child_module_name</i></trp>;
+require CGI_Component;
+
+@ISA=("CGI_Component");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    ### Skeleton code to check if current user's groups are match with  
+    ### specific intended group name.
+    #my $group_name = "???";
+    #my $match_group = $this->match_Group($group_name, @groups);
+}
+
+sub process_Content {
+    $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    ### Option to change default template view.
+    #if (some condition...) {
+    #    $this->set_Template_File("other_template_file.html");
+    #}
+    
+    ### The heart of "Template Method" design pattern that call "hook" 
+    ### functions to process and manipulate view's template-elements
+    $this->SUPER::process_Content;  
+}
+
+### The skeleton of "hook" function to be redefined to process 
+### template-elements content. <trp><i>TE_TYPE</i></trp> can be: VIEW, 
+### DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML, or CGIHTML.
+sub process_<trp><i>TE_TYPE</i></trp> { 
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    ### Start process template-element content.
+    #???
+    
+    $this->add_Content($te_content);
+}
+
+sub end_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    ### Skeleton code to check if current user's groups are match with  
+    ### specific intended group name.
+    #my $group_name = "???";
+    #my $match_group = $this->match_Group($group_name, @groups);
+    
+    ### It's mandatory to call this for multi phases modules
+    ### to reset some of the no longer required CGI data.    
+    $this->SUPER::end_Task;
+}
+
+1;
+#_end_
+#_doc_
+<a href="./txtsrc/cgi_component_child.txt">Get code...</href>
+#_end_

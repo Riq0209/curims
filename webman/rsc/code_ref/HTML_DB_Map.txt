@@ -1,0 +1,162 @@
+#_title_
+HTML_DB_Map
+#_end_
+
+#_des_
+### The core module to map CGI parameters to database table fields for 
+### insert/update operations. The CGI parameters are normally passed by 
+### HTML form input elements from the view template.<p />
+### This module has been intensively used inside the following 
+### Webman-framework's component-type modules: webman_db_item_insert, 
+### webman_db_item_update, webman_db_item_insert_multirows, 
+### webman_db_item_update_multirows, and webman_text2db_map.
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>DB_Utilities (Composition)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template</b><p />
+### The view template with HTML-form input elements to pass CGI parameters to 
+### be mapped to database table fields. Form input elements to be mapped to 
+### database table fields are named using the naming convention as follows: 
+### <c>$db_<i>field_name_1</i></c>, <c>...</c>, <c>$db_<i>field_name_n</i></c>
+#_end_
+<html>
+<body>
+<!-- start_view_ //-->
+<form method="POST" action="./index.cgi">
+  field_caption_1 : <input name="$db_field_name_1" type="text"><p />
+  ...
+  field_caption_n : <input name="$db_field_name_n" type="text"><p />
+  <input name="button_submit" type="submit" id="button_submit" value="Submit"/>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>
+#_doc_
+### On form submission, designated component-type module should process the 
+### passed CGI parameters for insert/update operations using HTML_DB_Map 
+### module inside the <c>run_Task</c> function (see section 6). This function 
+### becomes a hook function that is called inside application controller 
+### following component's functions calling procedures described in 
+### GGI_Component.
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Instantiation and Basic Parameter Setting</b><p />
+#_end_
+my $htmldb = new HTML_DB_Map;
+
+$htmldb->set_CGI($cgi);
+$htmldb->set_DBI_Conn($db_conn);
+$htmldb->set_Table($table_name);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Fields Mapping Exceptions</b><p />
+### By default HTML_DB_Map module will extract all CGI parameters with the 
+### name patterns: <c>$db_<i>field_name_1</i></c>, <c>...</c>, 
+### <c>$db_<i>field_name_n</i></c> to be mapped to table fields for 
+### insert/update operations. Use the next function to provide an exceptions 
+### (each field name are separated by single spaces).
+#_end_
+$htmldb->set_Exceptional_Fields("field_name_1 ... field_name_n"); 
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Insert/Update Access Authentication</b><p />
+### Set basic information for insert/update operations access privilege 
+### control implementation. User information to be passed are current user 
+### name (<c>$login_name</c>) and groups assigned to the user 
+### (<c>\@groups</c>) which is a reference to an array. The 
+### <c>$db_item_auth_table_name</c> scalar is an application's insert/update 
+### operations access privilege table that normally has a name in the form of 
+### "<c>webman_<i>appname</i>_db_item_auth</c>".
+###  
+#_end_
+$htmldb->set_DB_Item_Auth_Info($login_name, \@groups, $db_item_auth_table_name);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>5. Insert/Update Implementation</b><p />
+### The argument <c>$exec_mode</c> is an option of SQL statement execution for 
+### insert/update operations. It can be set to '0' (to only prepare the SQL 
+### statement) and if ignored the default is '1' (really execute the SQL 
+### statement).<p />
+### <b>5.1 Insert Operation.</b>
+#_end_
+$htmldb->insert_Table($exec_mode);
+
+#_doc_
+### <b>5.2 Update Operation (option 1).</b>
+#_end_
+$htmldb->update_Table("key_1 ... key_n", "val_1 ... val_n", $exec_mode);
+
+#_doc_
+### <b>5.3 Update Operation (option 2).</b><p />
+### The <c>$keys_str</c> is normally a complex SQL update keys string which is 
+### not supported by the simplified 
+### <c>("key_1 ... key_n", "val_1 ... val_n")</c> update keys and values 
+### mapping used in the first option.
+#_end_
+$htmldb->set_Update_Keys_Str($keys_str);
+$htmldb->update_Table(undef, undef, $exec_mode);
+
+#_doc_
+### <b>5.4 Insert/Update Operations Errors.</b><p />
+### Get database errors correspond to insert/update operations. It's 
+### applicable for both SQL execution options (at the preparation level or the  
+### real execution).
+#_end_
+my $error_opr = $htmldb->get_DB_Error_Message;
+
+#_doc_
+### <b>5.4 Insert/Update Authentication Errors.</b><p />
+### Get insert/update operations errors caused by privilege access control 
+### apllied to database item fields. It requires user and groups information 
+### setting as described in section 4.
+#_end_
+my $error_auth = $htmldb->get_Auth_Error_Message;
+
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>6. Implementation Inside Hook Function</b><p />
+#_end_
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $table_name = "???";
+    my $db_item_auth_table_name = "???";
+    
+    my $htmldb = new HTML_DB_Map;
+
+    $htmldb->set_CGI($cgi);
+    $htmldb->set_DBI_Conn($db_conn);
+    $htmldb->set_Table($table_name);
+    $htmldb->set_DB_Item_Auth_Info($login_name, \@groups, $db_item_auth_table_name);
+    
+    $htmldb->insert_Table;
+    
+    if ($htmldb->get_DB_Error_Message ne "") {
+        $cgi->add_Debug_Text($htmldb->get_DB_Error_Message, __FILE__, __LINE__, "DATABASE");
+    }
+    
+    if ($htmldb->get_Auth_Error_Message ne "") {
+        $cgi->add_Debug_Text($htmldb->get_Auth_Error_Message, __FILE__, __LINE__, "DATABASE");
+    }    
+}

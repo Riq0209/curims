@@ -1,0 +1,71 @@
+#_title_
+Checkbox_Selection
+#_end_
+
+#_des_
+### The core module to help generate tag codes for <c>checkbox</c> HTML-form 
+### element.
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. Instantiation and Basic Parameter Setting</b><p />
+### <b>Option 1</b> - Manually set the captions and values of the checkbox.
+#_end_
+
+my $chkboxs = new Checkbox_Selection($checkbox_name, $captions, $values, $selected, $separator_tag);
+
+#_doc_
+### The scalars $captions, $values, and $selected are references to an arrays. 
+### Below are the example of arrays references that might be assigned to these 
+### scalar. 
+#_end_
+my $captions = ["First", "Second", "Third"];
+my $values = ["1", "2", "3"];
+my $selected = ["2", "3"];
+
+#_doc_
+### Using the above array references setting with <c>$checkbox_name</c> is set 
+### to <c>"txt2num"</c> and <c>$separator_tag</c> is set to 
+### <c>"&lt;br /&gt;"</c> will produce the following checkbox element:
+#_end_
+<input type="checkbox" name="txt2num_0" value="1">First
+<br />
+<input type="checkbox" name="txt2num_1" value="2" checked>Second
+<br />
+<input type="checkbox" name="txt2num_2" value="3" checked>Third
+<br />
+
+#_doc_
+### <b>Option 2</b> - Set the captions and values using items from database table.
+#_end_
+my $chkboxs = new Checkbox_Selection($checkbox_name, undef, undef, $selected, $separator_tag);
+
+$chkboxs->set_DBU($dbu);
+$chkboxs->set_DB_Table_Info($table_name, $field_name_caption, $field_name_value, $field_name_order);
+#_doc_
+### The above function will generate the SQL statement:<p /> 
+### <sql>select $field_name_caption, $field_name_value from $table_name order 
+### by $field_name_order</sql><p />
+### to query items that will be used as a captions and values for the checkbox element.
+#_end_
+                                      
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Generating Checkbox Form Element</b><p />
+### The GMM_CGI instance (<c>$cgi</c>) is  required by Checkbox_Selection 
+### module so it can process and manipulate the checkbox form element to be 
+### generated as a CGI parameters. 
+### 
+#_end_
+$chkboxs->set_CGI($cgi);
+
+#_doc_
+### Get the generated checkbox form element string. This will also exclude 
+### the series of checkbox form element name (<c>$checkbox_name . "_0"</c>, 
+### <c>...</c>, <c>$checkbox_name . "_<i>n</i>"</c>) that exist as CGI 
+### parameters from being cached into database to prevent the current checkbox 
+### element CGI-data conflicting the next other to be generated (if it's 
+### identical). 
+#_end_
+my $content = $chkboxs->get_Checkbox_List;

@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Untitled Document</title>
+</head>
+
+<body>
+<!-- start_view_ //-->
+<table width="800" border="0" align="center" cellpadding="1" cellspacing="1" bgcolor="#CCCCCC">
+  <tr bgcolor="#CCCCCC">
+    <td width="15" align="center" colspan="4">
+      <b><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Add Potential Groups</font></b>
+    </td>
+  </tr>
+
+  <tr bgcolor="#FFFFCC">
+    <td width="15"></td>
+    <!-- start_menu_ //-->
+    <td> <b><font size="2">Group Name </font></b></td>
+    <td><b><font size="2">Description</font></b></td>
+    <!-- end_menu_ //-->
+    <td align="center" bgcolor="#FFFFCC"><font size="2"><b>Select &amp; Add</b></font></td>
+  </tr>
+
+  <!-- start_list_ //-->
+  <tr bgcolor="$tld_row_color_">
+    <td width="15" height="15" valign="top"><font size="2">$tld_num_.</font></td>
+    <td height="15" valign="top"><font size="2">$tld_group_name_</font></td>
+    <td height="15" valign="top"><font size="2">$tld_description_</font></td>
+    <td align="center" height="15" valign="top"><font size="2"><input type="checkbox" name="group_name_$tld_num_" value="$tld_group_name_"></td>
+  </tr>
+  <!-- end_list_ //-->
+
+  <tr bgcolor="#FFFFCC">
+    <td width="15"></td>
+
+    <td align="center" colspan="2">
+      <!-- start_cgihtml_ //-->
+      <a href="index.cgi?session_id=$cgi_session_id_&link_id=$cgi_link_id_&open_list=0"><font color="#0000FF" size="1">Close List</font></a>
+      <!-- end_cgihtml_ //-->
+    </td>
+
+    <td align="center">
+    <input name="button_submit" type="submit" id="button_submit" value="Add Selected">
+    </td>
+  </tr>
+
+  <tr bgcolor="#FFFFFF">
+    <td width="15">&nbsp;</td>
+    <td colspan="3">
+      <!-- start_menu_ name=list //-->
+      <font size="2">dynamic_menu_items_</font>
+      <!-- end_menu_ //-->
+    </td>
+  </tr>
+</table>
+<!-- end_view_ //-->
+</body>
+</html>

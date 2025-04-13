@@ -1,0 +1,296 @@
+#_title_
+webman_calendar_week_list
+#_end_
+
+#_des_
+### Component-type module that provides interactive navigation on calendar   
+### data through browsing operations to a set of lists of weeks.
+### 
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>Calendar (Composition)</li>
+### <li>Table_List_Data (Composition)</li>
+### <li>TLD_HTML_Map (Composition)</li>
+### </ul>
+### <br />
+### <b>Webman-framework's Component-type Modules:</b><br />
+### <ul>
+### <li>CGI_Component::webman_CGI_component (Inheritance)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. CGI Parameters</b>
+### <p />
+### Below are CGI parameters that provide control to and passed by 
+### webman_calendar_interactive instance at application run-time. 
+#_end_
+calendar_key_date_start => "yyyy-mm-dd"
+calendar_key_date_end => "yyyy-mm-dd"
+calendar_ymd_selected => "yyyy-mm-dd"
+#_doc_
+### By default the week's list sets are generated monthly unless the CGI 
+### parameters <c>calendar_key_date_start</c> and <c>calendar_key_date_end</c> 
+### are provided (passed to the module via HTTP-GET method). The module could 
+### also be used as calendar's date information picker by passing the picked 
+### date which is the date of the first day of the selected week to the 
+### <c>calendar_ymd_selected</c> CGI parameter.
+### . 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. View Template</b>
+### <p />
+### The main part of view template content for webman_calendar_week_list   
+### module is actually a LIST template-element (17-20), passed to 
+### <c>process_LIST</c> hook function and processed by TLD_HTML_Map core module. 
+### The LIST template-element contains the word patterns 
+### <c>$tld_week_date_start_</c>, <c>$tld_week_date_end_</c>, and 
+### <c>$tld_week_list_content_</c> as its main place-holders for calendar's 
+### first and last weeks' date and date's content. The word pattern 
+### <c>$tld_icon_selection_</c> is the place-holder for HTTP-GET links objects 
+### for users to pick a week to be active (see <c>calendar_ymd_selected</c> 
+### CGI parameter in section 1). Other place-holders 
+### (<c>$tld_date_column_style_</c> and <c>$tld_content_column_style_</c>) are 
+### used to control week-list's HTML-table columns presentation style using 
+### CSS.
+### <p />
+#_end_
+#_code_num_ 17-20
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<!-- start_view_ //-->
+<table border="1">
+  <tr style="background-color:#EEEEEE;">
+    <td colspan="2" align="center">
+      Week List Title
+    </td>
+  </tr>
+
+  <!-- start_list_ //-->
+  <tr style="$tld_row_style_">
+    <td valign="top" style="$tld_date_column_style_">$tld_icon_selection_ $tld_week_date_start_ / $tld_week_date_end_</td>
+    <td valign="top" style="$tld_content_column_style_">$tld_week_list_content_</td>
+  </tr>
+  <!-- end_list_ //-->
+
+  <tr style="background-color:#EEEEEE;">
+    <td colspan="2" align="center">
+      <a href="<!-- dynamic_content_ name=cal_prev_week_set //-->">&lt;&lt;</a>
+      |
+      <a href="<!-- dynamic_content_ name=cal_next_week_set //-->">&gt;&gt;</a>
+    </td>
+  </tr>
+</table>
+<!-- end_view_ //-->
+</body>
+</html>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Instantiation and Basic Parameter Setting</b><p />
+### The arguments <c>$all</c>, <c>$odd</c>, <c>$even</c>, <c>$current</c>,
+### <c>$selected</c>, <c>$col_date</c>, and <c>$col_content</c> (lines 11-12) 
+### are CSS's strings code to control the presentation of week-list's HTML-table 
+### rows and columns. HTML objects that act as HTTP-GET links resources for 
+### users to select or deselect particular week can be set via 
+### <c>$icon_select</c> and <c>$icon_deselect</c> arguments (line 13).
+#_end_
+#_code_num_
+my $component = new webman_calendar_week_list;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+### if both key date are ignored the default would
+### be the the first and end date of current month
+#$component->set_Key_Date_Start("yyyy-mm-dd");
+#$component->set_Key_Date_End("yyyy-mm-dd");
+
+#$component->set_Default_Row_Style($all, $odd, $even, $current, $selected);
+#$component->set_Default_Column_Style($col_date, $col_content);
+#$component->set_Week_Selection_Icon($icon_select, $icon_deselect);
+
+#$component->add_Date_Content("yyyy-mm-dd", $content);
+
+#$component->set_Template_Default($template_file);
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Component-type Generic Function Calls</b><p />
+#_end_
+$component->run_Task;
+$component->process_Content;
+$component->end_Task;
+
+my $content = $component->get_Content;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>5. Child Module for Customization</b><p />  
+### Most basic customization is to add content into specific calendar's 
+### week-date cell, done inside the overriden <c>run_Task</c> hook function 
+### (line 54). Other more advanced and complex customization tasks are 
+### involving calendar's data-structure manipulations inside 
+### <c>customize_TLD</c> function.
+### <p />
+### Calendar's data-structure instance (<c>$tld</c>) passed to 
+### <c>customize_TLD</c> function (line 105) is actually Table_List_Data core 
+### module instance. Read the comments included inside the skeleton code to get 
+### more detailed explanations for all possible customizations that could be made. 
+#_end_
+#_code_num_ 54-54,105-105 1
+package <trp><i>child_module_name</i></trp>;
+
+use webman_calendar_week_list;
+
+@ISA=("webman_calendar_week_list");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);    
+    
+    $this->SUPER::run_Task();
+    
+    ### If both key date are ignored the default would
+    ### be the the first and end date of current month.
+    #$this->set_Key_Date_Start("yyyy-mm-dd");
+    #$this->set_Key_Date_End("yyyy-mm-dd");
+
+    #$this->set_Default_Row_Style($all, $odd, $even, $current, $selected);
+    #$this->set_Default_Column_Style($col_date, $col_content);
+    #$this->set_Week_Selection_Icon($icon_select, $icon_deselect);
+
+    #$this->add_Date_Content("yyyy-mm-dd", $content);    
+}
+
+sub process_Content {
+    $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    $this->set_Template_File($this->{template_default});
+    
+    #print "\$this->{template_default} = " . $this->{template_default} . "<br>";
+    
+    $this->SUPER::process_Content;  
+}
+
+sub process_so_type_ { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    $this->add_Content($te_content);
+    
+    #if ($this->get_Error eq "") {
+    #   $this->add_Content($te_content);
+        
+    #} else {
+    #   $this->add_Content($this->get_Error);
+    #}
+}
+
+sub customize_TLD {
+    my $this = shift @_;
+    
+    ### The $tld instance has the column names and structure as follows:
+    ### 'row_style', 'date_column_style', 'content_column_style', 
+    ### 'current_week', 'icon_selection', 'selected',
+    ### 'week_date_start', 'week_date_end', 'week_list_content'   
+    my $tld = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $std_get_data = $cgi->generate_GET_Data("link_id");
+  
+    my $row_color = "#fbfbeb";
+    
+    ### Add other possible new column.
+    #$tld->add_Column("link");
+    
+    for (my $i = 0; $i < $tld->get_Row_Num; $i++) {
+        
+        ### Next possible operations on new column.  
+        #my $week_date_start = $tld->get_Data($i, "week_date_start");
+            
+        #$tld->set_Data($i, "link", "Link...?");
+        #$tld->set_Data_Get_Link($i, "link", "index.cgi?$std_get_data&calendar_ymd_iso=$week_date_start", "link_properties_");
+        
+        ### Further customize row for current active week.
+        #if ($tld->get_Data($i, "current_week")) {
+        #    $tld->set_Data($i, "week_date_start", "<b>" . $tld->get_Data($i, "week_date_start") . "</b>");
+        #    $tld->set_Data($i, "week_date_end", "<b>" . $tld->get_Data($i, "week_date_end") . "</b>");
+        #}
+    }
+    
+    #$cgi->add_Debug_Text($tld->get_Table_List, __FILE__, __LINE__);
+    
+    return $tld;
+}
+
+1;
+#_end_
+#_doc_
+<a href="./txtsrc/webman_calendar_week_list_child.txt">Get code...</href>
+#_end_

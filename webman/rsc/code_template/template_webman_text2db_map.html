@@ -1,0 +1,46 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+__parent_item_key_info__
+<a href="index.cgi?link_id=$cgi_link_id_&task=__task_fwd__&button_submit=Cancel">List</a>
+<!-- end_cgihtml_ //-->
+&gt;
+__operation_title__
+<p />
+
+<form method="POST" action="./index.cgi" enctype="multipart/form-data">
+<!-- dynamic_content_ name=form_hidden_field //-->
+<table border="1">
+  <tr>
+    <th>Text File:</th>
+    <td>
+      <input name="text_file_name" type="file" id="text_file_name">
+    </td>
+  </tr>
+
+  <tr>
+    <td>&nbsp;</td>
+    <td>
+      <input name="button_submit" type="submit" id="button_submit" value="Upload">
+      <input name="button_submit" type="submit" id="button_submit" value="Cancel">
+   </td>
+  </tr>
+</table>
+</form>
+
+<table border="1">
+  <tr><th>Input Text File Format</th></tr>
+
+  <tr>
+    <td>
+    <!-- dynamic_content_ name=txt2db_format //-->
+    </td>
+  </tr>
+</table>
+
+<!-- end_view_ //-->
+</body>
+</html>

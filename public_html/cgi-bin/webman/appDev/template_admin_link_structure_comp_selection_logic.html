@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<!-- start_view_ //-->
+<table width="100%" border="0">
+  <tr>
+    <td><font size="2"><b>Root LINK_PATH_ &gt; <a href="$caller_get_data_"><font color="#0099FF">Update
+      Reference</font></a> &gt; </b>$dynamic_content_num_ : DYNAMIC_MODULE :
+      <!-- dynamic_content_ //-->
+    </font></td>
+  </tr>
+  <tr>
+    <td><font size="1">&nbsp;</font></td>
+  </tr>
+  <tr>
+    <td>
+      <form name="form1" method="post" action="index.cgi" enctype="multipart/form-data">
+        <input type="hidden" name="task" value="update_ref_phase2_csl">
+        <input name="task_type" type="hidden" id="task_type" value="add_logic">
+        <input type="hidden" name="$db_link_ref_id" value="link_ref_id_">
+        <!-- dynamic_content_ //-->
+        <table border="1" cellpadding="1" cellspacing="1">
+          <tr>
+            <td><b><font size="2">CGI Parameter Name</font></b></td>
+            <td><b><font size="2">CGI Parameter Value</font></b></td>
+            <td><b><font size="2">Selected Component </font></b></td>
+            <td align="center"><b><font size="2">Operation</font></b></td>
+          </tr>
+          <!-- start_list_ //-->
+          <tr>
+            <td><font size="2">$tld_cgi_param_</font></td>
+            <td><font size="2">$tld_cgi_value_</font></td>
+            <td><font size="2">$tld_dyna_mod_name_</font></td>
+            <td align="center"><font size="2">$tld_operation_</font></td>
+          </tr>
+          <!-- end_list_ //-->
+          <tr>
+            <td> <font size="2">
+              <input name="cgi_param" type="text" id="cgi_param">
+              </font></td>
+            <td>
+              <input name="cgi_value" type="text" id="cgi_value">
+            </td>
+            <td>
+			<select name="dyna_mod_name" id="dyna_mod_name">
+              <!-- select_ //-->
+              </select>
+			</td>
+            <td align="center">
+              <input type="submit" name="submit" value="Add Logic">
+            </td>
+          </tr>
+        </table>
+      </form>
+
+    </td>
+  </tr>
+</table>
+<!-- dynamic_content_ //-->
+<!-- end_view_ //-->
+</body>
+</html>

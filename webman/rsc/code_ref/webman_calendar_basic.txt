@@ -1,0 +1,208 @@
+################## webman_calendar_basic (View Template) ######################
+
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<!-- start_view_ //-->
+<table width="315" border="1">
+  <tr>
+    <td width="45" colspan="7" align="center">$active_month_ &nbsp;&nbsp; $active_year_</td>
+  </tr>
+  <tr>
+    <td align="center" width="45">Mon</td>
+    <td align="center" width="45">Tue</td>
+    <td align="center" width="45">Wed</td>
+    <td align="center" width="45">Thu</td>
+    <td align="center" width="45">Fri</td>
+    <td align="center" width="45">Sat</td>
+    <td align="center" width="45">Sun</td>
+  </tr>
+  <!-- start_list_ //-->
+  <tr>
+    <td align="center" width="45" $tld_cell_color1_>$tld_d1_</td>
+    <td align="center" width="45" $tld_cell_color2_>$tld_d2_</td>
+    <td align="center" width="45" $tld_cell_color3_>$tld_d3_</td>
+    <td align="center" width="45" $tld_cell_color4_>$tld_d4_</td>
+    <td align="center" width="45" $tld_cell_color5_>$tld_d5_</td>
+    <td align="center" width="45" $tld_cell_color6_>$tld_d6_</td>
+    <td align="center" width="45" $tld_cell_color7_>$tld_d7_</td>
+  </tr>
+  <!-- end_list_ //-->
+</table>
+<!-- end_view_ //-->
+</body>
+</html>
+
+################## webman_calendar_basic (Usage) ##############################
+
+$component = new webman_calendar_interactive;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+        
+#$component->set_Script_Ref_Name("index.cgi");
+#$component->set_Template_Default("template_???.html");
+        
+#$component->set_Additional_Get_Data("get_var_1_=get_val_1_&...&get_var_n_=get_val_n_");
+
+#$component->set_Default_Cell_Colors("#normal_", "#current_", "#selected_");   ### example: ...("#F4F5FB", "#F4F5FB", "#FFE2C4");   
+#$component->set_Default_Text_Colors("#normal_", "#current_", "#selected_");  ### example: ...("#0099FF", "#FF0000", "#000000");
+
+#$component->set_Additional_Get_Data("get_var_1_=get_val_1_&...&get_var_n_=get_val_n_");
+
+#$component->set_Date_Cell_Color("yyyy-mm-dd", "#color_");
+#$component->set_Date_Text_Color("yyyy-mm-dd", "#color_");
+
+#$component->add_Date_Content("yyyy-mm-dd", "content_");
+
+$component->run_Task;
+$component->process_Content;
+$component->end_Task;
+
+#my @ahr = $component->get_Weekly_Date_Info($key_date_);
+#my @ahr = $component->get_Monthly_Date_Info($year_, $month_);
+
+my $content = $component->get_Content;
+
+
+################ webman_calendar_basic (customize) ############################
+
+package child_component_name_;
+
+use webman_calendar_basic;
+
+@ISA=("webman_calendar_basic");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    #$this->set_Error("???");
+    
+    $this->SUPER::run_Task();
+    
+    #$this->set_Date_Cell_Color("yyy-mm-dd", "#color_");
+    #$this->set_Date_Text_Color("yyy-mm-dd", "#colotr_");
+    
+    #$this->add_Date_Content("yyy-mm-dd", "content_");
+}
+
+sub process_Content {
+    $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    $this->set_Template_File($this->{template_default});
+    
+    #print "\$this->{template_default} = " . $this->{template_default} . "<br>";
+    
+    $this->SUPER::process_Content;
+}
+
+sub process_so_type_ { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    $this->add_Content($te_content);
+    
+    #if ($this->get_Error eq "") {
+    #   $this->add_Content($te_content);
+        
+    #} else {
+    #   $this->add_Content($this->get_Error);
+    #}
+}
+
+sub customize_TLD {
+    my $this = shift @_;
+    
+    my $tld = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $caller_get_data = $cgi->generate_GET_Data("link_id");
+    
+    #$tld->add_Column("new_column_");
+    
+    my $cell_color = "bgcolor=#EEF0F9";
+    
+    for (my $i = 0; $i < $tld->get_Row_Num; $i++) { 
+        #my $col_data = $tld->get_Data($i, "col_name_");
+        
+        #$col_data = "<font color=\"#0099FF\">$col_data</font>";
+            
+        #$tld->set_Data($i, "new_column_", $col_data);
+        #$tld->set_Data_Get_Link($i, "new_column_", "index.cgi?$caller_get_data", "link_properties_");    
+    
+        ### set different color at column level
+        #$tld->set_Data($i, "cell_color2", "$cell_color");
+        #$tld->set_Data($i, "cell_color4", "$cell_color");
+        #$tld->set_Data($i, "cell_color6", "$cell_color");
+        
+        ### set different color at row level 
+        #if (($i % 2) == 0) {
+        #    for (my $col = 1; $col <= 7; $col++) {
+        #        $tld->set_Data($i, "cell_color" . $col, "$cell_color");
+        #    }
+        #}
+    }
+    
+    #$cgi->add_Debug_Text($tld->get_Table_List, __FILE__, __LINE__);
+    
+    return $tld;
+}
+
+1;

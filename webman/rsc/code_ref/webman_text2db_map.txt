@@ -1,0 +1,511 @@
+#_title_
+webman_text2db_map
+#_end_
+
+#_des_
+### Component-type module that provides database item operations mapping 
+### (insert/update/delete ) from simple text-formatted file content upload.
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>HTML_DB_Map (Composition)</li>
+### <li>Text_DB_Map (Composition)</li>
+### <li>TLD_HTML_Map (Composition)</li>
+### </ul>
+### <br />
+### <b>Webman-framework's Component-type Modules:</b><br />
+### <ul>
+### <li>CGI_Component::webman_CGI_component (Inheritance)</li>
+### <li>webman_link_path_generator (Composition)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template</b>
+### <p />
+### There are two view template files must be assigned to a single 
+### webman_text2db_map module. First is an upload form page to upload the 
+### text-formatted file and the second is a confirmation page for displaying 
+### database item field values extracted from the uploaded text-formatted file 
+### before proceed with insert/update/delete operations.
+### <p />
+### <b>1.1 Upload Form Page</b>
+### <p />
+### The DYNAMIC_CONTENT template-element (line 4) named <c>link_path</c> will 
+### be processed by <c>webman_link_path_generator</c> module inside  
+### <c>process_DYNAMIC</c> hook function. It's used as a place-holder to 
+### render current application's link path when webman_text2db_map module 
+### is called. The next DYNAMIC_CONTENT template-element (line 7) named 
+### <c>form_hidden_field</c> is used as place-holder for HTML-form's hidden 
+### input-element. This hidden input-element is used as an entity to pass the 
+### parameter named <c>link_id</c> (via POST-method) which is the standard CGI 
+### parameter name used to refer nodes' IDs that construct the overall 
+### application's link structure. The logic is to use again node's link-id 
+### which is used to call webman_text2db_map module previously.
+### <p />
+### File input-element named <c>text_file_name</c> (line 12) provides control 
+### for users to browse and select text file to be uploaded. 
+### Two form's submit buttons (lines 19-20) with identical name 
+### <c>button_submit</c> but having two different values (<c>Upload</c> and 
+### <c>Cancel</c>) are the default settings to provide users the options to 
+### proceed or cancel file upload submission. In other word the module 
+### by default will check the input type element named <c>button_submit</c> 
+### and look at its value either <c>Upload</c> or <c>Cancel</c> before 
+### decide to continue or cancel file upload form submission.
+### <p />
+### The last DYNAMIC_CONTENT template-element (line 31) named 
+### <c>txt2db_format</c> is used as a place-holder to display the structure of 
+### text-formatted file content should be used to match with the current 
+### database item rows and field columns format setting apllied to the module. 
+#_end_
+#_code_num_ 4-4:#ffdddd,7-7:#ddffdd,12-12:#ffddff,19-20:#ddffff,31-31:#ffeedd 1
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //--> &gt; Text to DB Operations 
+<p />
+<form method="POST" action="./index.cgi" enctype="multipart/form-data">
+<!-- dynamic_content_ name=form_hidden_field //-->
+<table border="1">
+  <tr>
+    <td>Text File:</td>
+    <td>
+      <input name="text_file_name" type="file" id="text_file_name">
+    </td>
+  </tr>
+
+  <tr>
+    <td>&nbsp;</td>
+    <td>
+      <input name="button_submit" type="submit" id="button_submit" value="Upload">
+      <input name="button_submit" type="submit" id="button_submit" value="Cancel">
+   </td>
+  </tr>
+</table>
+</form>
+
+<table border="1">
+  <tr><th>Input Text File Format</th></tr>
+
+  <tr>
+    <td>
+    <!-- dynamic_content_ name=txt2db_format //-->
+    </td>
+  </tr>
+</table>
+    
+<!-- end_view_ //-->
+</body>
+</html>
+#_end_
+
+#_doc_
+### <b>1.2 Confirmation Form Page</b>
+### <p />
+### At application runtime toward confirmation phase (file upload execution), 
+### data items extracted from text-formatted file content are reconstructed as 
+### Table_List_Data instance. Item field names and values from the constructed 
+### Table_List_Data instance are later accessed and stored as database cached 
+### CGI parameters. These database cached CGI parameters are the exact 
+### one that will be used in the database operation currently apllied to the 
+### module. At the same time, data items from Table_List_Data instance can be 
+### displayed prior the real database operation for confirmation purpose. 
+### There are an options of view templates to be used to render these data 
+### items by either simply use module's built-in item listing view logic or 
+### arrange the list view presentation using LIST template-element that will 
+### later be manipulated by TLD_HTML_Map core module.
+### <p />
+### <p />
+### <b>1.2.1 Simple Item List</b>
+### <p />
+### The DYNAMIC_CONTENT template-elements (lines 4 and 7) have the same roles 
+### as DYNAMIC_CONTENT template-elements used in upload form page 
+### (sub section 1.1, code lines 4 and 7). The next DYNAMIC_CONTENT 
+### template-element (line 9) named <c>txt2db_item</c> is a place-holder to 
+### display the rows of extracted item fields and values from text-formatted 
+### file content using module's built-in item listing view logic.
+### <p />
+### Two form's submit buttons (lines 11-12) with identical name 
+### <c>button_submit</c> but having two different values (<c>Confirm</c> and 
+### <c>Cancel</c>) are the default settings to provide users the options to 
+### proceed or cancel database operation mapping currently applied to the 
+### module.
+### 
+#_end_
+#_code_num_ 4-4:#ffdddd,7-7:#ddffdd,9-9:#ffddff,11-12:#ddffff 1
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //--> &gt; Text to DB Operations 
+<p />
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+<div align="center">
+  <!-- dynamic_content_ name=txt2db_item //-->
+  <br />
+  <input name="button_submit" type="submit" id="button_submit" value="Confirm">
+  <input name="button_submit" type="submit" id="button_submit" value="Cancel">
+</div>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>
+#_end_
+
+#_doc_
+### <b>1.2.2 LIST template-element Item List</b>
+### <p />
+### The DYNAMIC_CONTENT template-elements (lines 4 and 7) have the same roles 
+### as DYNAMIC_CONTENT template-elements used in upload form page 
+### (sub section 1.1, code lines 4 and 7). Two form's submit buttons 
+### (lines 27-28), play the same roles such as explained previously 
+### (sub section 1.2.1 , code lines 11-12). 
+### <p />
+### Inside the webman_text2db_map module, item list structure from 
+### text-formatted file content is extracted and then reconstructed as 
+### Table_List_Data instance by Text_DB_Map core module. The LIST 
+### template-element named <c>txt2db_item</c> (lines 19-24) will be passed to 
+### <c>process_LIST</c> hook function and then manipulated by TLD_HTML_Map 
+### module, the core module that responsible to map items from the previously 
+### mentioned Table_List_Data instance into LIST template-element content 
+### structure.
+#_end_
+#_code_num_ 4-4:#ffdddd,7-7:#ddffdd,19-24:#ffddff,29-30:#ddffff 1
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //--> &gt; Text to DB Operations 
+<p />
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+<div align="center">
+
+  <table border="1">
+    <tr style="font-size:13px;">
+      <th>Num.</th>
+      <th>field_caption_1_</th>
+      <th>field_caption_2_</th>
+      <th>field_caption_n_</th>
+    </tr>
+
+    <!-- start_list_ name=txt2db_item //-->
+    <tr>
+      <td align="right">$tld_num_.</td>
+      <th>$tld_field_name_1_</th>
+      <th>$tld_field_name_2_</th>
+      <th>$tld_field_name_n_</th>
+    </tr>
+    <!-- end_list_ //-->
+  </table>
+  
+  <br />
+  <input name="button_submit" type="submit" id="button_submit" value="Confirm">
+  <input name="button_submit" type="submit" id="button_submit" value="Cancel">
+</div>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Instantiation and Basic Parameter Setting</b>
+### <p />
+### Generally below are the most basic parameter settings specific to module's 
+### main task to map database operations from text-formatted file content. 
+### <ul>
+### <li>Database operation mapping to be applied (line 11).</li>
+### <li>Optionally change the default item rows and columns spliter 
+### (lines 15 and 18).</li>
+### <li>Database table name and field names involved in the database operation 
+### applied to the module (lines 23-24).</li>
+### <li>Key-field names mainly used for item update/delete operations and to 
+### detect duplicate entry in the insert operation (line 35).</li>
+### </ul>
+### More detailed explanations for these basic parameter settings are given as 
+### a comments before each color-marked function calls below.
+#_end_
+#_code_num_ 11-11:#ffdddd,15-15:#ddffdd,18-18:#ddffdd,23-24:#ffddff,35-35:#ddffff 1
+$component = new webman_text2db_map;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+### If not set,the default can be insert/update/delete depend
+### on the combination of field list and key field name. Read
+### in set_Key_Field_Name section for more explanation. However,
+### for the sake of clarity, it's advisable for developers to 
+### confirm the task by using set_Task function below.
+$component->set_Task($task);
+
+### Default column spliter for text-formatted file content is "\t". 
+### Other characters such as "|", ":", and "," are also possible.
+#$component->set_Spliter_Column($spliter_col);
+
+### Default row spliter for text file content is "\n".
+#$component->set_Spliter_Row($spliter_row);
+
+### Set table name and its field names involved in text-formatted 
+### content to database operations mapping. The field names are 
+### actually only relevant for insert/update operations.
+$component->set_Table_Name($table_name);
+$component->set_Field_List("field_name_1_ ... field_name_n_");
+
+### If one of the key-field is also one of the field list set via set_Field_List function and the type of 
+### database operation has been left unset, the operation by default switched to update instead of insert. 
+### For the same scenario but there is only one field list, the operation will be set to delete. To 
+### overwrite this default mechanism, just set the task manually via set_Task function. Other than used as 
+### a keys to define the operation types, the key-field names in their more useful nature are used as a 
+### keys for item update/delete operations, and specifically used to detect/avoid duplicate entry in insert 
+### operation. The key-field names are passed as a single string argument split by space characters that will 
+### construct key-field names constraint using "or" conditions. For "and" condition just mix the key-field 
+### names such as follows: "key_field_name_2_&key_field_name_3_"
+$component->set_Key_Field_Name("key_field_name_1_ key_field_name_2_&key_field_name_3_ ... key_field_name_n_");
+
+### Add key-field from the current available CGI parameters and values. The  
+### key-field string final result will be added into the key-field string 
+### constructed by the pervious $component->set_Key_Field_Name(...) 
+### function call.
+$component->set_Key_Field_Name_Dynamic("key_field_name_1_='$cgi_key_field_name_1__' and ... );
+
+### Extracted input line text with blank field after splited by "$spliter_col" 
+### character will by default be excluded. To prevent this, one can convert  
+### all blank fields to other value that match with the data type of the 
+### mapped database fields.
+$txt2db->set_Blank_Field_Conversion($conversion_value);
+
+### Option to debug SQL satement generated by the module.
+$component->set_SQL_Debug(1);
+
+#$component->set_Submit_Button_Name($submit_button_name);  ### default is "button_submit"
+#$component->set_Proceed_On_Submit($proceed_button_value); ### default is "Upload"
+#$component->set_Confirm_On_Submit($confirm_button_value); ### default is "Confirm"
+#$component->set_Cancel_On_Submit($cancel_button_value);   ### default is "Cancel"
+
+$component->set_Template_Default($template_file);
+$component->set_Template_Default_Confirm($template_file_confirm);
+ 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Component-type Generic Function Calls</b>
+### <p />
+### The proposed implementations below are slightly different from the basic 
+### generic function calls of standard component-type modules since 
+### webman_text2db_map is categorized as multi phases component-type
+### module. The main differences are:<br >
+### <ul>
+### <li> Component's <c>run_Task</c> function (line 50) will return the status 
+### of true or false. It's true if the update operation is proceed and 
+### succeed. Other extra tasks for handling this status condition is now 
+### considerable (lines 52-55).</li>
+### <li>There are requirements to do other related tasks if update operation 
+### has reach its last phase (lines 63-70).</li>
+### </ul>
+### When last phase has been reached there are options to change the current 
+### active page by directly change the content (line 66) or just redirect the 
+### page to other URL (line 69). However, within the context of framework's 
+### sub-controller implementation using webman_component_selector module, 
+### these last phase tasks options is not really necessary since the module 
+### will automatically reset some related CGI parameters when last phase has 
+### been reached causing the sub-controller running other correspond module for 
+### its next recursive module's function call.
+#_end_
+#_code_num_ 50-50:#ffdddd,52-55:#ddffdd,63-65,66-66:#ffddff,67-68,69-69:#ddffff,70-70 48
+if ($component->authenticate) {
+    ### $status == 1 if update operation is proceed and succeed.
+    my $status = $component->run_Task;
+    
+    if ($status) {
+        ### Do other extra tasks if database operation is succeed.
+        ### ...
+    }    
+
+    $component->process_Content;
+}
+
+my $content = undef;
+
+if ($component->last_Phase) {
+    $component->end_Task;
+
+    ### Set to other related content .
+    #$content = "...";
+
+    ### Jump to other URL.
+    #$cgi->redirect_Page($url);
+
+} else {
+    $content = $component->get_Content;
+}
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Child Module for Customization</b>
+### <p />
+### Most generic customization tasks are reflect to multi-phases character 
+### featured by the base module as already explained in the previous section 
+### (section 3). Customizations inside child modules provide more fine-grained 
+### control on each phases involved (lines 43-50). An equivalent tasks from 
+### previous example (section 3) for handling succeed current mapped database 
+### operations can be done internally inside the child module (lines 54-56 and 
+### lines 80-84).
+### <p />
+### Other customization tasks that are more specific to module's main business 
+### are done by overriding module's functions 
+### <c>customize_TLD_DB_Operation</c> (lines 99-107) and 
+### <c>customize_TLD_View</c> (lines 125-133). It provides options to 
+### manipulate Table_List_Data instance generated from text-formatted file 
+### content either the real database operations or just for information 
+### display only.
+#_end_
+#_code_num_ 43-50:#ffdddd,54-56:#ddffdd,80-84:#ffddff,99-107:#ddffff,125-133:#ffeedd 1
+package <trp><i>child_module_name</i></trp>;
+
+use webman_text2db_map;
+
+@ISA=("webman_text2db_map");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    if ($this->init_Phase) {
+        ### init. phase extra tasks        
+        #$cgi->add_Debug_Text("init_Phase", __FILE__, __LINE__, "TRACING");
+        
+    } elsif($this->last_Phase) {
+        ### last phase extra tasks
+        #$cgi->add_Debug_Text("last_Phase", __FILE__, __LINE__, "TRACING");
+    }
+    
+    my $status = $this->SUPER::run_Task();
+    
+    if ($status) {
+        ### extra tasks after insert/update/delete operation is succeed
+    }    
+}
+
+sub end_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    ### Skeleton code to check if current user's groups are match with  
+    ### specific intended group name.
+    #my $group_name = "???";
+    #my $match_group = $this->match_Group($group_name, @groups);
+    
+    ### It's mandatory to call this for multi phases modules
+    ### to reset some of the no longer required CGI data.
+    $this->SUPER::end_Task();
+    
+    ### Put other extra end-task jobs after this line.
+    
+    ### Set to other related content.
+    #$this->set_Content("...");
+    
+    ### Jump to other URL.
+    #$cgi->redirect_Page($url);
+}
+
+### Customize and return Table_List_Data instance that
+### will be used for the real database operations.
+sub customize_TLD_DB_Operation {
+    my $this = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $tld = $this->{tld};
+    
+    if (defined($tld)) {
+        ### Start manipulate $tld instance.
+        
+        #$tld->add_Column("new_column_name_");
+        
+        #for (my $i = 0; $i < $tld->get_Row_Num; $i++) { 
+            #my $tld_data = $tld->get_Data($i, "col_name_");
+            
+            #$tld->set_Data($i, "new_col_name_", $new_col_data);
+        #}
+    }
+    
+    return $tld;
+}
+
+### Customize and return Table_List_Data instance 
+### that will be used for view purpose only.
+sub customize_TLD_View {
+    my $this = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $tld = $this->{tld};
+    
+    if (defined($tld)) {
+        ### Start manipulate $tld instance.
+        
+        #$tld->add_Column("new_column_name_");
+        
+        #for (my $i = 0; $i < $tld->get_Row_Num; $i++) { 
+            #my $tld_data = $tld->get_Data($i, "col_name_");
+            
+            #$tld->set_Data($i, "new_col_name_", $new_col_data);
+        #}
+    }
+    
+    return $tld;
+}
+
+1;
+#_end_
+#_doc_
+<a href="./txtsrc/webman_text2db_map_child.txt">Get code...</href>
+#_end_

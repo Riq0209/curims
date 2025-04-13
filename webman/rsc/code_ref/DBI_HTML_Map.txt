@@ -1,0 +1,164 @@
+#_title_
+DBI_HTML_Map
+#_end_
+
+#_des_
+### The core module used to map database table fields and render their values 
+### inside the view template. This module can also be used to create and 
+### return Table_List_Data module instance that dynamically represents the 
+### data structure of rows and columns of database items. In fact, this module 
+### was mainly used to generate Table_List_Data instance inside most of 
+### its clients (webman_db_item_update, webman_db_item_delete, 
+### webman_db_item_view_dynamic, webman_db_item_update_multirows, and 
+### webman_db_item_delete_multirows). Currently, there is only single 
+### component type module (webman_db_item_view) using it to directly mapping 
+### database table fields and values into the view template.
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>Table_List_Data (Composition)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template</b><p />
+### The paired template tags 
+### <c>&lt;!-- start_dbhtml_ name=db_field_view //--&gt;</c> and 
+### <c>&lt;!-- end_dbhtml_ //--&gt;</c> are used to mark the parts of DBHTML  
+### template-element (lines 17-23) to be processed by the DBI_HTML_Map module. 
+### The database table field names are mapped using template word patterns 
+### <c>$db_<i>field_name_1</i></c>, <c>...</c>, till 
+### <c>$db_<i>field_name_n</i></c>, adhere mapping naming convention imposed 
+### by DBI_HTML_Map module itself.
+#_end_
+#_code_num_ 17-23
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //--> &gt; List Title
+<p />
+
+<table border="1">
+  <tr>
+    <th>Num.</th>
+    <th>field_caption_1</th>
+    <th>field_caption_2</th>
+    ...
+    <th>field_caption_n</th>
+  </tr>
+
+  <!-- start_dbhtml_ name=db_field_view //-->
+  <tr>
+    <td align="right">$num_.</td>
+    <td>$db_field_name_1_</td>
+    <td>$db_field_name_2_</td>
+    ...
+    <td>$db_field_name_n_</td>
+  </tr>
+  <!-- end_dbhtml_ //-->
+</table>
+
+<!-- end_view_ //-->
+</body>
+</html>
+#_end_
+#_doc_
+### In the context of Webman-framework's component implementation, the above 
+### DBHTML template-element will be passed to and processed inside 
+### <c>process_DBHTML</c> hook function (see section 6). 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Instantiation and Basic Parameter Setting</b><p />
+### The passed arguments <c>$cgi</c> and <c>$db_conn</c> are other 
+### Webman-framework core modules instances. The <c>$cgi</c> is an instance of 
+### GMM_CGI module and the <c>$db_conn</c> is an instance of database connection 
+### created using DBI module. The <c>$sql</c> is a raw SQL statement used to 
+### query items from the database table.
+#_end_
+my $dbihtml = new DBI_HTML_Map;
+
+$dbihtml->set_DBI_Conn($db_conn);
+$dbihtml->set_SQL($sql);
+
+$dbihtml->set_Items_View_Num($num_view);
+$dbihtml->set_Items_Set_Num($num_set);
+#_doc_
+### The <c>$num_view</c> can be used to limit the item's view rows number and 
+### does requires <c>$num_set</c> to determine the set number of items to be 
+### viewed since the returned items have been splited into several set of 
+### rows. These two arguments actually provide pagination control on database  
+### item listing.
+###  
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Processing Template Element Content</b><p />
+#_end_
+$dbihtml->set_HTML_Code($te_content);
+my $content = $dbihtml->get_HTML_Code;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Table_List_Data Instance</b><p />
+### Function to help the creation of Table_List_Data module instance.
+#_end_
+my $tld = $dbihtml->get_Table_List_Data;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>5. Database Query Result Information</b><p />
+#_end_
+### Get database error for the given query ($sql) in section 2.  
+my $error = $dbihtml->get_DB_Error_Message;
+
+### Total of item row number returned.
+my $total_item = $dbihtml->get_Items_Num;
+
+### Total item set number that is the rounded up of 
+### [$num_view (in section 2) / $total_item] even if 
+### the decimal point is < 0.5
+my $total_set = $dbihtml->get_Total_Items_Set_Num;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>6. Implementation Inside Hook Function</b><p />
+#_end_
+sub process_DBHTML { 
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    ### Start process template-element' content.
+    if ($te_type_name eq "db_field_view") {
+        my $dbihtml = new DBI_HTML_Map;
+        
+        $dbihtml->set_DBI_Conn($db_conn);
+        $dbihtml->set_SQL($this->{sql});
+        #$dbihtml->set_Items_View_Num($num_view);
+        #$dbihtml->set_Items_Set_Num($num_set);    
+        $dbihtml->set_HTML_Code($te_content);
+    
+        my $content = $dbihtml->get_HTML_Code;
+    
+        if ($dbihtml->get_DB_Error_Message ne "") {
+            $cgi->add_Debug_Text("Database Error: " . $dbihtml->get_DB_Error_Message, __FILE__, __LINE__, "DATABASE");
+        }    
+    
+        if ($dbihtml->get_Items_Num > 0) {
+            $this->add_Content($content);
+        }
+    }
+}

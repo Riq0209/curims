@@ -1,0 +1,1217 @@
+################## web_man_CGI_component_child (customize) #########################
+
+package child_component_name_;
+
+use webman_CGI_component;
+
+@ISA=("webman_CGI_component");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    $this->{template_default} = undef;
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub set_Template_Default {
+    my $this = shift @_;
+    
+    my $template_file = shift @_;
+    
+    $this->{template_default} = $template_file;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    #$this->set_Error("???");
+    
+    $this->SUPER::run_Task();
+}
+
+sub process_Content {
+    $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    $this->set_Template_File($this->{template_default});
+    
+    $this->SUPER::process_Content;  
+}
+
+sub process_so_type_ { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_name = $te->get_Name;
+    
+    $this->add_Content($te_content);
+    
+    #if ($this->get_Error eq "") {
+    #   $this->add_Content($te_content);
+        
+    #} else {
+    #   $this->add_Content($this->get_Error);
+    #}
+}
+
+1;
+
+
+
+
+################ webman_calendar_interactive (customize) ##########################
+
+package child_component_name_;
+
+use webman_calendar_interactive;
+
+@ISA=("webman_calendar_interactive");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    #$this->set_Error("???");
+    
+    $this->SUPER::run_Task();
+}
+
+sub process_Content {
+    $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    $this->set_Template_File($this->{template_default});
+    
+    #print "\$this->{template_default} = " . $this->{template_default} . "<br>";
+    
+    $this->SUPER::process_Content;  
+}
+
+sub process_so_type_ { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    
+    #my $te_type_name = $te->get_Name;
+    
+    $this->add_Content($te_content);
+    
+    #if ($this->get_Error eq "") {
+    #   $this->add_Content($te_content);
+        
+    #} else {
+    #   $this->add_Content($this->get_Error);
+    #}
+}
+
+sub customize_TLD {
+    my $this = shift @_;
+    
+    my $tld = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $i = 0;
+    my $j = 1;
+    my $tld_data = undef;
+    
+    my $caller_get_data = $cgi->generate_GET_Data("link_name link_id dmisn app_name ...");
+    my $get_data = undef;
+    
+    #$tld->add_Column("new_column_");
+    
+    $tld->add_Column("d1_event");
+    $tld->add_Column("d2_event");
+    $tld->add_Column("d3_event");
+    $tld->add_Column("d4_event");
+    $tld->add_Column("d5_event");
+    $tld->add_Column("d6_event");
+    $tld->add_Column("d7_event");
+    
+    my $cell_color = "#EEF0F9";
+    
+    for ($i = 0; $i < $tld->get_Row_Num; $i++) { 
+        #$tld_data = $tld->get_Data($i, "nama");
+        
+        #$get_data = $caller_get_data . "&" . "nama=" . $tld_data;
+        #$get_data =~ s/ /+/g;
+        
+        #$tld_data = "<font color=\"#0099FF\">$tld_data</font>";
+            
+        #$tld->set_Data($i, "nama", $tld_data);
+        #$tld->set_Data_Get_Link($i, "nama", "index.cgi?$get_data");
+        
+        $tld->set_Data($i, "cell_color2", "$cell_color");
+        $tld->set_Data($i, "cell_color4", "$cell_color");
+        $tld->set_Data($i, "cell_color6", "$cell_color");
+        
+        for ($j = 1; $j <= 7; $j++) {
+            my $date_ISO = $tld->get_Data($i, "d" . $j . "_date_ISO");
+            
+            if ($date_ISO ne "") {
+                $tld->set_Data($i, "d" . $j . "_event", $date_ISO);
+            }
+            
+        }
+        
+    }
+    
+    return $tld;
+}
+
+1;
+
+
+
+
+################## webman_db_item_insert (customize) ###########################
+
+package child_component_name_;
+
+use webman_db_item_insert;
+
+@ISA=("webman_db_item_insert");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub set_Template_Default {
+    my $this = shift @_;
+    
+    my $template_file = shift @_;
+    
+    $this->{template_default} = $template_file;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    $this->SUPER::run_Task();
+}
+
+sub process_Content {
+    $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    $this->set_Template_File($this->{template_default});
+    
+    #print "\$this->{template_default} = " . $this->{template_default} . "<br>";
+    
+    $this->SUPER::process_Content;  
+}
+
+sub process_DYNAMIC { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    if ($te_type_name eq "other_dynamic_part_name_") {
+        ### add logic to get other dynamic content below
+        ### ???
+        ### ???
+        
+        $te->set_Content($other_dynamic_content_);
+    } 
+    
+    $this->SUPER::process_DYNAMIC($te);
+}
+
+sub process_DATAHTML { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    if ($te_type_name eq "other_dynamic_part_name_") {
+        ### add logic to get other dynamic content below
+        ### ???
+        ### ???
+        
+        $te->set_Content($other_dynamic_content_);
+    }          
+    
+    $this->SUPER::process_DATAHTML($te);
+}
+
+sub process_so_type_ { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    $this->add_Content($te_content);
+}
+
+1;
+
+
+
+
+################## webman_db_item_update (customize) ###########################
+
+package child_component_name_;
+
+use webman_db_item_update;
+
+@ISA=("webman_db_item_update");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub set_Template_Default {
+    my $this = shift @_;
+    
+    my $template_file = shift @_;
+    
+    $this->{template_default} = $template_file;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    $this->SUPER::run_Task();
+}
+
+sub process_Content {
+    $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    $this->set_Template_File($this->{template_default});
+    
+    #print "\$this->{template_default} = " . $this->{template_default} . "<br>";
+    
+    $this->SUPER::process_Content;  
+}
+
+sub process_DYNAMIC { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    if ($te_type_name eq "other_dynamic_part_name_") {
+        ### add logic to get other dynamic content below
+        ### ???
+        ### ???
+        
+        $te->set_Content($other_dynamic_content_);
+    } 
+    
+    $this->SUPER::process_DYNAMIC($te);
+}
+
+sub process_DATAHTML { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    if ($te_type_name eq "other_dynamic_part_name_") {
+        ### add logic to get other dynamic content below
+        ### ???
+        ### ???
+
+        $te->set_Content($other_dynamic_content_);
+    } 
+        
+    $this->SUPER::process_DATAHTML($te);    
+}
+
+sub process_so_type_ { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    
+    #my $te_type_name = $te->get_Name;
+    
+    $this->add_Content($te_content);
+}
+
+1;
+
+
+
+
+################## webman_db_item_delete ##################################
+
+package child_component_name_;
+
+use webman_db_item_delete;
+
+@ISA=("webman_db_item_delete");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub set_Template_Default {
+    my $this = shift @_;
+    
+    my $template_file = shift @_;
+    
+    $this->{template_default} = $template_file;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    $this->SUPER::run_Task();
+}
+
+sub process_Content {
+    $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    $this->set_Template_File($this->{template_default});
+    
+    #print "\$this->{template_default} = " . $this->{template_default} . "<br>";
+    
+    $this->SUPER::process_Content;  
+}
+
+sub process_DYNAMIC { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    if ($te_type_name eq "other_dynamic_part_name_") {
+        ### add logic to get other dynamic content below
+        ### ???
+        ### ???
+        
+        $te->set_Content($other_dynamic_content_);
+    } 
+    
+    $this->SUPER::process_DYNAMIC($te);
+}
+
+sub process_DATAHTML { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    if ($te_type_name eq "other_dynamic_part_name_") {
+        ### add logic to get other dynamic content below
+        ### ???
+        ### ???
+
+        $te->set_Content($other_dynamic_content_);
+    } 
+        
+    $this->SUPER::process_DATAHTML($te);    
+}
+
+1;
+
+
+
+
+################## webman_db_item_view #######################################
+
+package child_component_name_;
+
+use webman_db_item_view_dynamic;
+
+@ISA=("webman_db_item_view");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    $this->SUPER::run_Task;
+}
+
+sub process_DBHTML { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    
+    ### possible to do some text pattern matching & replacement
+    ### before pass to its supers class function
+    ### ???
+    ### ???
+    
+    $this->SUPER::process_DBHTML($te);
+}
+
+1;
+
+
+
+
+################## webman_db_item_view_dynamic ###############################
+
+package child_component_name_;
+
+use webman_db_item_view_dynamic;
+
+@ISA=("webman_db_item_view_dynamic");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    $this->SUPER::run_Task();
+}
+
+sub customize_TLD {
+    my $this = shift @_;
+    
+    my $tld = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $i = 0;
+    my $tld_data = undef;
+    
+    my $caller_get_data = $cgi->generate_GET_Data("link_name link_id dmisn app_name ...");
+    my $get_data = undef;
+    
+    $tld->add_Column("row_color");
+    
+    my $row_color = "#FFFFFF";
+    
+    for ($i = 0; $i < $tld->get_Row_Num; $i++) { 
+        #$tld_data = $tld->get_Data($i, "nama");
+        
+        #$get_data = $caller_get_data . "&" . "nama=" . $tld_data;
+        #$get_data =~ s/ /+/g;
+        
+        #$tld_data = "<font color=\"#0099FF\">$tld_data</font>";
+            
+        #$tld->set_Data($i, "nama", $tld_data);
+        #$tld->set_Data_Get_Link($i, "nama", "index.cgi?$get_data");
+        
+        $tld->set_Data($i, "row_color", "$row_color");
+        
+        if ($row_color eq "#FFFFFF") {
+            $row_color = "#F2F3FD";
+        } else {
+            $row_color = "#FFFFFF";
+        }
+    }
+    
+    return $tld;
+}
+
+1;
+
+
+
+
+################## webman_TLD_item_view (customize) ###############################
+
+package child_component_name_;
+
+use webman_TLD_item_view;
+
+@ISA=("webman_TLD_item_view");
+
+sub new {
+    my $class = shift;
+    
+        my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    ### create table list data instance ############################################
+    my $tld = new Table_List_Data;
+    
+    ### do task to set items inside $tld ###########################################
+    ### ???
+    ### ???
+    
+    $this->set_TLD($tld);
+    
+    $this->SUPER::run_Task();
+}
+
+sub process_Content {
+    $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    $this->set_Template_File($this->{template_default});
+    
+    #print "\$this->{template_default} = " . $this->{template_default} . "<br>";
+    
+    $this->SUPER::process_Content;  
+}
+
+sub process_LIST { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    if ($te_type_name eq "main") {
+        $this->SUPER::process_LIST($te);
+        
+    } else {
+        $this->add_Content($te_content);
+    }
+}
+
+sub customize_TLD {
+    my $this = shift @_;
+    
+    my $tld = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $i = 0;
+    my $tld_data = undef;
+    
+    my $caller_get_data = $cgi->generate_GET_Data("link_name link_id dmisn app_name  " . $this->{inl_var_name} . " ...");
+    my $get_data = undef;
+    
+    $tld->add_Column("row_color");
+    
+    my $row_color = "#FFFFFF";
+    
+    for ($i = 0; $i < $tld->get_Row_Num; $i++) { 
+        $tld->set_Data($i, "row_color", "$row_color");
+
+        if ($row_color eq "#FFFFFF") {
+            $row_color = "#EEEEFF";
+        } else {
+            $row_color = "#FFFFFF";
+        }
+        
+        
+        ### example for setting link for table list data item
+        
+        #$tld_data = $tld->get_Data($i, "column_name_");
+        
+        #$get_data = $caller_get_data . "&" . "column_name_=" . $tld_data;
+        #$get_data =~ s/ /+/g;
+        
+        #$tld_data = "<font color=\"#0099FF\">$tld_data</font>";
+            
+        #$tld->set_Data($i, "column_name_", $tld_data);
+        #$tld->set_Data_Get_Link($i, "column_name_", "index.cgi?$get_data");
+    }
+    
+    return $tld;
+}
+
+1;
+
+
+
+
+################## webman_TLD_item_view_dynamic (customize) #######################
+
+package child_component_name_;
+
+use webman_TLD_item_view_dynamic;
+
+@ISA=("webman_TLD_item_view_dynamic");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    ### create table list data instance ############################################
+    my $tld = new Table_List_Data;
+    
+    ### do task to set items inside $tld ###########################################
+    ### ???
+    ### ???    
+    
+    $this->set_TLD($tld);
+    
+    $this->SUPER::run_Task();
+}
+
+sub process_Content {
+    $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    $this->set_Template_File($this->{template_default});
+    
+    #print "\$this->{template_default} = " . $this->{template_default} . "<br>";
+    
+    $this->SUPER::process_Content;  
+}
+
+sub process_VIEW { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    
+    my $caller_get_data = $cgi->generate_GET_Data("link_name dmisn link_id app_name session_id  " . $this->{inl_var_name} . " ...");
+    
+    $te_content =~ s/\$caller_get_data_/$caller_get_data/;
+        
+    $te->set_Content($te_content);
+        
+    $this->SUPER::process_VIEW($te);
+}
+
+sub process_LIST { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    if ($te_type_name eq "main") {
+        $this->SUPER::process_LIST($te);
+        
+    } else {
+        $this->add_Content($te_content);
+    }
+}
+
+sub process_SELECT { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    if ($te_type_name eq $this->{lsn_var_name}) {
+        $this->SUPER::process_SELECT($te);
+            
+    } else {
+        $this->add_Content($te_content);
+    }
+}
+
+sub process_DYNAMIC { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    if ($te_type_name eq "other_dynamic_part_name_") {
+        ### add logic to get other dynamic content below
+        ### ???
+        ### ???
+        
+        $te->set_Content($other_dynamic_content_);
+    } 
+    
+    $this->SUPER::process_DYNAMIC($te);
+    
+}
+
+sub process_so_type_ { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+
+    #my $te_type_name = $te->get_Name;    
+    
+    $this->add_Content($te_content);
+}
+
+sub customize_TLD {
+    my $this = shift @_;
+    
+    my $tld = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $i = 0;
+    my $tld_data = undef;
+    
+    my $caller_get_data = $cgi->generate_GET_Data("link_name link_id dmisn app_name " . $this->{inl_var_name} . " ...");
+    my $get_data = undef;
+    
+    $tld->add_Column("row_color");
+    
+    my $row_color = "#FFFFFF";
+    
+    for ($i = 0; $i < $tld->get_Row_Num; $i++) { 
+        $tld->set_Data($i, "row_color", "$row_color");
+
+        if ($row_color eq "#FFFFFF") {
+            $row_color = "#EEEEFF";
+        } else {
+            $row_color = "#FFFFFF";
+        }
+        
+        
+        ### example for setting link for table list data item
+        
+        #$tld_data = $tld->get_Data($i, "column_name_");
+        
+        #$get_data = $caller_get_data . "&" . "column_name_=" . $tld_data;
+        #$get_data =~ s/ /+/g;
+        
+        #$tld_data = "<font color=\"#0099FF\">$tld_data</font>";
+            
+        #$tld->set_Data($i, "column_name_", $tld_data);
+        #$tld->set_Data_Get_Link($i, "column_name_", "index.cgi?$get_data");
+    }
+    
+    return $tld;
+}
+
+1;

@@ -1,0 +1,384 @@
+#_title_
+webman_FTP_upload
+#_end_
+
+#_des_
+### Component-type module that provides functions to support file upload 
+### operation from client browser to application server host. The uploaded 
+### files will be first saved into application's temporary directory before 
+### copied into the target directory by using the FTP service. Files stored  
+### inside the temporary directory will be automatically deleted after the 
+### copy operation is completed. FTP user account for access to target upload 
+### directory is normally provided by the same server that host the 
+### application.
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>CGI_HTML_Map (Composition)</li>
+### <li>FTP_Service (Composition)</li>
+### <li>Table_List_Data (Composition)</li>
+### <li>TLD_HTML_Map (Composition)</li>
+### </ul>
+### <br />
+### <b>Webman-framework's Component-type Modules:</b><br />
+### <ul>
+### <li>CGI_Component::webman_CGI_component (Inheritance)</li>
+### <li>webman_link_path_generator (Composition)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template</b>
+### <p />
+### There are two view template files might be assigned to a single 
+### webman_FTP_upload module. The first is an HTML form page of 
+### "multipart/form-data" for user to choose the files to be uploaded. The 
+### second is a confirmation page to provide option to either proceed or 
+### cancel the upload operation. The second confirmation page also be useful 
+### to display the information and status of files being uploaded. If there is 
+### no confirmation view template assigned to the module the confirmation 
+### phase will be skipped. 
+### <p />
+### <b>1.1 Upload Form Page</b>
+### <p />
+### Below is an example of HTML form page for single file upload operation.
+#_end_
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //--> &gt; Upload File
+<p />
+<form method="POST" action="./index.cgi" enctype="multipart/form-data">
+  <!-- dynamic_content_ name=form_hidden_field //-->
+  <table border="1" wdth="640">
+    <tr>
+      <td align="center">
+        <b>File to Upload:</b> <input name="file_upload" type="file" id="file_upload">
+      </td>
+    </tr>
+
+    <tr>
+      <td align="center">
+        <input name="button_submit" type="submit" id="button_submit" value="Upload">
+        <input name="button_submit" type="submit" id="button_submit" value="Cancel">
+     </td>
+    </tr>
+  </table>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>
+#_doc_
+### For multiple files upload operation, an HTML form page like below can be used.
+#_end_
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //--> &gt; Upload Files
+<p />
+<form method="POST" action="./index.cgi" enctype="multipart/form-data">
+  <!-- dynamic_content_ name=form_hidden_field //-->
+  <table border="1">
+    <tr>
+      <td align="center">
+        <b>File to Upload #1:</b> <input name="file_upload_0" type="file" id="file_upload_0">
+        <p />
+        <b>File to Upload #2:</b> <input name="file_upload_1" type="file" id="file_upload_1">
+        <p />
+        <b>File to Upload #3:</b> <input name="file_upload_2" type="file" id="file_upload_2">
+        <p />
+      </td>
+    </tr>
+
+    <tr>
+      <td align="center">
+        <input name="button_submit" type="submit" id="button_submit" value="Upload">
+        <input name="button_submit" type="submit" id="button_submit" value="Cancel">
+     </td>
+    </tr>
+  </table>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>
+#_doc_
+### <b>1.2 Confirmation Form Page</b>
+### <p />
+### Both the single and multiple files upload operations will share the same 
+### view template for confirmation page such as shown below. 
+#_end_
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //--> &gt; Upload File
+<p />
+<form method="POST" action="./index.cgi">
+  <!-- dynamic_content_ name=form_hidden_field //-->
+  <table border="1">
+    <tr>
+      <th>Num.</th>
+      <th>File Name</th>
+      <th>Size</th>
+      <th>Status</th>
+      <th>Save Mode</th>
+    </tr>
+
+    <!-- start_list_ name=file_upload_list //-->
+    <tr class="$tld_row_class_">
+      <td align="right">$tld_num_.</td>
+
+      <td>$tld_name_</td>
+      <td align="right">$tld_size_</td>
+      <td align="center">$tld_status_</td>
+      <td align="center">$tld_save_mode_</td>
+
+    </tr>
+    <!-- end_list_ //-->
+
+    <tr>
+      <td align="center" colspan=5>
+        <input name="button_submit" type="submit" id="button_submit" value="Confirm">
+        <input name="button_submit" type="submit" id="button_submit" value="Cancel">
+     </td>
+    </tr>
+  </table>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Instantiation and Basic Parameter Setting</b>
+### <p />
+#_end_
+my $component = new webman_FTP_upload;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+### Default is "localhost"
+#$component->set_FTP_Host($host);
+
+$component->set_FTP_Login($login);
+$component->set_FTP_Password($password);
+
+### Can be "ascii" or "binary", default is "binary".
+#$component->set_Transfer_Mode($str_mode);
+
+### Default is "./temp". Need to make sure that the applied temporary 
+### directory is set to be writable by user who running the application  
+### main CGI script that is normally the user who running the web server. 
+#$component->set_Dir_Temp($dir_temp);
+
+### Any sub-directory under home directory of current FTP user account used. 
+$component->set_Dir_Upload($dir_upload);
+
+#$component->set_Submit_Button_Name($submit_button_name);  ### default is "button_submit"
+#$component->set_Proceed_On_Submit($proceed_button_value); ### default is "Upload"
+#$component->set_Confirm_On_Submit($confirm_button_value); ### default is "Confirm"
+#$component->set_Cancel_On_Submit($cancel_button_value);   ### default is "Cancel"
+
+#$component->set_Last_Phase_CGI_Data_Reset("param_name_1 param_name_2 ... param_name_n");
+#$component->set_Last_Phase_URL_Redirect($url);
+
+### Upload form page view template.
+$component->set_Template_Default($template_file);
+
+### Don't assign confirm view template to skip the confirmation phase. 
+$component->set_Template_Default_Confirm($template_file_confirm);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Component-type Generic Function Calls</b>
+### <p />
+#_end_
+if ($component->authenticate) {
+    $component->run_Task; 
+    $component->process_Content;
+}
+
+if ($component->last_Phase) {
+    $component->end_Task;
+}
+
+my $content = $component->get_Content;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Child Module for Customization</b>
+### <p />
+### Possible customization tasks to be performed are to further specify the 
+### target upload directory, manipulate file information and status before the 
+### execution of copy/save operation by FTP service, and to log/record the 
+### information of the uploaded files after they have been copied/saved into 
+### the target upload directory. All these kind of tasks can be done inside 
+### the <c>run_Task</c>, <c>override_FTP_Conn_Init</c>, 
+### <c>override_FTP_Conn_Complete</c>, <c>process_File_Info</c>, and 
+### <c>process_File_Info_Saved</c> functions respectively.
+#_end_
+package <trp><i>child_module_name</i></trp>;
+
+use webman_FTP_upload;
+
+@ISA=("webman_FTP_upload");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    ### Skeleton code to check if current user's groups are match with  
+    ### specific intended group name.
+    #my $group_name = "???";
+    #my $match_group = $this->match_Group($group_name, @groups);
+    
+    ### The most possible customization is to further specify the upload 
+    ### directory correspond to current environment and user profile.
+    %month2num = (Jan => "01", Feb => "02", Mar => "03", Apr => "04", 
+                  May => "05", Jun => "06", Jul => "07", Aug => "08", 
+                  Sep => "09", Oct => "10", Nov => "11", Dec => "12");
+                     
+    my $calendar = new Calendar;
+    
+    $calendar->set_CGI($cgi);
+    $calendar->set_DBI_Conn($db_conn);
+    $calendar->init_Task;
+    
+    my $year = $calendar->{current_year};
+    my $month = $month2num{$calendar->{current_month}};
+    
+    $this->{dir_upload} =~ s/\/$//;
+    $this->{dir_upload} .= "/$login_name/$year/$month";
+    
+    $this->SUPER::run_Task();
+}
+
+### The next function is hooked inside the run_Task function at the last 
+### phase just after the FTP connection instance is made available but 
+### before the uploaded file is saved into the target folder. 
+sub override_FTP_Conn_Init {
+    my $this = shift @_;
+    my $ftp_conn = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;   
+
+    ### Next is to do the task that requires 
+    ### service from $ftp_conn instance.
+    ### ???
+}
+
+### The next function is hooked inside the run_Task function at the last 
+### phase just after the uploaded file is saved into the target folder and  
+### before the FTP connection is closed. 
+sub override_FTP_Conn_Complete {
+    my $this = shift @_;
+    my $ftp_conn = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    ### Next is to do the task that requires 
+    ### service from $ftp_conn instance.
+    ### ???
+}
+
+sub process_File_Info {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    #my $match_group = $this->match_Group($group_name_, @groups);
+    
+    ### This function is to be overriden by the child module to further 
+    ### manipulate the uploaded files info. before they are saved into 
+    ### the target upload directory.
+    my @file_info = @{$this->{file_info}};
+    
+    foreach my $file (@file_info) {
+        ### The most basic thing to be done is to list the uploaded 
+        ### files to be saved.
+        $cgi->add_Debug_Text("$file->{dir_upload} : $file->{name} : $file->{name_to_save} : $file->{ext} : $file->{status} : $file->{save_mode}", 
+                             __FILE__, __LINE__);
+                             
+        ### Do extra tasks on the above file info. Below is the example 
+        ### to prevent the existing file from being overwritten.
+        if ($file->{status} eq "Exist") {
+            $file->{save_mode} = 0;
+        }
+    }
+}
+
+sub process_File_Info_Saved {
+    my $this = shift @_;
+    my $ftp_conn = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    #my $match_group = $this->match_Group($group_name_, @groups);
+    
+    ### This function is to be overriden by the child module to further 
+    ### manipulate the uploaded files info. after they are saved into 
+    ### the target upload directory.
+    my @file_info_saved = @{$this->{file_info_saved}};
+    
+    foreach my $file (@file_info_saved) {
+        ### The most basic one is to list the files that have been saved.
+        $cgi->add_Debug_Text("Save file as $file->{dir_upload}/$file->{name}", __FILE__, __LINE__);
+        
+        ### Do extra tasks on the above saved file info. The most poassible 
+        ### one is to record it into database table for later queries and 
+        ### retrievals
+        #???
+    }
+}
+
+1;
+
+
+

@@ -1,0 +1,39 @@
+#_title_
+Select_Option
+#_end_
+
+#_des_
+### The core module to help generate HTML code for <c>select</c> form element 
+### (dropdown list box). 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. Instantiation and Basic Parameter Setting</b><p />
+#_end_
+my $s_opt = new Select_Option;
+
+#_doc_
+### <b>Option 1</b> - Manually set the captions and values of the dropdown 
+### list box options
+#_end_
+$s_opt->set_Values("value_1", "value_2", "...", "value_n");
+$s_opt->set_Options("option_1", "option_2", "...", "option_n");
+
+#_doc_
+### <b>Option 2</b> - Set the captions and values using items from database table..
+#_end_
+$s_opt->set_DBI_Conn($db_conn);
+$s_opt->set_Values_From_DBI_SQL($sql_str);
+$s_opt->set_Options_From_DBI_SQL($sql_str);
+
+#_doc_
+### Set current selected items of the dropdown list box to be generated.
+#_end_
+$s_opt->set_Selected("value_1", "...", "value_n");
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Generating Dropdown List Box</b><p />
+#_end_
+my $content = $s_opt->get_Selection;

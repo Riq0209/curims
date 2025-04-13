@@ -1,0 +1,269 @@
+#_title_
+webman_calendar
+#_end_
+
+#_des_
+### Component-type module used to render basic calendar information of
+### system's current active month.
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>Calendar (Composition)</li>
+### <li>Table_List_Data (Composition)</li>
+### <li>TLD_HTML_Map (Composition)</li>
+### </ul>
+### <br />
+### <b>Webman-framework's Component-type Modules:</b><br />
+### <ul>
+### <li>CGI_Component::webman_CGI_component (Inheritance)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template</b>
+### <p />
+### The main part of view template content for webman_calendar module is 
+### actually a LIST template-element (23-31), passed to <c>process_LIST</c> 
+### hook function and processed by TLD_HTML_Map core module. The LIST 
+### template-element contains the formation of word patterns 
+### <c>$tld_date1_</c>, <c>...</c>, <c>$tld_date7_</c> and 
+### <c>$tld_date1_content_</c>, <c>...</c>, <c>$tld_date1_content_</c> as 
+### place-holders for calendar's date and date's content.  
+### <p />
+#_end_
+#_code_num_ 23-31
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<!-- start_view_ //-->
+<table width="315" border="1">
+  <tr>
+    <td width="45" colspan="7" align="center">$active_month_ &nbsp;&nbsp; $active_year_</td>
+  </tr>
+  <tr>
+    <td align="center" width="45">Mon</td>
+    <td align="center" width="45">Tue</td>
+    <td align="center" width="45">Wed</td>
+    <td align="center" width="45">Thu</td>
+    <td align="center" width="45">Fri</td>
+    <td align="center" width="45">Sat</td>
+    <td align="center" width="45">Sun</td>
+  </tr>
+  <!-- start_list_ //-->
+  <tr>
+    <td align="center" valign="top" width="45" $tld_cell1_color_>$tld_date1_ $tld_date1_content_</td>
+    <td align="center" valign="top" width="45" $tld_cell2_color_>$tld_date2_ $tld_date2_content_</td>
+    <td align="center" valign="top" width="45" $tld_cell3_color_>$tld_date3_ $tld_date3_content_</td>
+    <td align="center" valign="top" width="45" $tld_cell4_color_>$tld_date4_ $tld_date4_content_</td>
+    <td align="center" valign="top" width="45" $tld_cell5_color_>$tld_date5_ $tld_date5_content_</td>
+    <td align="center" valign="top" width="45" $tld_cell6_color_>$tld_date6_ $tld_date6_content_</td>
+    <td align="center" valign="top" width="45" $tld_cell7_color_>$tld_date7_ $tld_date7_content_</td>
+  </tr>
+  <!-- end_list_ //-->
+</table>
+<!-- end_view_ //-->
+</body>
+</html>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Instantiation and Basic Parameter Setting</b><p />
+### The arguments <c>$normal</c>, <c>$current</c>, <c>$odd</c>, and 
+### <c>$even</c> are strings represent HTML color codes in hexadecimal fromat 
+### number (<c>"#RRGGBB"</c>).
+#_end_
+my $component = new webman_calendar;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+#$component->set_Default_Text_Colors($normal, $current);
+
+#$component->set_Default_Cell_Colors($normal, $current);
+
+#$component->set_Default_Column_Color($odd, $even);
+#$component->set_Default_Row_Color($odd, $even);
+
+#$component->add_Date_Content("yyyy-mm-dd", $content);
+
+#$component->set_Template_Default($template_file);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Component-type Generic Function Calls</b><p />
+#_end_
+$component->run_Task;
+$component->process_Content;
+$component->end_Task;
+
+my $content = $component->get_Content;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Child Module for Customization</b><p /> 
+### Most basic customization is to add content into specific calendar's 
+### date-cell, done inside the overriden <c>run_Task</c> hook function 
+### (line 54). Other more advanced and complex customization tasks are 
+### involving calendar's data-structure manipulations inside 
+### <c>customize_TLD</c> function.
+### <p />
+### Calendar's data-structure instance (<c>$tld</c>) passed to 
+### <c>customize_TLD</c> function (line 109) is actually Table_List_Data core 
+### module instance.
+#_end_
+#_code_num_ 54-54,109-109 1
+package <trp><i>child_module_name</i></trp>;
+
+use webman_calendar;
+
+@ISA=("webman_calendar");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    #$this->set_Error("???");
+    
+    $this->SUPER::run_Task();
+    
+    #$this->set_Default_Text_Colors("#all_", "#current_");
+
+    #$this->set_Default_Cell_Colors("#all_", "#current_");
+
+    #$this->set_Default_Column_Color(#odd_, #even_");
+    #$this->set_Default_Row_Color(#odd_, #even_");
+
+    #$this->add_Date_Content("yyyy-mm-dd", "content_");
+}
+
+sub process_Content {
+    $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    $this->set_Template_File($this->{template_default});
+    
+    #print "\$this->{template_default} = " . $this->{template_default} . "<br>";
+    
+    $this->SUPER::process_Content;  
+}
+
+### The skeleton of "hook" function to be redefined to process template 
+### elements content. TE_TYPE_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, 
+### SELECT, DATAHTML, CGIHTML, etc.
+sub process_TE_TYPE_ {
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    $this->add_Content($te_content);
+    
+    #if ($this->get_Error eq "") {
+    #   $this->add_Content($te_content);
+        
+    #} else {
+    #   $this->add_Content($this->get_Error);
+    #}
+}
+
+sub customize_TLD {
+    my $this = shift @_;
+    
+    ### The $tld instance has the column names and structure as follows:
+    ### 'date1', ..., 'date7', 
+    ### 'cell1_color', ..., 'cell7_color', 
+    ### 'date1_iso', ..., 'date7_iso',
+    ### 'date1_content', ..., 'date7_content'
+    my $tld = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    ### The "link_id" is CGI parameter which is used to make the main controller run this this module
+    my $std_get_data = $cgi->generate_GET_Data("link_id");
+    
+    ### Add other possible new columns (link1, ..., link7).
+    #for (my $cell_num = 1; $cell_num <= 7; $cell_num++) {
+    #    $tld->add_Column("link" . $cell_num);
+    #}
+    
+    for (my $i = 0; $i < $tld->get_Row_Num; $i++) { 
+        ### Next possible operations on new columns (link1, ..., link7).
+        #for (my $cell_num = 1; $cell_num <= 7; $cell_num++) {
+        #    my $date_iso = $tld->get_Data($i, "date" . $cell_num . "_iso");
+        #    my $link_properties = "title=\"Click to do something...\"";
+        #    
+        #    if ($date_iso ne "") {
+        #        $tld->set_Data($i, "link" . $cell_num, "Link...?");
+        #        $tld->set_Data_Get_Link($i, "link" . $cell_num, 
+        #                                    "index.cgi?$std_get_data&calendar_ymd_selected=$date_iso", 
+        #                                    "$link_properties");
+        #    }
+        #}
+    }
+    
+    $cgi->add_Debug_Text($tld->get_Table_List, __FILE__, __LINE__);
+    
+    return $tld;
+}
+
+1;
+#_end_
+#_doc_
+<a href="./txtsrc/webman_calendar_child.txt">Get code...</href>
+#_end_

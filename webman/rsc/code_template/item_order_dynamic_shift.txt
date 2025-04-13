@@ -1,0 +1,69 @@
+    ### keys to change: __table_name__, __field_order_active__, __field_order__, __field_pk_active__, __field_fk__, __field_pk__
+    
+    
+    my $__field_fk__ = $cgi->param("__field_fk__");
+    
+    my $mode = $cgi->param("mode");
+    my $__field_pk__ = $cgi->param("__field_pk__");
+    my $__field_pk_active__ = $cgi->param("__field_pk_active__");
+    
+    if ($mode ne "") {
+        $dbu->set_Table("__table_name__");
+        
+        my $__field_order__ = $dbu->get_Item("__field_order__", "__field_pk__", $__field_pk__);
+        my $__field_order_active__ = $dbu->get_Item("__field_order__", "__field_pk__", $__field_pk_active__);
+        
+        if ($mode eq "put_before") {
+            $dbu->set_Table("__table_name__");
+            $dbu->set_Keys_Str("__field_fk__='$__field_fk__' and __field_order__ >= '$__field_order__' and __field_order__ < '$__field_order_active__'");
+            my @ahr = $dbu->get_Items("__field_pk__", undef, undef, "__field_order__", undef);
+            $dbu->set_Keys_Str(undef);
+            
+            $dbu->set_Table("__table_name__");
+            $dbu->update_Item("__field_order__", "$__field_order__", 
+                              "__field_pk__", "$__field_pk_active__");            
+            
+            $__field_order__++;
+            
+            foreach my $item (@ahr) {
+                $dbu->set_Table("__table_name__");
+                $dbu->update_Item("__field_order__", "$__field_order__", 
+                                  "__field_pk__", "$item->{__field_pk__}");
+                                 
+                $__field_order__++;
+            }
+            
+        } elsif ($mode eq "swap") {
+            $dbu->set_Table("__table_name__");
+            
+            $dbu->update_Item("__field_order__", "$__field_order__", 
+                             "__field_pk__", "$__field_pk_active__");
+                             
+            $dbu->update_Item("__field_order__", "$__field_order_active__", 
+                              "__field_pk__", "$__field_pk__");
+        
+        } elsif($mode eq "put_after") {
+            $dbu->set_Table("__table_name__");
+            $dbu->set_Keys_Str("__field_fk__='$__field_fk__' and __field_order__ > '$__field_order_active__' && __field_order__ <= '$__field_order__'");
+            my @ahr = $dbu->get_Items("__field_pk__", undef, undef, "__field_order__", undef);
+            $dbu->set_Keys_Str(undef);
+            
+            $dbu->set_Table("__table_name__");
+            $dbu->update_Item("__field_order__", $__field_order__, 
+                              "__field_pk__", "$__field_pk_active__");
+            
+            foreach my $item (@ahr) {
+                $dbu->set_Table("__table_name__");
+                $dbu->update_Item("__field_order__", "$__field_order_active__", 
+                                  "__field_pk__", "$item->{__field_pk__}");
+                                 
+                $__field_order_active__++;
+            }            
+        }
+        
+        if ($mode eq "put_before" || $mode eq "swap" || $mode eq "put_after") {
+            $cgi->param_Shift("mode");
+            $cgi->param_Shift("__field_pk__");
+            $cgi->param_Shift("__field_pk_active__");
+        }
+    }

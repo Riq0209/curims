@@ -1,0 +1,131 @@
+#_title_
+Text_DB_Map
+#_end_
+
+#_des_
+### The core module used to support database operations (insert and update) 
+### through the mapping of content data from the pre-formatted text file. By 
+### default, inside the text file, the "\t" and "\n" characters are used to 
+### separate the columns and the rows of database items.
+#_end_
+
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>DB_Utilities (Composition)</li>
+### <li>Table_List_Data (Composition)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. Instantiation and Basic Parameter Setting</b><p />
+#_end_
+
+my $txt2db = new Text_DB_Map;
+
+#_doc_
+### <b>1.1 Input Text File</b><p />
+### Input from text based file is simply set via <c>set_Text_File_Name</c> 
+### function.
+#_end_
+$txt2db->set_Text_File_Name("???.txt");
+
+#_doc_
+### <b>1.2 Scalar Type Input</b><p />
+### Option to directly pass the input content without using text based 
+### pre-formatted input file.
+#_end_
+my $text_content = "$data_r1c1\t$data_r1c2\t$data_r1c3\n$data_r2c1\t$data_r2c2\t$data_r2c3";
+$txt2db->set_Text_File_Content($text_content);
+
+#_doc_
+### <b>1.3 Columns and Rows Spliter Characters</b><p />
+### Default spliters for rows and columns are the "\t" and "\n" characters. Other   
+### characters such as "|", ":", and "," are also possible to be set via 
+### <c>$spliter_col</c> and <c>$spliter_row</c> arguments below.
+#_end_
+$txt2db->set_Spliter_Column($spliter_col);
+$txt2db->set_Spliter_Column(spliter_row);
+
+#_doc_
+### <b>1.4 Database Connection and Table Name</b><p />
+### The argument <c>$db_conn</c> is an instance of database connection created 
+### using CPAN's DBI module and the argument <c>$table_name</c> is the table 
+### name where the insert or update operations will be applied to.
+#_end_
+$txt2db->set_Conn($db_conn);
+$txt2db->set_Table_Name($table_name);
+
+#_doc_
+### <b>1.5 Update Key Field</b><p />
+### For update operation the key field name is required. It's used to feed the 
+### SQL update key: <sql>update ... where $key_field_name='...';</sql>
+#_end_
+$txt2db->set_Key_Field_Name($key_field_name);
+
+#_doc_
+### <b>1.6 Auto Key Field Type</b><p />
+### For insert operation on tables which implement automatic key-field values 
+### creation, the next function can be used. The <c>$key_type</c> argument can 
+### be "auto_increment", "36Base", or "62Base"and the default is 
+### "auto_increment". Read DB_Utilities module documentation for details about 
+### "36Base" and "62Base" key types.
+#_end_
+$txt2db->set_Key_Field_Type($key_type);
+
+#_doc_
+### <b>1.7 Auto Key Field Length</b><p />
+### This function is specifically applied for the above "36Base" and "62Base" 
+### key types. If ignored the default length is automatically set to 6.
+#_end_
+$txt2db->set_Key_Field_Length("length_");
+
+#_doc_
+### <b>1.8 Blank Field Conversion</b><p />
+### Extracted input line text with blank field after splited by "$spliter_col" 
+### character will by default be excluded. To prevent this, one can convert  
+### all blank fields to other value that match with the data type of the 
+### mapped database fields.
+#_end_
+$txt2db->set_Blank_Field_Conversion($conversion_value);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Table_List_Data Instance</b><p />
+### This function is automatically called inside <c>insert_Row</c> and 
+### <c>update_Row</c> functions (see section 3) but can be optionally called 
+### manually to create and return Table_List_Data module instance
+#_end_
+my $tld = $txt2db->generate_TLD;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Insert and Update Operations</b><p />
+#_end_
+#_doc_
+### <b>3.1 Insert Operation</b><p />
+### The argument for <c>set_Field_List</c> function is an anonymous array 
+### reference. The array's length must exaclty the same with the number of 
+### columns from the input text file that separated by the special column's 
+### spliter character (see section 1.3). The items of the array represent the 
+### database table field names.
+#_end_
+$txt2db->set_Field_List(["field_name_c1_", "field_name_c2_", "field_name_c3_"]);
+$txt2db->insert_Row;
+
+#_doc_
+### <b>3.2 Update Operation</b><p />
+### The argument for <c>set_Field_List</c> function is exactly the same as 
+### explained in section 3.1.
+#_end_
+$txt2db->set_Field_List(["field_name_c1_", "field_name_c2_", "field_name_c3_"]);
+$txt2db->update_Row;
+
+#_doc_
+### <b>3.3 Insert/Upate Items Debug</b><p />
+### Print back item rows being insert/update.
+#_end_
+my $tld = $txt2db->get_TLD;
+print $tld->get_Table_List;

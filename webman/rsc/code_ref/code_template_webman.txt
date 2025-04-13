@@ -1,0 +1,379 @@
+
+### web_man_CGI_component based module call ##############################
+
+sub other_web_man_CGI_component_child_subroutine {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $component = new web_man_CGI_component_child_name_;
+
+    #$component->set_Template_Default("template_web_man_CGI_component_child_name_.html");
+
+    $component->set_CGI($cgi);
+    $component->set_DBI_Conn($db_conn); ### option 2
+
+    if ($component->authenticate($login_name, \@groups, "webman_". $cgi->param("app_name") . "_comp_auth")) {
+        $component->run_Task;
+        $component->process_Content;
+    }
+
+    my $content = $component->get_Content;
+
+    $this->add_Content($content);
+}
+
+
+
+
+################## webman_calendar_interactive.pm ####################################
+
+$component = new webman_calendar_interactive;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+        
+$component->set_Script_Ref_Name("index.cgi");
+$component->set_Template_Default("template_webman_calendar_interactive.html");
+$component->set_Dates_Highlighted(@dates_highlighted);
+        
+$component->set_Additional_Get_Data($this->generate_GET_Data("get_data_1_ ... get_data_n_"));
+
+#$component->set_Cell_Colors("#normal_", "#current_", "#selected_");   ### example: ...("#F4F5FB", "#F4F5FB", "#FFE2C4");   
+#$component->set_Date_Text_Colors("#normal_", "#current_", "#selected_");  ### example: ...("#0099FF", "#FF0000", "#000000");
+#$component->set_Date_Highlighted("yyyy-mm-dd", ..., "yyyy-mm-dd");
+#$component->set_Additional_Get_Data("get_var_1_=get_val_1_&...&get_var_n_=get_val_n_");
+
+$component->run_Task;
+
+$component->process_Content;
+
+# my @ahr = $component->get_Weekly_Date_Info($key_date_);
+# my @ahr = $component->get_Monthly_Date_Info($year_, $month_);
+
+$te_content = $component->get_Content;
+
+
+
+
+################## webman_link_path_generator.pm #####################################
+
+my $wmlpg = new webman_link_path_generator;
+
+$wmlpg->set_Template_Default("template_link_path.html");
+$wmlpg->set_Carried_GET_Data("app_name session_id get_data_n_"); ### all possible get data except link_name & link_id
+$wmlpg->set_Level_Start("0");
+$wmlpg->set_Level_Deep("0");
+
+
+$wmlpg->set_CGI($cgi);
+$wmlpg->set_DBI_Conn($db_conn);
+
+$wmlpg->construct_Link_Path;
+
+$wmlpg->run_Task;
+$wmlpg->process_Content;
+
+my $content = $wmlpg->get_Content;
+
+
+
+
+################## webman_db_item_insert.pm ####################################
+
+my $component = new webman_db_item_insert;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+$component->set_Template_Default("template_add.html");
+$component->set_Template_Default_Confirm("template_add_confirm.html");
+
+$component->set_Table_Name("table_name_");
+$component->set_Check_On_CGI_Data("\$db_field_name_1_ ... \$db_field_name_n_"); 
+$component->set_Check_On_Fields_Duplication("field_name_1_ field_name_2_&field_name_3_ ... field_name_n_");
+
+
+#$component->set_Exceptional_DB_Fields("db_field_1_ ... db_field_n_");
+
+#$component->set_Submit_Button_Name("submit_button_name_"); ### default is "button_submit"
+#$component->set_Proceed_On_Submit("proceed_submit_button_value_"); ### default is "Proceed"
+#$component->set_Confirm_On_Submit("confirm_submit_button_value_"); ### default is "Confirm"
+#$component->set_Edit_On_Submit("edit_submit_button_value_"); ### default is "Edit"
+#$component->set_Cancel_On_Submit("cancel_submit_button_value_"); ### default is "Cancel"
+
+#$component->set_Last_Phase_CGI_Data_Reset("task button_submit \$db_field_name_1_ ... ... \$db_field_name_n_");
+#$component->set_Last_Phase_Only_If_Submit_Is("submit_button_value_");
+
+my $status = 0; 
+
+if ($component->authenticate($login_name, \@groups, "webman_". $cgi->param("app_name") . "_comp_auth")) {
+    $status = $component->run_Task; ### $status == 1 if insert operation is proceeded/success
+    $component->process_Content;
+}
+
+my $content = undef;
+
+if ($component->last_Phase) {
+    $component->last_Phase_CGI_Data_Reset;
+    $content = "set to other related content";
+
+} else {
+    $content = $component->get_Content;
+}
+
+
+
+
+################## webman_db_item_update.pm ####################################
+
+my $component = new webman_db_item_update;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+$component->set_Template_Default("template_update.html");
+$component->set_Template_Default_Confirm("template_update_confirm.html");
+
+$component->set_Table_Name("table_name_");
+$component->set_Update_Keys_Str("key_field_1_ = '\$cgi_key_field_1__'  and ... and key_field_n_ = '\$cgi_key_field_n__'");
+
+### the next method call can be omitted if the two above if completed and doesn't  
+### required complex tables joint for viewing current item to be updated 
+
+### $component->set_SQL_View("select * from table_name_ where key_field_1_ = '\$cgi_key_field_1__' and ... and key_field_n_ = '\$cgi_key_field_n__'");
+
+$component->set_Check_On_CGI_Data("\$db_field_name_1_ ... \$db_field_name_n_");
+$component->set_Check_On_Fields_Duplication("field_name_1_ field_name_2_&field_name_3_ ... field_name_n_");
+
+#$component->set_Limit_On_Fields("field_name_1_ ... field_name_n_"); ### only fields defined will be updated
+
+#$component->set_Submit_Button_Name("submit_button_name_"); ### default is "button_submit"
+#$component->set_Proceed_On_Submit("proceed_submit_button_value_"); ### default is "Proceed"
+#$component->set_Confirm_On_Submit("confirm_submit_button_value_"); ### default is "Confirm"
+#$component->set_Edit_On_Submit("edit_submit_button_value_"); ### default is "Edit"
+#$component->set_Cancel_On_Submit("cancel_submit_button_value_"); ### default is "Cancel"
+
+#$component->set_DB_Item_Auth_Info($login_name_, \@groups_, "webman_" . $cgi->param("app_name") . "_db_item_auth");
+
+#$component->set_Last_Phase_CGI_Data_Reset("task button_submit \$db_field_name_1_ ... ... \$db_field_name_n_");
+
+my $status = 0; 
+
+if ($component->authenticate($login_name, \@groups, "webman_". $cgi->param("app_name") . "_comp_auth")) {
+    $status = $component->run_Task; ### $status == 1 if insert operation is proceeded/success
+    $component->process_Content;
+}
+
+my $content = undef;
+
+if ($component->last_Phase) {
+    $component->last_Phase_CGI_Data_Reset;
+    $content = "set to other related content";
+
+} else {
+    $content = $component->get_Content;
+}        
+
+        
+
+
+################## webman_db_item_delete.pm ###############################
+
+my $component = new webman_db_item_delete;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn); ### option 2
+
+$component->set_Template_Default("template_delete_confirm.html");
+
+$component->set_Table_Name("table_name_1_ ... table_name_n_");
+$component->set_Delete_Keys_Str("key_field_1_ = '\$cgi_key_field_value_1__'  and ... and key_field_n_ = '\$cgi_key_field_value_n__'");
+
+$component->set_SQL_View("select * from table_name_ where key_field_1_ = '\$cgi_key_field1__' and ... and key_field_n_ = '\$cgi_key_field_n__'");
+
+#$component->set_Submit_Button_Name("submit_button_name_"); ### default is "button submit"
+#$component->set_Proceed_On_Submit("proceed_submit_button_value_"); ### default is "Proceed"
+#$component->set_Cancel_On_Submit("cancel_submit_button_value_"); ### default is "Cancel"
+
+#$component->set_Last_Phase_CGI_Data_Reset("task button_submit \$db_field_name_1_ ... ... \$db_field_name_n_");
+
+my $status = 0; 
+
+if ($component->authenticate($login_name, \@groups, "webman_". $cgi->param("app_name") . "_comp_auth")) {
+    $status = $component->run_Task; ### $status == 1 if insert operation is proceeded/success
+    $component->process_Content;
+}
+
+my $content = undef;
+
+if ($component->last_Phase) {
+    if ($status) {
+        ### do other related/relevance additional tasks
+    }
+    
+    $component->last_Phase_CGI_Data_Reset;
+    
+    $content = "set to other related content";
+
+} else {
+    $content = $component->get_Content;
+}
+
+
+
+
+################## webman_db_item_view.pm ####################################
+
+my $component = new webman_db_item_view;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+$component->set_Template_Default("template_???.html");
+
+$component->set_SQL_Debug($num); ### 0 or 1 and default is 0
+
+$component->set_SQL("select * from table_name_ where key_val_str_ order by order_fields_");
+
+#if ($component->authenticate($login_name, \@groups, "webman_". $cgi->param("app_name") . "_comp_auth")) {
+    $component->run_Task;
+    $component->process_Content;
+#}
+        
+my $content = $component->get_Content;
+
+
+
+
+################## webman_db_item_view_dynamic.pm ############################
+
+$component = new webman_db_item_view_dynamic;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+#$component->set_DBI_App_Conn("db_driver_ db_name_ db_username_ db_password_");
+
+$component->set_Template_Default("template_???.html");
+
+$component->set_SQL_Debug($num); ### 0 or 1 and default is 0
+
+#$component->set_SQL("select * from table_name_ order by \$cgi_order_by_???_");
+#$component->set_SQL("select * from table_name_ where \$cgi_filter_by_???_ order by \$cgi_order_by_???_");
+
+$component->set_Table_Name($table_name); ### this will ignore the sql above
+
+$component->set_Order_Field_CGI_Var("order_by_???");
+
+$component->set_Order_Field_Caption("caption_1_:...:caption_n_");
+$component->set_Order_Field_Name("field_1_:...:field_2_"); ### can be 1 or many fields following standard SQL order syntax: fname_ | fname_ desc | fname_1_ , ..., fname_2 desc | ...  
+
+#$component->set_Map_Caption_Field("caption_1_ => field_1_, ..., caption_n_ => field_n_"); ### it's only [1 to 1] mapping
+#$component->set_Default_Order_Field_Selected($order_field_index_num_); ### default is 0
+
+#$component->set_DB_Items_View_Num($num); ### default is 10
+#$component->set_DB_Items_Set_Num($num); ### default is 1
+#$component->set_List_Selection_Num($num); ### default is 15
+
+#$component->set_Row_Num_Text_Pattern("\$tld_???_"); ### default is "\$tld_num_"
+
+#$component->set_INL_Var_Name("???"); ### Items Num./List, default is "inl"
+#$component->set_LSN_Var_Name("???"); ### List Set Num., default is "lsn"
+
+#$component->set_Filter_Field_Name($field_name);
+#$component->set_Filter_Field_CGI_Var("filter_by_???"); ### default is filter_by_$field_name
+#$component->set_Filter_Field_Additional_Keystr("[and|or] field_1_='field_value_1_' [and|or] ... [and|or] field_n_='field_value_n_'");
+
+$component->set_DB_Items_Set_Num_Var("dbisn_???");
+$component->set_Dynamic_Menu_Items_Set_Number_Var("dmisn_???");
+                                                                     
+$component->set_Additional_GET_Data("get_data_1=get_value_1&...&get_data_n=get_value_n");
+$component->set_Additional_Hidden_POST_Data("post_data_1=post_value_1&...&post_data_n=post_value_n");                               
+
+$component->set_Link_Path_Additional_Get_Data("cgi_var_name_1=cgi_var_value_1_&...&cgi_var_name_n=cgi_var_value_n_"); 
+
+$component->run_Task;
+$component->process_Content;
+
+#print "SQL = " . $component->get_SQL_View; ### for debug purpose
+
+my $content = $component->get_Content;
+
+
+
+
+################## webman_TLD_item_view.pm ###########################################
+
+my $component = new webman_TLD_item_view;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn); ### option 2
+
+$component->set_Template_Default("template_.html");
+$component->set_TLD($tld);
+#$component->set_Items_View_Num(50);
+#$component->set_Items_Set_Num(1);
+
+#if ($component->authenticate($login_name, \@groups, "webman_" . $cgi->param("app_name") ."_comp_auth")) {
+    $component->run_Task;
+    $component->process_Content;
+#}
+
+my $content = $component->get_Content;
+
+
+
+
+################## webman_TLD_item_view_dynamic.pm ####################################
+
+my $component = new webman_TLD_item_view_dynamic;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn); ### option 2
+
+$component->set_TLD($tld);
+
+$component->set_Template_Default("template_???.html");
+
+$component->set_List_Selection_Num(10); ### default is 15 (if line/code is disabled)
+
+$component->set_Order_Field_CGI_Var("order_by_???");
+$component->set_Order_Field_Caption("Caption 1:Caption 2:Caption n");
+$component->set_Order_Field_Name_Opt_Mode("field_1:field_2 field_1:field_n", "asc/desc:asc/desc asc/desc:asc/desc", "str/num:str/num str/num:str/num");
+
+$component->set_Default_Order_Field_Selected($order_field_index_);
+
+$component->set_Items_View_Num(50);
+$component->set_Items_Set_Num(1); ### set for default set num
+
+#$component->set_INL_Var_Name("???"); ### Items Num./List, default is "inl"
+#$component->set_LSN_Var_Name("???"); ### List Set Num., default is "lsn"
+
+$component->set_Items_Set_Num_Var("tldisn_???");
+$component->set_Dynamic_Menu_Items_Set_Number_Var("dmisn_???");
+
+$component->set_Carried_GET_Data("inl ..."); ### all possible get data except link_name, dmisn, 
+                                             ### link_id, app_name, and session_id
+                                                                     
+$component->set_Carried_Hidden_POST_Data("... "); ### all possible hidden post data except link_name, dmisn, 
+                                                  ### link_id, app_name, and session_id                                                                     
+
+
+$component->set_Additional_GET_Data("get_data_1=get_value_1&...&get_data_n=get_value_n");                                                      
+$component->set_Additional_Hidden_POST_Data("post_data_1=post_value_1&...&post_data_n=post_value_n");
+
+$component->set_Link_Path_Carried_Get_Data("get_data_1_ ... get_data_n_"); ### all possible post data except link_name, link_id, dmisn, app_name & session_id
+
+if ($component->authenticate($login_name, \@groups, "webman_" . $cgi->param("app_name") ."_comp_auth")) {
+    $component->run_Task;
+    $component->process_Content;
+}
+
+my $content = $component->get_Content;

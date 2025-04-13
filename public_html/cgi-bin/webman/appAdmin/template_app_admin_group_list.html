@@ -1,0 +1,70 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<!-- start_view_ //-->
+<br>&nbsp;<br>
+<table width="900" border="0" align="center" cellpadding="1" cellspacing="1" bgcolor="#CCCCCC">
+  <tr bgcolor="#FFFFCC">
+    <td width="15"><font size="1" face="Verdana, Arial, Helvetica, sans-serif"></font></td>
+    <!-- start_menu_ name=caption //-->
+    <td> <b><font color="#990000" size="2">menu_item0_</font></b></td>
+    <td><b><font color="#990000" size="2">menu_item1_</font></b></td>
+    <td align="center"><b><font size="2">Components Assigned </font></b></td>
+    <td align="center"><b><font size="2">Users Assigned </font></b></td>
+    <!-- end_menu_ //-->
+    <td width="100" align="center" bgcolor="#FFFFCC"><font size="2"><b>Operations</b></font></td>
+  </tr>
+  <!-- start_list_ //-->
+  <tr bgcolor="$tld_row_color_">
+    <td width="15" height="15" valign="top"><font size="2">$tld_num_.</font></td>
+    <td height="15" valign="top"><font size="2">$tld_group_name_</font></td>
+    <td height="15" valign="top"><font size="2">$tld_description_</font></td>
+    <td align="center" valign="top"><font size="2"><a href="./index.cgi?$caller_get_data_&group_name=$tld_group_name_&task=group_assign_component"><font color="#0099FF">$tld_comp_num_</font></a></font></td>
+    <td height="15" align="center" valign="top"><font size="2"><a href="./index.cgi?$caller_get_data_&group_name=$tld_group_name_&task=group_assign_user"><font color="#0099FF">$tld_user_num_</font></a></font></td>
+
+    <td width="100" height="15" align="center" valign="top">
+      <font size="2">
+      <a href="./index.cgi?$caller_get_data_&id_group=$tld_id_group_&group_name=$tld_group_name_&task=group_update"><font color="#0099FF">Update</font></a> /
+      <a href="./index.cgi?$caller_get_data_&id_group=$tld_id_group_&group_name=$tld_group_name_&task=group_delete"><font color="#0099FF">Delete</font></a></font>
+    </td>
+  </tr>
+  <!-- end_list_ //-->
+  <tr bgcolor="#FFFFCC">
+    <td width="15" height="20"><font size="2">...</font></td>
+    <td height="20"><font size="2">...</font></td>
+    <td height="20"><font size="2">...</font></td>
+    <td height="20" align="center"><font size="2">...</font></td>
+    <td align="center"><font size="2">...</font></td>
+    <td width="100" height="20" align="center"><font size="1"><a href="./index.cgi?$caller_get_data_&task=group_add"><font color="#0099FF" size="2">Add</font></a></font></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td width="15">&nbsp;</td>
+    <form name="tld_view_dynamic" method="post" action="index.cgi">
+    <td align="center" height="25" colspan="5">
+	  <font title="Item Number/List" color="#FF0000" size="2"><b> Items/List:</b></font>
+	  <input name="inl" type="text" id="inl" value="$inl_" size="3">
+	  &nbsp;
+
+	  <!-- start_menu_ name=list //-->
+	  <font size="2">dynamic_menu_items_</font>
+	  <!-- end_menu_ //-->
+
+	  &nbsp;
+
+	  <font title="List Set Number" color="#FF0000" size="2"><b>List Set Num. :</b></font>
+	  <select name="lsn" onChange="document.tld_view_dynamic.submit()">
+		<!-- select_ name=lsn //-->
+	  </select>
+
+	  <!-- dynamic_content_ name=form_hidden_field //-->
+    </td>
+    </form>
+  </tr>
+</table>
+<!-- end_view_ //-->
+</body>
+</html>

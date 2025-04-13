@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+<p />
+
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+
+<table>
+<!-- start_cgihtml_ name=fe_update_delete //-->
+<tr>
+  <td align="right"><b>__key_field_search_caption__:</b></td>
+
+  <td>
+    <input name="__key_field_search_name__" type="text" id="__key_field_search_name__" value="$cgi___key_field_search_name___">
+  </td>
+</tr>
+<!-- end_cgihtml_ //-->
+<tr>
+  <td>&nbsp;</td>
+  <td><input name="button_submit" type="submit" id="button_submit" value="Search" /></td>
+</tr>
+</table>
+
+</form>
+
+<!-- dynamic_content_ name=search_result //-->
+<p />
+&nbsp;
+
+<!-- start_cgihtml_ name=link_update_delete //-->
+<a href="./index.cgi?link_id=$cgi_link_id_&task=__task_update__">Update</a> |
+<a href="./index.cgi?link_id=$cgi_link_id_&task=__task_delete__">Delete</a>
+<!-- end_cgihtml_ //-->
+
+<!-- end_view_ //-->
+</body>
+</html>

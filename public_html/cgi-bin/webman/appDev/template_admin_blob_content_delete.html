@@ -1,0 +1,67 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<!-- start_view_ //-->
+<form name="form1" method="post" action="" enctype="multipart/form-data">
+  <input type="hidden" name="task" value="reload_phase3">
+  <input type="hidden" name="mode" value="reload">
+  <!-- dynamic_content_ //-->
+  <input type="hidden" name="delete_blob_id_list" value="$delete_blob_id_list_">
+  <input type="hidden" name="$db_blob_id">
+  <input type="hidden" name="$db_content">
+  <table width="100%" border="0">
+    <tr>
+      <td width="75" align="right"><font size="2"><b>Reload File:</b></font></td>
+      <td><font size="2">
+        <!-- start_datahtml_ //-->
+        <a href="../app_name_/index_blob_content_printer_v2.cgi?blob_id=blob_id_&app_name=app_name_" target="_blank"><font color="#0099FF">$filename_</font></a>
+        <!-- end_datahtml_ //-->
+        </font></td>
+    </tr>
+    <tr>
+      <td width="75" align="right"><font size="1">&nbsp;</font></td>
+      <td><font size="1">&nbsp;</font></td>
+    </tr>
+    <tr>
+      <td width="75" align="right"><font size="1">&nbsp;</font></td>
+      <td><font size="1">&nbsp;</font><b><font size="2" color="#FF0000">Requires
+        to delete BLOB content as listed below: </font><font size="2">&nbsp;&nbsp;</font></b></td>
+    </tr>
+    <tr>
+      <td width="75" align="right"><font size="1">&nbsp;</font></td>
+      <td><font size="1">&nbsp;</font></td>
+    </tr>
+    <tr>
+      <td width="75" align="right"><font size="1">&nbsp;</font></td>
+      <td>
+        <table width="100%" border="0">
+		  <!-- start_dbhtml_ //-->
+          <tr>
+            <td width="25" align="right" height="16"><font size="2">$num_.</font></td>
+            <td width="858" height="16"><font size="2"><a href="../$app_name_/index_blob_content_printer_v2.cgi?blob_id=$db_blob_id_&app_name=$app_name_" target="_blank"><font color="#0099FF">$db_filename_.$db_extension_</font></a></font></td>
+          </tr>
+		  <!-- end_dbhtml_ //-->
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td width="75" align="right"><font size="1">&nbsp;</font></td>
+      <td><font size="1">&nbsp;</font></td>
+    </tr>
+    <tr>
+      <td width="75" align="right">&nbsp;</td>
+      <td>
+        <input type="submit" name="submit" value="Continue">
+        <input type="submit" name="submit" value="Cancel">
+      </td>
+    </tr>
+  </table>
+</form>
+<br>
+<!-- end_view_ //-->
+</body>
+</html>

@@ -1,0 +1,101 @@
+#_title_
+CGI_HTML_Map
+#_end_
+
+#_des_
+### The core module to render CGI parameters values inside the view 
+### template. In most cases developers not need to use this module directly 
+### since its implementation already supported internally inside CGI_Component 
+### module. Developers only need to prepare the view template (see section 1)  
+### and assign it to application component that is based on CGI_Component 
+### module.   
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template</b><p />
+### Example of view template to render student information from CGI parameters 
+### "name", "course", and "year". The parts of CGI template-element named 
+### <c>student_info</c> (lines 09-14) are marked by the 
+### <c>&lt;!-- start_cgihtml_ name=student_info //--&gt;</c> 
+### and <c>&lt;!-- end_cgihtml_ //--&gt;</c> paired template tags.   
+### Component-type module assigned with this view template will have its 
+### <c>process_CGIHTML</c> function hooked and run when the main function to 
+### extract view template-elements <c>process_Content</c> is called. Read 
+### section 3 for example on how to override this hook function.
+### <p />
+### Also note that the CGI parameters are mapped into CGI template-elements 
+### using template word patterns as follows: <c>name =&gt; $cgi_name_</c>, 
+### <c>course =&gt; $cgi_course_</c>, and <c>year =&gt; $cgi_year_</c>.
+### 
+#_end_
+#_code_num_ 9-14
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body>
+<!-- start_view_ //-->
+<!-- start_cgihtml_ name=student_info //-->
+Name: $cgi_name_
+<br />
+Course: $cgi_course_
+<br />
+Year: $cgi_year_
+<!-- end_cgihtml_ //-->
+<!-- end_view_ //->
+</body>
+</html
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Instantiation and Basic Parameter Setting</b><p />
+### The passed argument <c>$cgi</c> is other Webman-framework core module  
+### instance. The <c>$cgi</c> is an instance of GMM_CGI module.
+#_end_
+my $cgi_HTML = new CGI_HTML_Map;
+    
+$cgi_HTML->set_CGI($cgi);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Processing Template Element Content</b><p />
+#_end_
+$cgi_HTML->set_HTML_Code($te_content);
+
+### $esc_mode can be 0 or 1
+$cgi_HTML->set_Escape_HTML_Tag($esc_mode); 
+    
+my $content = $cgi_HTML->get_HTML_Code;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Implementation Inside Hook Function</b><p />
+### Please note that in most cases the implementation below is not required 
+### since it has been by default handled inside CGI_Component core module (the 
+### most top base-module of component-type modules). 
+#_end_
+sub process_CGIHTML { 
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    ### Start process template-element's content.
+    my $cgi_HTML = new CGI_HTML_Map;
+        
+    $cgi_HTML->set_CGI($cgi);
+    $cgi_HTML->set_HTML_Code($te_content);
+    
+    my $content = $cgi_HTML->get_HTML_Code;
+    
+    $this->add_Content($content);
+}

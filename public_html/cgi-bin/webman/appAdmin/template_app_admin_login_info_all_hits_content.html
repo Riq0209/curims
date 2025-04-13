@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Untitled Document</title>
+
+
+</head>
+
+<body>
+<!-- start_view_ //-->
+<!-- start_cgihtml_ name=name_ //-->
+<a href="index.cgi?link_id=3&app_name_in_control=$cgi_app_name_in_control_&session_id=$cgi_session_id_&hits_session_id=">
+<font color="#0099FF">All</font></a> &gt; 
+Hits Detail List &gt; 
+$cgi_hits_session_id_
+<!-- end_cgihtml_ //-->
+<br>
+<br/>
+<table width="480" border="0" align="center" cellpadding="1" cellspacing="1" bgcolor="#CCCCCC">
+  
+  <tr align="center" bgcolor="#CCFFFF">
+    <td colspan="2"><strong><font size="2">User Information</font></strong> </td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td align="right" bgcolor="#FFFFCC"><strong><font size="2">Login name: </font></strong></td>
+    <td><!-- start_dbhtml_ //--><font size="2">$db_login_name_</font></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td align="right" bgcolor="#FFFFCC"><strong><font size="2">Full Name: </font></strong></td>
+    <td><font size="2">$db_full_name_</font></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td align="right" bgcolor="#FFFFCC"><strong><font size="2">Description:</font></strong></td>
+    <td><font size="2">$db_description_</font><!-- end_dbhtml_ //--></td>
+  </tr>
+</table>
+<br>
+<table width="480" border="0" align="center" cellpadding="1" cellspacing="1" bgcolor="#CCCCCC">
+  <tr align="center" bgcolor="#CCFFFF">
+    <td colspan="4"><strong><font size="2">Hits Detail</font></strong> </td>
+  </tr>
+  <tr bgcolor="#FFFFCC">
+    <td align="right"><strong><font size="2">Num.</font></strong></td>
+    <td align="center" bgcolor="#FFFFCC">        <strong><font size="2">Date/Time</font></strong></td>
+    <td align="center"><strong><font size="2">Method </font></strong></td>
+    <td align="center"><strong><font size="2"> Hit ID </font></strong></td>
+  </tr>
+  <!-- start_list_ //-->
+  <tr bgcolor="#FFFFFF">
+    <td align="right"><font size="2">$tld_num_.</font></td>
+    <td align="center"><font size="2">$tld_date_ / $tld_time_</font></td>
+    <td align="center"><font size="2">$tld_method_</font></td>
+    <td align="center"><font size="2">$tld_hit_id_</font></td>
+  </tr>
+  <!-- end_list_ //-->
+</table>
+<!-- end_view_ //-->
+</body>
+</html>

@@ -1,0 +1,639 @@
+################## Template Tags ###################################################
+
+### coupled tag
+
+<!-- start_view_ //-->...<!-- end_view_ //-->
+
+
+<!-- start_menu_ name=name_ //-->
+
+    menu_item0_ | menu_item1_ ... menu_itemn_ ### (HTML_Link_Menu.pm)
+    
+    dynamic_menu_items_ ### (HTML_Dynamic_Link_Menu.pm)
+    
+<!-- end_menu_ //-->
+
+
+<!-- start_dbhtml_ name=name_ //-->...<!-- end_dbhtml_ //-->
+
+<!-- start_list_ name=name_ //-->...<!-- end_list_ //-->
+
+<!-- start_datahtml_ name=name_ //-->...<!-- end_datahtml_ //-->
+
+<!-- start_cgihtml_ name=name_ //-->...<!-- end_cgihtml_ //-->
+
+
+### single tag
+
+<!-- dynamic_content_ name=name_ //-->
+
+<!-- select_ name=name_ //-->
+
+
+### special template name
+
+<!-- dynamic_content_ name=form_hidden_field //--> ### webman_TLD_item_view_dynamic & webman_db_item_insert
+
+<!-- dynamic_content_ name=link_path //-->         ### new suggesstion still not implemented into any module
+
+<!-- start_datahtml_ name=form_db_field //-->      ### webman_db_item_insert
+
+<!-- start_menu_ name=caption //-->        ### webman_TLD_item_view_dynamic
+
+<!-- start_menu_ name=list //-->           ### webman_TLD_item_view_dynamic
+
+<!-- start_list_ name=main //-->           ### webman_TLD_item_view_dynamic
+
+<!-- select_ name=lsn //-->                ### webman_TLD_item_view_dynamic
+
+
+### special pattern variable 
+
+cgi_var_name_ -> Data_HTML_Map
+
+$cgi_cgi_var_name_ -> CGI_HTML_Map
+
+$db_field_name_ -> DBI_HTML_Map
+
+$db_cgi_var_field_name -> HTML_DB_Map
+
+$tld_field_name_ -> TLD_HTML_Map
+
+$carried_previous_get_data_ -> webman_db_item_view_dynamic.pm
+
+
+
+################## Most simple index.cgi implementation #######################
+
+#! /usr/bin/perl
+
+use DBI;
+use GMM_CGI;
+use main_page_component_;
+
+$dbi_conn = DBI->connect("DBI:dbd_driver_:dbname=db_name_", "user_", "password_");
+
+$cgi = new GMM_CGI;
+
+$page_properties = "";
+
+$cgi->print_Header;
+$cgi->start_HTML("page_title_", $page_properties);
+
+$component_name = $cgi->param("component_name");
+
+if ($component_name eq "") {
+    $component_name = "main_page_component_";
+}
+
+$component = new $component_name;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($dbi_conn);
+$component->run_Task;
+$component->process_Content;
+
+my $content = $component->get_Content;
+
+print $content;
+
+$cgi->end_HTML();
+
+
+
+################## CGI_Component Child #############################################
+
+package package_name_;
+
+require CGI_Component;
+
+@ISA=("CGI_Component");
+
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+}
+
+sub process_Content {
+    $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    $this->set_Template_File("./template_file_.html");
+    
+    $this->SUPER::process_Content;  
+}
+
+sub process_so_type_ { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    
+    $this->add_Content($te_content);
+}
+
+1;
+
+
+
+################## CGI_Component Called ############################################
+
+
+#! /usr/bin/perl
+
+#use Pg;  ### option 1
+#use DBI; ### option 2
+
+#use component_name;     ### option 1
+#require component_name; ### option 1
+
+#$conn = Pg::connectdb("dbname=??? user=??? password=???");              ### option 1
+#$dbi_conn = DBI->connect("DBI:mysql:dbname=db?", "user?", "password?"); ### option 2
+
+my $cgi = new GMM_CGI;
+
+
+my $component = new component_name;
+
+$component->set_CGI($cgi);
+
+$component->set_Pg_Conn($db_conn);  ### option 1
+
+$component->set_DBI_Conn($db_conn); ### option 2
+
+$component->set_Error_Back_Link($link_content_);
+
+if ($component->authenticate(login_name_, groups_array_ref_, comp_auth_table_name_)) { ### option 1
+    $component->run_Task;
+    $component->process_Content;
+}
+
+$component->run_Task; ### option 2
+$component->process_Content;            
+
+my $content = $component->get_Content;
+
+### optional for handling app. constraint error
+
+$component->set_Error($error_message); ### option 1
+$component->generate_App_Constraint_Error_Message($app_constraint_type); ### option 2
+
+if ($component->get_Error ne "") {
+    $content = $component->get_Error;
+}
+
+
+
+################## GMM_CGI Used ############################################
+
+my $cgi = new GMM_CGI;
+
+$cgi->print_Header;
+
+$cgi->start_HTML($page_title, $page_properties, $java_script_src);
+
+my $cgi_param_value = $cgi->param("cgi_param_name_");
+my $cgi_param_value = $cgi->param_Shift("cgi_param_name_"); ### also remove CGI variable from current active list
+
+if (!$cgi->set_Param_Val("cgi_param_name", "cgi_param_value_")) {
+    $cgi->add_Param("cgi_param_name", "cgi_param_value_");
+}
+
+$cgi->end_HTML();
+
+
+################## Select_Option Used ############################################
+
+my $s_opt = new Select_Option;
+
+#$s_opt->set_DBI_Conn($db_conn);
+#$s_opt->set_Values_From_DBI_SQL($sql);
+#$s_opt->set_Options_From_DBI_SQL($sql);
+
+
+#$s_opt->set_Values("value_1", "value_2", "...", "value_n");
+#$s_opt->set_Options("option_1", "option_2", "...", "option_n");
+
+$s_opt->set_Selected("value_1", "...", "value_n");
+
+my $content = $s_opt->get_Selection;
+
+
+
+################## DB_Utilities Used ############################################
+
+my $dbu = new DB_Utilities;
+
+$dbu->set_DBI_Conn($db_conn);   ### option 1
+$dbu->set_Pg_Conn($db_conn);    ### option 2
+
+$dbu->set_Escape_HTML_Tag(num); ### num = 1/0
+
+$dbu->set_Table("table_name_");
+
+
+$dbu->set_Keys_Str($keys_str);  ### option 3 
+...
+...
+...
+$dbu->set_Keys_Str(undef); ### 
+
+
+$dbu->insert_Row("key_1 ... key_n", "val_1 ... val_n");     ### method 1
+$dbu->update_Item("update_field", "update_value", "key_1 ... key_n", "val_1 ... val_n");
+$dbu->delete_Item("key_1 ... key_n", "val_1 ... val_n");    ### method 2
+
+$var_ = $dbu->find_Item("key_1 ... key_n", "val_1 ... val_n");      ### method 3
+
+$var_ = $dbu->count_Item("key_1 ... key_n", "val_1 ... val_n", "distinct_field_");  ### method 4
+
+$var_ = $dbu->get_Item("field_name", "key_1 ... key_n", "val_1 ... val_n"); ### method 6
+
+
+@array_hash_ref = $dbu->get_Items("field_name_1 ... field_name_n", 
+                                  "key_1 ... key_n", "val_1 ... val_n", 
+                                  "order_fields_", "distinct_mode_");             ### method 7
+
+$array_hash_ref[0]->{field_name_1}; ### return item in first row & column from method 7
+
+
+$var_ = $dbu->get_MAX_Item("field_name", "key_1 ... key_n", "val_1 ... val_n");  ### method 8
+$var_ = $dbu->get_MIN_Item("field_name", "key_1 ... key_n", "val_1 ... val_n");  ### method 9
+
+$var_ = $dbu->table_Exist; ### method 10
+
+$dbu->drop_Table; ### method 11
+
+$sql_str = $dbu->get_SQL; ### method 12
+
+
+### special for DB item authentication ###
+
+$dbu->set_DB_Item_Auth_Info($login_name, \@groups, "webman_app_name_db_item_auth", "webman_app_name_user_group");
+
+$dbu->set_Error_Back_Link($error_back_link_content_);
+
+### option 1
+$dbu->delete_Item(""key_1 ... key_n", "val_1 ... val_n");   
+$db_item_access_error = $dbu->get_Auth_Error_Message;
+
+### option 2
+%field_value = ("field_name" => "value");               
+$db_auth = $dbu->check_DB_Item_Auth("INSERT", \%field_value);
+$db_item_access_error = $dbu->get_Auth_Error_Message;
+
+
+
+################## DBI_HTML_Map Used ##############################################
+
+my $dbihtml = new DBI_HTML_Map;
+
+$dbihtml->set_DBI_Conn($db_conn);
+$dbihtml->set_SQL(sql_str_);
+$dbihtml->set_HTML_Code($te_content);
+$dbihtml->set_Items_View_Num(num_);
+$dbihtml->set_Items_Set_Num(num_);
+
+#my $content = $dbihtml->get_HTML_Code;   ### option 1
+#my $tld = $dbihtml->get_Table_List_Data; ### option 2
+
+my $var_ = $dbihtml->get_Items_Num;
+my $var_ = $dbihtml->get_Total_Items_Set_Num;
+
+
+
+################## HTML_DB_Map Used ##############################################
+
+my $htmldb = new HTML_DB_Map;
+
+$htmldb->set_CGI($cgi);
+$htmldb->set_DBI_Conn($db_conn);
+$htmldb->set_Table("table_name");
+
+$htmldb->set_Exceptional_Fields("fields_1_ ... fields_n_"); ### option 1
+
+$htmldb->insert_Table; ### method 1
+$htmldb->update_Table("key_1 ... key_n", "val_1 ... val_n");### method 2
+
+
+
+################## HTML_Link_Menu Used ###########################################
+
+my @menu_items = ("item_1", "item_2", "...", "item_n");
+
+my @menu_links = ("index.pl?get_data_1&...", 
+                  "index.pl?...&...", 
+                  "index.pl?get_data_n&...");
+                  
+my $html_menu = new HTML_Link_Menu;
+
+$html_menu->set_Menu_Template_Content($te_content);
+$html_menu->set_Menu_Items(@menu_items);
+$html_menu->set_Menu_Links(@menu_links);
+$html_menu->add_GET_Data_Links_Source($...);
+$html_menu->set_Active_Menu_Item(item_1...n);
+
+$content = $html_menu->get_Menu;
+
+
+
+################## HTML_Dynamic_Link_Menu Used (1) ##################################
+
+my $current_selected_link = $cgi->param("link_ref_name");
+if ($current_selected_link eq "") { $current_selected_link = "link_item_0";}
+
+my @menu_items = ("link_item_0", "...", "link_item_n");
+my @menu_links= ("link_resource_0", "...", "link_resource_n");
+
+my $dhtml_menu = new HTML_Dynamic_Link_Menu;
+
+$dhtml_menu->set_Menu_Template_Content($te_content);
+$dhtml_menu->set_Items_View_Num(10);
+$dhtml_menu->set_Items_Set_Num(1);
+
+$dhtml_menu->set_Menu_Items(@menu_items);
+$dhtml_menu->set_Menu_Links(@menu_links);
+
+$dhtml_menu->set_Auto_Menu_Links("index.cgi", "link_ref_name", "link_items_set_num_name");
+$dhtml_menu->set_Active_Menu_Item($current_selected_link);
+
+$dhtml_menu->set_Separator_Tag("");
+$dhtml_menu->set_Next_Tag("");
+$dhtml_menu->set_Previous_Tag("");
+$dhtml_menu->set_Non_Selected_Link_Color("#0099FF");
+
+my $caller_get_data = $cgi->generate_GET_Data("parent_link_ref_name parent_link_items_set_num_name");
+
+$dhtml_menu->add_GET_Data_Links_Source($caller_get_data);
+
+$te_content = $dhtml_menu->get_Menu;
+
+
+
+################## HTML_Dynamic_Link_Menu Used (2) ##################################
+
+my $dhtml_menu = new HTML_Dynamic_Link_Menu;
+
+$dhtml_menu->set_Menu_Template_Content($te_content);
+$dhtml_menu->set_Items_View_Num(10);
+$dhtml_menu->set_Items_Set_Num($dmisn);
+
+my $i = 0;
+
+for ($i = 1; $i <= $this->{total_db_items_set_num}; $i++) {
+    $dhtml_menu->set_Menu_Item("$i");
+}
+
+$dhtml_menu->set_Auto_Menu_Links("index.pl", "db_items_set_number", "dmisn");
+$dhtml_menu->set_Active_Menu_Item($db_items_set_number);
+
+$dhtml_menu->set_Separator_Tag("|");
+$dhtml_menu->set_Next_Tag(">>");
+$dhtml_menu->set_Previous_Tag("<<");
+$dhtml_menu->set_Non_Selected_Link_Color("#0099FF");
+
+$content = $dhtml_menu->get_Menu;
+
+
+
+################## HTML_Dynamic_Link_Menu Used (3) ##################################
+
+my $dhtml_menu = new HTML_Dynamic_Link_Menu;
+
+$dhtml_menu->set_Menu_Template_Content($te_content);
+$dhtml_menu->set_Items_View_Num(10);
+$dhtml_menu->set_Items_Set_Num($dmisn);
+
+my $i = 0;
+
+for ($i = 1; $i <= $this->{total_db_items_set_num}; $i++) {
+    $dhtml_menu->set_Menu_Item("$i");
+}
+
+$dhtml_menu->set_Auto_Menu_Links("index.pl", "db_items_set_number", "dmisn");
+$dhtml_menu->set_Active_Menu_Item($db_items_set_number);
+
+my $GET_data = $this->generate_GET_Data("view_paper_menu order_by component_name_L1_1 left_menu component_name_L1 top_menu session_id login");
+$dhtml_menu->add_GET_Data_Links_Source($GET_data);
+
+$GET_data = $this->generate_GET_Data("db_items_set_number view_paper_menu order_by component_name_L1_1 left_menu component_name_L1 top_menu session_id login");
+$dhtml_menu->set_Previous_GET_Data_Links_Source($GET_data);
+$dhtml_menu->set_Next_GET_Data_Links_Source($GET_data);
+
+$content = $dhtml_menu->get_Menu;
+
+
+################## HTML_Link_Path Used ##############################################
+
+my $link_path = new HTML_Link_Path();
+
+$link_path->set_Captions("Pelajar", "Senarai", $nama_pelajar, "Subjek");
+$link_path->set_Links(undef, "index.cgi?", undef, undef);
+$link_path->set_Additional_GET_Data($caller_get_data);
+
+$link_path->set_Separator_Tag(" <font color=\"#FF6600\">&gt;</font> ");
+$link_path->set_Active_Link_Color("#0099FF");
+
+my $link_path_content = $link_path->get_Link_Path;
+
+
+
+################## Data_HTML_Map Used ##########################################
+
+my $data_HTML = new Data_HTML_Map;
+    
+$data_HTML->set_CGI($cgi);
+$data_HTML->set_HTML_Code($te_content);
+$data_HTML->set_Special_Tag_View(num_); ### num_ can be 0 or 1
+    
+$te_content = $data_HTML->get_HTML_Code;
+
+
+
+################## CGI_HTML_Map Used ##########################################
+
+my $cgi_HTML = new CGI_HTML_Map;
+    
+$cgi_HTML->set_CGI($cgi);
+$cgi_HTML->set_HTML_Code($te_content);
+$cgi_HTML->set_Escape_HTML_Tag("?"); ### can be 0 or 1
+    
+$te_content = $cgi_HTML->get_HTML_Code;
+
+
+
+################## Table_List_Data used ##########################################
+
+######################## normal used
+
+my $tld = new Table_List_Data;
+
+$tld->add_Column("column_1_");
+...
+...
+...
+$tld->add_Column("column_n_");
+
+my $i = 0;
+
+my $row_num = $tld->get_Row_Num;
+
+for ($i = 0; $i < $row_num; $i++) {
+    ...
+    
+    $tld->add_Row_Data(@array_of_column);
+    
+    ...
+}
+
+######################## using DBI_HTML_Map
+...
+...   
+standard DBI_HTML_Map used...  
+...   
+...
+
+my $tld = $dbihtml->get_Table_List_Data;
+    
+my $db_items_num = $dbihtml->get_Items_Num;
+
+if ($db_items_num > 0) {
+    my $total_row_num = $tld->get_Row_Num;
+    
+    $tld->add_Column("column_name");
+    
+    $data = $tld->get_Data($row_num, "column_name");
+    
+    $tld->set_Data($row_num, "column_name", $column_data);
+
+    $tld->set_Data_Get_Link($row_num, "column_name", $get_link, "_blank/_top/_self/...");
+
+
+    $column_data = $tld->get_Data($row_num, "column_name");
+}
+
+$tld->sort_Data("column_name_1 ... column_name_n", "asc/desc ... asc/desc", "str/num ... str/num);
+
+print $tld->get_Table_List; ### debug purpose
+
+
+
+################## TLD_HTML_Map Used ############################################
+
+...
+...   
+standard Table_List_Data used...  
+...   
+...
+
+my $tldhtml = new TLD_HTML_Map;
+            
+$tldhtml->set_Table_List_Data($tld);
+$tldhtml->set_HTML_Code($te_content);
+
+#$tldhtml->set_Items_View_Num(items_view_num_); ### option 1
+#$tldhtml->set_Items_Set_Num(items_set_num_);   ### option 2
+            
+my $html_result = $tldhtml->get_HTML_Code;
+            
+$this->add_Content($html_result);
+
+
+
+################## session Table  Info ##########################################
+
++------------------+-------------+------+-----+---------+-------+
+| Field            | Type        | Null | Key | Default | Extra |
++------------------+-------------+------+-----+---------+-------+
+| session_id       | varchar(15) |      | PRI |         |       |
+| login_name       | varchar(15) | YES  |     | NULL    |       |
+| login_date       | date        | YES  |     | NULL    |       |
+| login_time       | time        | YES  |     | NULL    |       |
+| last_active_date | date        | YES  |     | NULL    |       |
+| last_active_time | time        | YES  |     | NULL    |       |
+| epoch_time       | int(11)     | YES  |     | NULL    |       |
+| idle_time        | int(11)     | YES  |     | NULL    |       |
+| status           | varchar(10) | YES  |     | NULL    |       |
+| temp_table       | smallint    | YES  |     | NULL    |       |
++------------------+-------------+------+-----+---------+-------+
+
+
+################## user Table  Info #############################################
+
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| login_name  | varchar(15)  |      | PRI |         |       |
+| password    | varchar(50)  | YES  |     | NULL    |       |
+| full_name   | varchar(50)  | YES  |     | NULL    |       |
+| description | varchar(255) | YES  |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+
+
+################## group Table  Info ############################################
+
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| id_group    | smallint(6)  |      | PRI | NULL    | auto_increment |
+| group_name  | varchar(50)  |      | PRI |         |                |
+| description | varchar(255) | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+
+
+################## user_group Table  Info #############################################
+
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| login_name | varchar(15) | YES  |     | NULL    |       |
+| group_name | varchar(50) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+
+
+################## comp_auth Table Info #########################################
+
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| comp_name  | varchar(100) | YES  |     | NULL    |       |
+| login_name | varchar(15)  | YES  |     | NULL    |       |
+| group_name | varchar(50)  | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+

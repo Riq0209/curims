@@ -1,0 +1,84 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+<p />
+
+<!-- dynamic_content_ name=db_items_num_begin //--> -
+<!-- dynamic_content_ name=db_items_num_end //--> of
+<!-- dynamic_content_ name=db_items_num_total //--> Records.
+<p />
+
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- dynamic_content_ name=form_hidden_field //-->
+
+<table border="1">
+  <!-- start_menu_ name=caption //-->
+  <tr>
+    <th>Num.</th>
+    __menu_item__
+  </tr>
+  <!-- end_menu_ //-->
+
+  <script language="JavaScript">
+    // javascript array to store popup info. data
+    // __js_popup_data_array__
+  </script>
+
+  <!-- start_list_ name=main //-->
+  <tr class="$tld_row_class_">
+    <td align="right">$tld_num_.</td>
+
+    __field_name__
+
+  </tr>
+  <!-- end_list_ //-->
+
+  <tr bgcolor="#EEEEEE">
+    <td align="right">...</td>
+
+    __field_blank__
+
+  </tr>
+</table>
+
+<p />
+
+  Items/List: <input name="__inl_name__" type="text" id="__inl_name__" value="$__inl_name___" size="3">
+  &nbsp;
+
+  <!-- start_menu_ name=list //-->
+    dynamic_menu_items_
+  <!-- end_menu_ //-->
+  &nbsp;
+
+  List Set Num. :
+  <select name="__lsn_name__" onChange="document.tld_view_dynamic.submit()">
+    <!-- select_ name=__lsn_name__ //-->
+  </select>
+
+  <p />
+
+  __filter_part_start__
+  <!-- start_cgihtml_ //-->
+  <div>
+  <b><font color="#557755">Filter(s) [ </font></b>
+  &nbsp;
+  __part_spliter__
+  <div style="display:inline; background:#CCDDCC; padding:6px 2px 6px 2px;">
+  <b>__filter_field_caption__:</b>
+  <input type="text" name="filter___filter_field_name__" size="10" value="$cgi_filter___filter_field_name___">
+  </div>
+  &nbsp;
+  __part_spliter__
+  <input type="submit" name="button_submit" value="Refresh List">
+  &nbsp;
+  <b><font color="#557755">]</font></b>
+  </div>
+  <!-- end_cgihtml_ //-->
+  __filter_part_end__
+
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

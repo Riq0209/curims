@@ -1,0 +1,77 @@
+#_title_
+webman_dynamic_links
+#_end_
+
+#_des_
+### Component-type module that provides facilities to extract and generate  
+### application's link-nodes at specific link path level path based on current 
+### active link-node ID. The selected link-nodes will be displayed as web  
+### application menus with the help of HTML_Link_Menu_Paginate core module. 
+### These application menus are actually a standard HTML hypertext links which  
+### provide users an access points to application services via HTTP-GET method. 
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>HTML_Link_Menu_Paginate (Composition)</li>
+### </ul>
+### <b>Webman-framework's Component-type Modules:</b><br />
+### <ul>
+### <li>CGI_Component::webman_CGI_component (Inheritance)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template</b>
+### <p />
+### The view template is exactly the one used by and as explained in 
+### HTML_Link_Menu_Paginate core module. 
+### <p />
+#_end_
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- start_menu_ //-->
+dynamic_menu_items_
+<!-- end_menu_ //-->
+<!-- end_view_ //-->
+</body>
+</html>
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Instantiation and Basic Parameter Setting</b>
+### <p />
+#_end_
+#_code_num_ 0 1
+my $component = new webman_dynamic_links;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+$component->set_Link_ID_Key();
+$component->set_Link_Path_Level();
+
+$component->set_CGI_GET_Data();
+$component->set_CGI_GET_Data_Carried();
+
+$component->set_Link_Separator_Tag();
+$component->set_Non_Selected_Link_Color();
+
+$component->set_Template_Default($template_file)
+ 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Component-type Generic Function Calls</b>
+### <p />
+#_end_
+#_code_num_ 0 17
+$component->run_Task;
+$component->process_Content;
+
+my $content = $component->get_Content;
+#_end_

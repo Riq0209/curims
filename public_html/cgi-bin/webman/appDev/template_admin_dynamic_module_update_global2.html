@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<!-- start_view_ //-->
+<font size="2">Dynamic Module Management &gt; <a href="index.cgi?$caller_get_data_"><font color="#0099FF">Update 
+Global DB Parameter</font></a> &gt; $dyna_mod_name_</font> 
+<br>&nbsp;<br>
+<form name="form1" method="post" action="">
+  <input type="hidden" name="$db_dyna_mod_name">
+  <!-- dynamic_content_ //-->
+  <table width="640" border="1" cellpadding="1" cellspacing="1">
+    <tr>
+      <td colspan="2" align="center"><b><font size="2">Dynamic Content </font></b></td>
+      <td rowspan="2"><b><font size="2">Parameter Name</font></b></td>
+      <td rowspan="2"><b><font size="2">Parameter Value</font></b></td>
+      <td rowspan="2" align="center"><b><font size="2">Operation</font></b></td>
+    </tr>
+    <tr> 
+      <td align="center"><font size="2"><b>Num.</b></font></td>
+      <td align="center"><font size="2"><b>Name</b></font></td>
+    </tr>
+    <!-- start_list_ //-->
+    <tr> 
+      <td align="center"><font size="2">$tld_dynamic_content_num_</font></td>
+      <td align="center"><font size="2">$tld_dynamic_content_name_&nbsp;</font></td>
+      <td><font size="2">$tld_param_name_</font></td>
+      <td><font size="2">$tld_param_value_</font></td>
+      <td align="center"><font size="2">$tld_operation_</font></td>
+    </tr>
+    <!-- end_list_ //-->
+    <tr> 
+      <td align="center"> 
+        <select name="$db_dynamic_content_num">
+          <!-- select_ //-->
+        </select>
+      </td>
+      <td align="center"><input name="$db_dynamic_content_name" type="text" id="$db_dynamic_content_name"></td>
+      <td> <font size="2"> 
+        <select name="$db_param_name">
+          <!-- select_ //-->
+        </select>
+        </font></td>
+      <td> 
+        <input type="text" name="$db_param_value" size="35">
+      </td>
+      <td align="center"> 
+        <input type="submit" name="submit" value="Set">
+      </td>
+    </tr>
+  </table>
+</form>
+<font size="2"> </font> 
+<!-- end_view_ //-->
+</body>
+</html>

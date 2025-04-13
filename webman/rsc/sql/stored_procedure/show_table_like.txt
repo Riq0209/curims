@@ -1,0 +1,6 @@
+delimiter //
+CREATE PROCEDURE show_table_like(pattern VARCHAR(255))
+BEGIN
+SELECT table_name FROM information_schema.tables WHERE table_name LIKE pattern;
+END //
+delimiter ;

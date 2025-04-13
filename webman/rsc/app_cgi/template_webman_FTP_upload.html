@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<!-- start_view_ //-->
+<form method="POST" action="./index.cgi" enctype="multipart/form-data">
+  <!-- start_cgihtml_ //-->
+  <input type="hidden" name="link_id" value="$cgi_link_id_">
+  <!-- end_cgihtml_ //-->
+  <table border="1">
+    <tr>
+      <td align="center">
+        <b>File to Upload:</b> <input name="file_upload" type="file" id="$file_upload">
+      </td>
+    </tr>
+
+    <tr>
+      <td align="center">
+        <input name="button_submit" type="submit" id="button_submit" value="Upload">
+        <input name="button_submit" type="submit" id="button_submit" value="Cancel">
+     </td>
+    </tr>
+  </table>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

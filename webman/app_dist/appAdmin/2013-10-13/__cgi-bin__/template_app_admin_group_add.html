@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Untitled Document</title>
+</head>
+
+<body>
+<!-- start_view_ //-->
+<b>Add New Group</b>
+<br/><br/>
+<table width="640" border="0" align="center" cellpadding="1" cellspacing="1" bgcolor="#CCCCCC">
+  <tr>
+    <td align="center" bgcolor="#FFFFFF">
+	<br>
+	<form method="POST" action="./index.cgi">
+	<!-- dynamic_content_ name=form_hidden_field //-->
+      <table width="480" border="0" cellpadding="1" cellspacing="1" bgcolor="#CCCCCC">
+      <tr bgcolor="#FFFFFF">
+        <td width="100" align="right"><strong><font size="2">
+          <!-- start_datahtml_ name=form_db_field //-->
+          Group Name: </font></strong></td>
+        <td>
+          <input name="$db_group_name" type="text" id="$db_group_name" value="$db_group_name_" size="35">
+          <br/>
+          <font color="#FF0000" size="2">$fe_group_name_</font>
+        </td>
+      </tr>
+      <tr valign="top" bgcolor="#FFFFFF">
+        <td width="100" align="right"><strong><font size="2">Description:</font></strong></td>
+        <td><textarea name="$db_description" cols="40" id="$db_description">$db_description_</textarea>
+          <strong><font size="2">
+          <!-- end_datahtml_ //-->
+          </font></strong></td>
+      </tr>
+      <tr bgcolor="#FFFFFF">
+        <td width="100">&nbsp;</td>
+        <td>
+          <input name="button_submit" type="submit" id="submit" value="Add">
+          <input name="button_submit" type="submit" id="submit" value="Cancel">
+        </td>
+      </tr>
+    </table>
+    </form>
+	<br>
+	</td>
+  </tr>
+</table>
+<!-- end_view_ //-->
+</body>
+</html>

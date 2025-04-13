@@ -1,0 +1,4 @@
+### Input format: $dns $username $password $app_name $proceed_task
+###   Limitation: Only work as single line input
+
+www.foo.com username_ password_ app_name_ y

@@ -1,0 +1,109 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<b>__parent_item_key_info__</b>
+<!-- end_cgihtml_ //-->
+&gt;
+__list_title__
+&gt;
+Add from List
+<p />
+
+<!-- dynamic_content_ name=parent_item_info //-->
+<p />
+
+<!-- dynamic_content_ name=db_items_num_begin //--> -
+<!-- dynamic_content_ name=db_items_num_end //--> of
+<!-- dynamic_content_ name=db_items_num_total //--> Records to be added.
+<p />
+
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- dynamic_content_ name=form_hidden_field //-->
+  <input type="hidden" name="submission_type">
+
+<table border="1">
+  <!-- start_menu_ name=caption //-->
+  <tr>
+    <th>Num.</th>
+    __menu_item__
+    <!-- start_cgihtml_ //-->
+    <th align="center">
+      Selection &amp; Operations
+      <br />
+      <a href="javascript:checkbox_select_all('__id_item_added___', $cgi___inl_name___, $cgi___dbisn_name___);">All</a> |
+      <a href="javascript:checkbox_select_none('__id_item_added___', $cgi___inl_name___, $cgi___dbisn_name___);">None</a> |
+      <a href="javascript:checkbox_select_invert('__id_item_added___', $cgi___inl_name___, $cgi___dbisn_name___);">Invert</a>
+    </th>
+    <!-- end_cgihtml_ //-->
+  </tr>
+  <!-- end_menu_ //-->
+
+  <!-- start_list_ name=main //-->
+  <tr class="$tld_row_class_">
+    <td align="right">$tld_num_.</td>
+
+  __field_name__
+
+    <td align="center">
+      <input type="checkbox" name="__id_item_added___$tld_idx_" id="__id_item_added___$tld_idx_" value="$tld___id_item_added___">
+    </td>
+
+  </tr>
+  <!-- end_list_ //-->
+
+  <tr bgcolor="#EEEEEE">
+    <td align="right">...</td>
+
+    __field_blank__
+
+    <td align="center">
+      <a href="javascript:document.tld_view_dynamic.submission_type.value='add_selected'; document.tld_view_dynamic.submit();">Add Selected</a>
+      |
+      <a href="javascript:document.tld_view_dynamic.submission_type.value='parent_list'; document.tld_view_dynamic.submit();">Back to Parent List</a>
+    </td>
+  </tr>
+</table>
+
+<p />
+
+  Items/List: <input name="__inl_name__" type="text" id="__inl_name__" value="$__inl_name___" size="3">
+  &nbsp;
+
+  <!-- start_menu_ name=list //-->
+    dynamic_menu_items_
+  <!-- end_menu_ //-->
+  &nbsp;
+
+  List Set Num. :
+  <select name="__lsn_name__" onChange="document.tld_view_dynamic.submit()">
+    <!-- select_ name=__lsn_name__ //-->
+  </select>
+
+  <p />
+
+  __filter_part_start__
+  <!-- start_cgihtml_ //-->
+  <div>
+  <b><font color="#557755">Filter(s) [ </font></b>
+  &nbsp;
+  __part_spliter__
+  <div style="display:inline; background:#CCDDCC; padding:6px 2px 6px 2px;">
+  <b>__filter_field_caption__:</b>
+  <input type="text" name="filter___filter_field_name___afls" size="10" value="$cgi_filter___filter_field_name___afls_">
+  </div>
+  &nbsp;
+  __part_spliter__
+  <input type="submit" name="button_submit" value="Refresh List">
+  &nbsp;
+  <b><font color="#557755">]</font></b>
+  </div>
+  <!-- end_cgihtml_ //-->
+  __filter_part_end__
+
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

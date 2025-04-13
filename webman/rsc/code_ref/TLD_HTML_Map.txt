@@ -1,0 +1,133 @@
+#_title_
+TLD_HTML_Map
+#_end_
+
+#_des_
+### The core module used to display the content data of Table_List_Data  
+### module's instance following Webman-framework's view template system 
+### structure standard.<p/>
+### This module has been used inside the following Webman-framework's 
+### component type modules: webman_db_item_view_dynamic, webman_text2db_map, 
+### webman_TLD_item_view, webman_calendar, webman_calendar_interactive, 
+### webman_calendar_week_list, webman_calendar_weekly, and 
+### webman_calendar_weekly_timerow.
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>Table_List_Data (Aggregation)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template</b><p />
+### The paired template tags 
+### <c>&lt;!-- start_list_ name=tld_items //--&gt;</c> and 
+### <c>&lt;!-- end_list_ //--&gt;</c> are used to mark the parts of LIST 
+### template-element (lines 14-21) to be processed by TLD_HTML_Map instance. 
+### The word pattern <c>$tld_num_</c> is used to map special column name 
+### <c>"num"</c> that represents Table_List_Data's item numbers. Other column 
+### names are mapped using template word patterns 
+### <c>$tld_<i>column_name_1</i>_</c>, <c>...</c>, till 
+### <c>$tld_<i>column_name_n</i>_</c>, adhere mapping naming convention 
+### imposed by TLD_HTML_Map module itself.
+#_end_
+#_code_num_ 14-21
+<html>
+<body>
+<!-- start_view_ //-->
+<table border="1">
+  <tr>
+    <th>Num.</th>
+    <th>column_caption_1</th>
+    <th>column_caption_2</th>
+    ...
+    <th>column_caption_n</th>
+  </tr>
+  
+  <!-- start_list_ name=tld_items //-->
+  <tr >
+    <td align="right">$tld_num_.</td>
+
+    <td>$tld_column_name_1_</td>
+    <td>$tld_column_name_2_</td>
+    ...
+    <td>$tld_column_name_n_</td>
+  </tr>
+  <!-- end_list_ //-->
+<!-- end_view_ //-->
+</body>
+</html>
+#_end_
+#_doc_
+### In the context of Webman-framework's component implementation, the above 
+### LIST template-element will be passed to and processed inside 
+### <c>process_LIST</c> hook function (see section 4). 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Instantiation and Basic Parameter Setting</b><p />
+### The <c>$tld</c> argument is an instance of Table_List_Data module.  
+#_end_
+
+my $tldhtml = new TLD_HTML_Map;
+            
+$tldhtml->set_Table_List_Data($tld);
+
+#_doc_
+### Pagination support for large number of data items can be done by passing 
+### <c>$num_view</c> and <c>$num_view</c> arguments to the next two functions. 
+#_end_
+$tldhtml->set_Items_View_Num($num_view);
+$tldhtml->set_Items_Set_Num($num_set);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Processing Template Element Content</b><p />
+#_end_
+$tldhtml->set_HTML_Code($te_content);
+my $content = $tldhtml->get_HTML_Code;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Implementation Inside Hook Function</b><p />
+#_end_
+sub process_LIST { 
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    ### Start process template-element's content.
+    if ($te_type_name eq "tld_items") {
+        ### First is to create Table_List_Data instance and 
+        ### add some content data into it.
+        my $tld = ...
+        ...
+        ...
+        ...
+        
+        ### Use TLD_HTML_Map module to display the above 
+        ### $tld instance content data,
+        my $tldhtml = new TLD_HTML_Map;
+
+        $tldhtml->set_Table_List_Data($tld);
+
+        ### Implement the next 2 lines to enable 
+        ### pagination support.
+        #$tldhtml->set_Items_View_Num($num_view);
+        #$tldhtml->set_Items_Set_Num($num_set);
+        
+        $tldhtml->set_HTML_Code($te_content);
+        my $content = $tldhtml->get_HTML_Code;
+    }
+}

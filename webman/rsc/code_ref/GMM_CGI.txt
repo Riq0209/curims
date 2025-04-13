@@ -1,0 +1,179 @@
+#_title_
+GMM_CGI
+#_end_
+
+#_des_
+### The core module to handle CGI-data operations (GET/POST). It can also be
+### used to handle cookie-data related operations. To alleviate CGI's data 
+### handling complexity and minimize dependencies on cookie-data operations, 
+### GMM_CGI module applied database cache on CGI's data to emulate state-full 
+### environment feature to the CGI parameters used in the application. In the  
+### context of Webman-framework's development strategies, for each subsequent 
+### accesses to the application, developers only need to pass the link ID and 
+### other altered or new created CGI parameters. Other previous non-altered 
+### CGI parameters passed will automatically mined out from database cache by 
+### GMM_CGI module itself and instantly available in the current active CGI 
+### runtime. For cookie-data, in most cases it will only  be used to store 
+### user's session ID.
+#_end_
+
+#_dep_
+### <b>CPAN's Modules:</b><br />
+### <ul>
+### <li>CGI::Cookies (Composition)</li>
+### </ul>
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>DB_Utilities (Composition)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. Instantiation and Basic Parameter Setting</b><p />
+### The <c>$db_conn</c> is an instance of database connection created using  
+### DBI module.
+#_end_
+my $cgi = new GMM_CGI;
+
+$cgi->set_DBI_Conn($db_conn);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. GMM_CGI Module and CGI Main Script</b><p />
+### Basic skeleton code of main CGI script using GMM_CGI module member functions to 
+### handle HTML content output. 
+#_end_
+require GMM_CGI;
+
+my $cgi = new GMM_CGI;
+
+$cgi->set_DBI_Conn($db_conn);
+
+if (<trp><i>some condition...</i></trp>) {
+    ### Must be called before $cgi->print_Header and page redirection will 
+    ### only happen when $cgi->print_Header is called. 
+    $cgi->redirect_Page($new_url); 
+}
+
+### Uncomment the next line to implement it database cache on CGI-data.
+#$cgi->update_DB_Cache_Var;
+
+$cgi->print_Header;
+
+### $page_subheader  => other HTML header elements other than <title> tag ($page_title)
+### $page_properties => page's elements presentation control via <body ...> tag attribute settings
+$cgi->start_HTML($page_title, $page_subheader , $page_properties);
+
+...
+...
+...
+
+### Print out all debug text added.
+$cgi->print_Debug_Text;
+
+$cgi->end_HTML();
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Cookie Handling</b><p />
+### Functions to handle cookie-data. All these related cookie functions must be 
+### called before <c>$cgi->print_Header</c> function call.
+#_end_
+$cgi->set_Cookie($name, $value);
+$cgi->delete_Cookie($name);
+$cgi->delete_Cookie_All;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. CGI Parameter and Value</b><p />
+### Get the current value of CGI variable named <c>$param_name</c>.
+#_end_
+my $val = $cgi->param($param_name);
+
+#_doc_
+### Next is for the case of a single <c>$param_name</c> is used to store a  
+### list of parameter's values. One of the case example is the HTML 
+### <c>&lt;select&gt;</c> form element that applied with <c>multiple</c> 
+### attribute. 
+#_end_
+my @vals = $cgi->param_List($param_name);
+
+#_doc_
+### Same as <c>$cgi->param($param_name)</c> but also remove <c>$param_name</c> 
+### from the CGI variable list.
+#_end_
+my $val = $cgi->param_Shift($param_name); 
+
+#_doc_
+### Check if variable name <c>$param_name</c> is exist in the 
+### CGI variable list.
+#_end_
+my $exist = $cgi->param_Exist($param_name);
+
+#_doc_
+### Extract all CGI variables information from the list and add it into CGI 
+### debug text via call to <c>$cgi->add_Debug_Text(...)</c> function. All 
+### debug text added can be printed out latter as HTML content by calling 
+### <c>$cgi->print_Debug_Text</c> function (see section 2).
+#_end_
+my @cgi_var_list = $cgi->var_Name;
+        
+foreach my $param_name (@cgi_var_list) {
+    my $param_value = $cgi->param($param_name);
+
+    $cgi->add_Debug_Text("$param_name = $param_value", __FILE__, __LINE__);    
+}
+
+#_doc_
+### Change the current value of CGI variable named <c>$param_name</c> to 
+### <c>$param_value</c> or add it if it's not exist yet.
+#_end_
+if (!$cgi->set_Param_Val($param_name, $param_value)) {
+    $cgi->add_Param($param_name, $param_value);
+}
+
+#_doc_
+### Function to simplify the previous operation to change or add 
+### (if not exist) CGI's variables and values.
+#_end_
+$cgi->push_Param($param_name, $param_nvalue); 
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>5. File Upload</b><p />
+### File names and their content, uploaded via "multipart/form-data" HTML form 
+### are simply stored in two different array variables. File names and their  
+### correspondent content can be retrieved by accessing items at the same index 
+### number from these two different array variables.
+#_end_
+### Functions to access array variables that used to store  
+### the uploaded file names and their content.
+my @file_name = $cgi->upl_File_Name;
+my @file_content = $cgi->upl_File_Content;
+
+for (my $i = 0; $i < @file_name; $i++) {
+    my $fname = $file_name[$i];
+    my $fcontent = $file_content[$i];
+    
+    ### Do whatever necessary such as saving $fcontent 
+    ### as a file with name $fname. 
+    ...
+    ...
+}
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>6. GET/POST Data Format</b><p />
+### Convert string value to CGI GET-data format. If <c>$str</c> has the value 
+### of "Hello world!" then <c>$str_getfmt</c> will has the value of 
+### "Hello+world!".
+#_end_
+my $str_getfmt = $cgi->convert_GET_Format_CharToCode($str);
+
+#_doc_
+### Generate GET-data and POST-data formatted string from an existing ??? 
+#_end_
+my $str_getdata = $cgi->generate_GET_Data($var_name, $var_name_excepted);
+
+my $str_postdata =$cgi->generate_Hidden_POST_Data($var_name, $var_name_excepted);

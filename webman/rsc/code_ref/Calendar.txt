@@ -1,0 +1,94 @@
+#_title_
+Calendar
+#_end_
+
+#_des_
+### The core module to generate calendar data inside the standard Webman's 
+### application calendar table. Calendar's table name exist in the database 
+### in the form of <c>"webman_<i>appname</i>_calendar"</c>. 
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>DB_Utilities (Composition)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. Instantiation and Basic Parameter Setting</b><p /> 
+### The passed arguments <c>$cgi</c> and <c>$db_conn</c> are other 
+### Webman-framework core modules instances. The <c>$cgi</c> is an instance of 
+### GMM_CGI module and the <c>$db_conn</c> is an instance of database connection 
+### created using DBI module.
+#_end_
+my $calendar = new Calendar;
+
+$calendar->set_CGI($cgi);
+$calendar->set_DBI_Conn($db_conn);
+$calendar->set_DB_Table("webman_???_calendar");
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Calendar Data Initiation</b><p /> 
+### Initiate and generate basic calendar data (if not exist) inside 
+### application's calendar table.
+#_end_
+$calendar->init_Task;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Calendar Member Data</b><p /> 
+### Available member variables after calendar data initiation.
+#_end_
+my $year = $calendar->{current_year};   ### $year => "yyyy"
+my $month = $calendar->{current_month}; ### $month => "Jan", ... , "Dec"
+my $date = $calendar->{current_date};   ### $date => 1, ... , 31
+my $day = $calendar->{current_day};     ### $day => "Mon", ... , "Sun"
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Week's Date Information List</b><p /> 
+### The key date (<c>$key_date</c>) is an ISO standard "yyyy-mm-dd" date 
+### string that within the range of the week's date. The returned 
+### <c>@week_date</c> is an array of hash reference with the keys are consists 
+### of 'cal_id', 'year', 'month', 'date', 'day', 'month_abbr', 'day_abbr', and 
+### 'iso_ymd'.
+#_end_
+my @week_date = $calendar->{calendar}->get_Weekly_Date_Info($key_date);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>5. Month's Date Information List</b><p /> 
+### Year and month passed as a separate arguments. The $month_abbr is month 
+### string abbreviation: "Jan", ... , "Dec". The returned <c>@month_date</c> 
+### has the same structure as the above <c>@week_date</c> (section 4) array of 
+### reference.
+#_end_
+my @month_date = $calendar->get_Monthly_Date_Info("yyyy", $month_abbr);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>6. Intermediate Date Information List </b><p /> 
+### The arguments <c>$date_start</c> and <c>$date_end</c> are ISO standard 
+### "yyyy-mm-dd" date string and <c>$date_start</c> must be the earliest date 
+### than <c>$date_end</c>. The returned <c>@list_date has</c> has the same 
+### structure with the above <c>@week_date</c> and <c>@month_date</c> 
+### (sections 4 and 5) but the date list might accross different weeks, 
+### months, or years within the range set via <c>$date_start</c> and 
+### <c>$date_end</c>.
+#_end_
+my @list_date = $calendar->get_Intermediate_Date_Info($date_start, $date_end);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>7. Next and Previous Days Date </b><p /> 
+### The passed <c>$current_date</c> argument and the returned variables 
+### (<c>$prev_days_date</c> and <c>$next_days_date</c>) are in the format of 
+### ISO standard "yyyy-mm-dd" date string. The <c>$days_num</c> argument is 
+### the number of days before/after the <c>$current_date</c> including the 
+### <c>$current_date</c> itself.
+#_end_
+my $prev_days_date = $calendar->get_Prev_Days_Date($current_date, $days_num);
+my $next_days_date = $calendar->get_Date_Days_Date($current_date, $days_num);

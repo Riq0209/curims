@@ -1,0 +1,141 @@
+#_title_
+Session
+#_end_
+
+#_des_
+### The core module used to handle session data or more specifically users'
+### session IDs at the application's runtime. For each user, the module will 
+### authenticate them via their login and password before assign specific 
+### random and unique session IDs to them. For users which already have 
+### session IDs assigned to them, the module will only need to validate these 
+### existing session IDs which fetched from browser's cookie data or passed to 
+### the application via CGI parameter list instance. 
+### 
+#_end_
+
+#_dep_
+
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>DB_Utilities (Composition)</li>
+### <li>GMM_CGI (Composition)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. Instantiation and Basic Parameter Setting</b><p />
+### The <c>$cgi</c> is an instance of GMM_CGI module and <c>$db_conn</c> is an 
+### instance of database connection created using DBI module.
+### The <c>set_Idle_Time</c> function is used to set the idle session time in 
+### seconds before it becomes expired due to user inactivity.
+#_end_
+my $session = new Session;
+
+$session->set_CGI($cgi);
+$session->set_DBI_Conn($dbi_conn);
+$session->set_Idle_Time(3600);
+#_doc_
+### The framework implementations are heavily rely on database tables for 
+### session's related data handling. For particular application there are three 
+### tables involved named in the form of <c>webman_<i>app_name</i>_session</c>, 
+### <c>webman_<i>app_name</i>_user</c>, and 
+### <c>webman_<i>app_name</i>_cgi_var_cache</c>. All informations about these 
+### tables are automatically set when the <c>set_CGI</c> function is called. 
+### To assign the session related tables manually, the following function 
+### calls can be used.   
+### <p />
+#_end_
+$session->set_Session_Table("webman_<trp><i>app_name</i></trp>_session");
+$session->set_User_Auth_Table("webman_<trp><i>app_name</i></trp>_user", "login_name", "password");
+$session->set_CGI_Var_DB_Cache_Table("webman_<trp><i>app_name</i></trp>_cgi_var_cache");
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Handling User's Session</b>
+### <p />
+### Generally, Session module is used to handle both, a new session ID creation 
+### and to validate an existing user's session ID.
+### <p />
+### <b>2.1 New Session ID Creation</b>
+### <p />
+### For new session ID creation, user's authentication informations (login and 
+### password) are required. If the given authentication informations is valid 
+### then a new session ID will be generated. Later, the new generated session 
+### ID is assigned to the user by making it available from CGI parameter list 
+### and browser's cookies data using the parameter named <c>session_id</c>.
+### <p />
+#_end_
+my $login = $cgi->param("login");
+
+my $password = $cgi->param("password");
+   $password =~ s/\'//g; ### Basic sql injection prevention.
+   
+$session->set_Auth_Info($login, $password);
+$session->create_Session;
+
+my $session_id = $session->get_Session_ID;
+
+if ($session_id != -1) { ### 19/01/2011
+    ### Make the generated session ID available from both
+    ### CGI parameter list and browser's cookie data.
+    $cgi->set_Cookie("session_id", $session_id);
+    $cgi->push_Param("session_id", $session_id);
+    
+    ### Mark any possible zombie sessions.    
+    $session->refresh_Session;
+    
+    ### User authentication is succeed.
+    ...
+    ...
+    
+} else {
+    ### User authentication is failed.
+    ...
+    ...
+}
+#_doc_
+### <b>2.2 Existing Session ID Validation</b><p />
+### <p />
+### For an existing user's session ID validation, the ID is acquired either 
+### from the CGI parameter list or browser's cookie-data.
+#_end_
+my $session_id = $cgi->param("session_id");
+
+if ($session_id eq "") { 
+    ### Session ID is still not available from CGI parameter list, 
+    ### try to get it from browser's cookie.
+    $session_id = $cgi->get_Cookie_Val("session_id");
+    
+    ### Push session ID from cookie into CGI parameter list.
+    $cgi->push_Param("session_id", $session_id);
+}
+
+if (<trp><i>Logout condition is true...</i></trp>) {
+    ### Mark current session ID with 'logout' status.
+    $session->logout($session_id);
+    
+    ### Remove session ID from cookie.
+    $cgi->delete_Cookie("session_id");
+
+} else {
+
+    $session->set_Session_ID($session_id);
+
+    if ($session->is_Valid) {
+        ### Mark any possible zombie sessions    
+        $session->refresh_Session; 
+        
+        ### User authentication is succeed.
+        ...
+        ...        
+        
+    } else {
+        ### User authentication is failed.
+        ...
+        ...    
+    
+    }
+}
+
+

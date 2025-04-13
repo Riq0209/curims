@@ -1,0 +1,69 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<!-- start_view_ //-->
+<br>&nbsp;<br>
+<table width="100%" border="0" align="center" cellpadding="1" cellspacing="1" bgcolor="#CCCCCC">
+  <tr bgcolor="#FFFFCC">
+    <td width="15" align="right"><font size="2"><b>Num.</b></font></td>
+    <!-- start_menu_ name=caption //-->
+    <td width="70"> <b><font color="#990000" size="2">menu_item0_</font></b></td>
+    <td><b><font color="#990000" size="2">menu_item1_</font></b></td>
+    <td bgcolor="#FFFFCC"><b><font size="2">Description</font></b></td>
+    <td align="center"><b><font color="#990000" size="2">menu_item2_</font></b></td>
+    <td align="center"><b><font color="#990000" size="2">menu_item3_</font></b></td>
+	<td align="center"><b><font color="#990000" size="2">menu_item4_</font></b></td>
+	<!-- end_menu_ //-->
+  </tr>
+  <!-- start_list_ //-->
+  <tr bgcolor="$tld_row_color_">
+    <td width="15" height="15" align="right" valign="top"><font size="2">$tld_num_.</font></td>
+    <td width="80" height="15" valign="top"><font size="2">$tld_login_name_</font></td>
+    <td height="15" valign="top"><font size="2">$tld_full_name_</font></td>
+    <td height="15" valign="top"><font size="2">$tld_description_</font></td>
+    <td height="15" align="center" valign="top"><font size="2">$tld_login_date_ / $tld_login_time_</font></td>
+    <td width="100" height="15" align="center" valign="top"><font size="2">$tld_client_ip_</font></td>
+    <td width="100" align="center" valign="top"><font size="2"><a href="index.cgi?link_id=13&$tld_previous_get_data_&hits_session_id=$tld_session_id_">$tld_hits_</a></font></td>
+  </tr>
+  <!-- end_list_ //-->
+  <tr bgcolor="#FFFFCC">
+    <td width="15">&nbsp;</td>
+	<form name="f" method="post" action="index.cgi">
+	<!-- dynamic_content_ name=form_hidden_field //-->
+    <td colspan="6">
+      <!-- start_menu_ name=list //-->
+      <font size="2">dynamic_menu_items_</font>
+      <!-- end_menu_ //-->
+      <font size="2"><strong>&nbsp;&nbsp;Limit Description in:</strong></font>
+      <select name="limit_description" id="limit_description" onChange="document.f.submit()">
+        <option value=""></option>
+        <!-- select_ //-->
+      </select>
+
+      <!-- start_cgihtml_ //-->
+      &nbsp; &nbsp;
+      <font size="2"><strong>Login Name:</strong></font>
+      <input type="text" size="8" name="login_name" value="$cgi_login_name_">
+
+      &nbsp; &nbsp;
+      <font size="2"><strong>Date:</strong></font>
+      <input type="text" size="8" name="login_date" value="$cgi_login_date_">
+
+      &nbsp; &nbsp;
+      <font size="2"><strong>Time:</strong></font>
+      <input type="text" size="6" name="login_time" value="$cgi_login_time_">
+      <!-- end_cgihtml_ //-->
+
+      &nbsp; &nbsp;
+      <input type="submit" value="Search">
+    </td>
+	</form>
+  </tr>
+</table>
+<!-- end_view_ //-->
+</body>
+</html>

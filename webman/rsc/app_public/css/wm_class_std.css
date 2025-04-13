@@ -1,0 +1,33 @@
+.header {}
+.link_std:link {text-decoration:none;}
+.footer {}
+
+tr.popup th {border:1px solid #AAAAFF; padding:3px; background-color:transparent;}
+tr.popup td {border:1px solid #AAAAFF; padding:3px; background-color:transparent;}
+
+tr.row_odd {background-color:#ffffff;}
+tr.row_even {background-color:#fbfbeb;}
+
+#div_main {
+  position: relative;
+  width: 1000px;
+  border: 0px solid;
+}
+
+#div_page_dimmer {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 2000px;
+  height: 2000px;
+  //background-color: #2f3f4b;
+  background-image:url(page_dimmer.png); 
+  background-repeat:repeat;
+  visibility:hidden;
+  border: 0px solid;
+  z-index: 1;
+}
+
+div.note {position:absolute; top:120; left:15; width:250px; padding:5px; border:1px solid #AAAAFF; background:#EEEEFF; font-size:8pt; text-align:left;}
+div.popup {position:absolute; padding:5px; border:2px solid #AAAAFF; background:#F0F0FF; visibility:hidden;}
+div.popup_onclick {position:absolute; padding:17px 23px 10px 10px; border:2px solid #CCCCCC; background:#FAFAFA; visibility:hidden;}

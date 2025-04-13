@@ -1,0 +1,66 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<a href="index.cgi?link_id=$cgi_link_id_&task=wmcudas_user_multirows_delete&button_submit=Cancel">List</a>
+<!-- end_cgihtml_ //-->
+&gt;
+Delete
+<p />
+
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+
+<table border="1">
+  <tr>
+    <td align="right" valign="top"><b>Num. </b></td>
+    <td valign="top"><b>Login Name</b></td>
+
+    <td valign="top"><b>Password</b></td>
+
+    <td valign="top"><b>Full Name</b></td>
+
+    <td valign="top"><b>Description</b></td>
+
+    <td valign="top"><b>Email</b></td>
+
+    <td valign="top"><b>Email2</b></td>
+
+  </tr>
+
+  <!-- start_datahtml_ name=form_db_field //-->
+  <tr>
+   <td align="right" valign="top"><b>$row_num_. </b></td>
+   <td>$db_login_name_$row_idx_</td>
+
+   <td>$db_password_$row_idx_</td>
+
+   <td>$db_full_name_$row_idx_</td>
+
+   <td>$db_description_$row_idx_</td>
+
+   <td>$db_email_$row_idx_</td>
+
+   <td>$db_email2_$row_idx_</td>
+
+  </tr>
+  <!-- end_datahtml_ //-->
+
+  <tr>
+    <td align="right" colspan="7">
+      <input name="button_submit" type="submit" id="button_submit" value="Proceed"/>
+      <input name="button_submit" type="submit" id="button_submit" value="Cancel"/>
+    </td>
+  </tr>
+</table>
+</form>
+
+<!-- start_cgihtml_ //-->
+<a href="index.cgi?link_id=$cgi_link_id_&task=wmcudas_user_text2db_delete">Upload Text File</a>
+<!-- end_cgihtml_ //-->
+
+<!-- end_view_ //-->
+</body>
+</html>

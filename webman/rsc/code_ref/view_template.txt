@@ -1,0 +1,381 @@
+#_title_
+View Template
+#_end_
+
+#_des_
+### Webman-framework's view template is simply a standard HTML document 
+### comprises a collection of special structured tags constructed using HTML's 
+### comment tag: <c>&lt;!-- ... //--&gt;</c>. These special tags are mainly 
+### used to split view template file into several different content parts, 
+### known as template-element. The generic form of template-element tags are 
+### written as follows: 
+### <p />
+### <c>&lt;!-- <i>element_type_</i> name=<i>element_name</i> //--&gt;</c>
+### <p />
+### The <c><i>element_type_</i></c> and <c><i>element_name</i></c> tag's 
+### properties are template-element's type and name. Template-element name 
+### (<c><i>element_name</i></c>) string mustn't contain any single space 
+### characters. Template-elements can exist inside the view template with or 
+### without a name. Without a name they can be simply referred back by using 
+### their index-type number. However, it's more preferable to give 
+### template-elements a unique names, so they can be referred back in more 
+### flexible manner.
+### <p />
+### There are two types of template-element tags that are single or paired. 
+### The paired has its generic form as follows:
+### <p />
+### <c>
+### &lt;!-- start_<i>element_type_</i> name=<i>element_name</i> //--&gt;<br /><br />
+### <i>other standard HTML parts and special word patterns goes here...</i><br /><br />
+### &lt;!-- end_<i>element_type_</i> //--&gt;<br />
+### </c>
+### <p />
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template Area & VIEW Template-element</b><p />
+### The <c>&lt;!-- start_view_ //--&gt;</c> and 
+### <c>&lt;!-- end_view_ //--&gt;</c> are special paired template tags used to 
+### mark the parts of template file content to be processed by the 
+### application's component-type modules. In other word they mark the 
+### beginning and the ending of line of view template file to be treated as a 
+### view template area. Other standard HTML parts and framework's sub 
+### template-elements must exist inside this view template area if they are 
+### intended to be rendered as a view content of the application. 
+#_end_
+<html>
+<head>...</head>
+<body>
+<!-- start_view_ //-->
+#_doc_
+<c><i>other standard HTML parts and sub template-elements goes here...</i></c>
+#_end_
+<!-- end_view_ //-->
+</body>
+</html>
+#_doc_
+### Inside the view template area any standard HTML parts will become 
+### <b>VIEW template-elements</b> and will be processed by <c>process_VIEW</c> 
+### hook function. Other sub template-elements types indentified will be 
+### processed by their corresponding hook functions. The example below shows 
+### the fragments of template-elements which might be constructed from a 
+### single view template file.
+#_end_
+#_code_num_ 5-8,10-11:#fff7f7,13-17
+<html>
+<head>...</head>
+<body>
+<!-- start_view_ //-->
+
+<h1>WebDev Inc.</h1>
+<hr />
+
+<!-- start_menu_ name=main_link //-->
+<p>Main Links:</p> 
+menu_item0_ | menu_item1_ | menu_item2_
+<!-- end_menu_ //-->
+
+Our organization provide services to ... 
+<hr />
+Copyright 2012 WebDev Org.
+
+<!-- end_view_ //-->
+</body>
+</html>
+#_end_
+#_doc_
+### There are three template-elements exist inside the above template file as 
+### follows:
+### <p />
+### <table border="1">
+### <tr><th>Code Lines</th><th>Element Type</th><th>Index-type Num.</th><th>Element Name</th></tr>
+### <tr><td>05 - 08   </td><td>VIEW        </td><td>0              </td><td>&nbsp;      </td></tr>
+### <tr><td>10 - 11   </td><td>MENU        </td><td>1              </td><td>main_link   </td></tr>
+### <tr><td>13 - 17   </td><td>VIEW        </td><td>2              </td><td>&nbsp;      </td></tr>
+### </table>
+### <p />
+### All sub template-element types currently available to be included inside 
+### the view template area are described in section 3 and section 4. 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Component Designation & Hook Function Implementation</b><p />
+### View template files are normally designated to and processed by 
+### specific component-type modules (<c>CGI_Component::webman_CGI_component</c> 
+### based modules). The designation of template file to these type of modules 
+### can be done by applying template file naming convention following 
+### framework's "Convention over Configurations" (CoC) style. The CoC proposed 
+### that, for component-type module <c><i>component_name</i>.pm</c> the
+### default view template file name can be 
+### <c>template_<i>component_name</i>.html</c> or 
+### <c><i>component_name</i>.html</c>. The former naming style has the 
+### privilege over the latter and the component itself will automatically 
+### search an existing file using these naming conventions. To manually assign 
+### template file to specific component, the component's 
+### <c>set_Template_File(...)</c> generic function can be used. The 
+### implementation can be done inside component's <c>process_Content{...}</c> 
+### function as below:
+#_end_
+sub process_Content {
+    $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    ### Option to change default template view.
+    if (some condition...) {
+        $this->set_Template_File("other_template_file.html");
+    }
+    
+    ### The heart of "Template Method" design pattern that call "hook" 
+    ### functions to process and manipulate view's template-elements
+    $this->SUPER::process_Content;  
+}
+#_doc_
+### Inside the component-type modules each template-elements are binded to 
+### specific hook functions through the implementations of 
+### "Inversion of Control" (IoC) mechanism using "Template_Method" design 
+### pattern. Developers doesn't need to know how these hook methods should be 
+### called at runtime, they only need to override them to process and 
+### manipulate the template-element before return the content result back to 
+### the component. Below is the generic skeleton code of hook function 
+### implementation.
+#_end_
+### The skeleton of "hook" function to be redefined to process 
+### template-elements content. TE_TYPE can be: VIEW, DYNAMIC, SELECT, MENU, 
+### DBHTML, LIST, DATAHTML, or CGIHTML.
+sub process_TE_TYPE { 
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    ### Process template-elements by referring 
+    ### to their name.
+    if ($te_type_name eq "???") {
+        ...
+    }
+    
+    ### Option to process template-elements by referring 
+    ### to their index-type number
+    #if ($te_type_num == ???) {
+    #    ...
+    #}
+    
+    $this->add_Content($te_content);
+}
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Single Template-element Tags</b><p />
+### Single template-tags will become a content place-holder themselves. They 
+### are normally used as a place-holder for other complex-structured contents 
+### generated by other component-type modules.
+### <p />&nbsp;<p />
+### <b>3.1 DYNAMIC_CONTENT Template-element</b><p />
+### Inside framework's main controller (webman_main), DYNAMIC_CONTENT has been 
+### used as main template-element to be processed and linked to application's 
+### main link structure. For each link-nodes, DYNAMIC_CONTENT template-element 
+### names are used as references by main controller to run other application's 
+### component-type modules.
+#_end_
+#_doc_
+### <c>&lt;!-- dynamic_content_ name=<i>element_name</i> //--&gt;</c>
+### <p />
+### Inside the main controller and other component-type modules 
+### DYNAMIC_CONTENT template-elements are passed to and handled by 
+### <c>process_DYNAMIC</c> hook function.
+### <p />&nbsp;<p />
+#_end_
+#_doc_
+### <b>3.2 SELECT Template-element</b><p />
+### It should no be used directly by developers since it exist as default  
+### template-element used by framework's standard component-type modules. 
+#_end_
+#_doc_
+### <c>&lt;!-- select_ name=<i>element_name</i> //--&gt;</c>
+### <p />
+### Inside component-type modules SELECT template-elements are passed to 
+### and handled by <c>process_SELECT</c> hook function.
+### <p />&nbsp;<p />
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Paired Template-element Tags</b></p>
+### Paired template-element tags normally contains special word patterns act
+### as a content place-holder for application data. Its contents (special word 
+### patterns and other HTML parts) are normally passed to other framework's
+### core modules to be processed/manipulated before return back the result to 
+### current component which the view template file was designated. 
+### 
+### <p />&nbsp;<p />
+### <b>4.1 MENU Template-element</b><p />
+### Template-element used to render the application menu or precisely the HTML 
+### links to call application resources/services via HTTP-GET method approach. 
+### It might content the template word patterns <c>menu_item<i>idx</i>_</c> or 
+### <c>dynamic_menu_items_</c> as its content place-holder. These options of 
+### word patterns are depends on the core modules used to process the  
+### template-element's content (HTML_Link_Menu or HTML_Link_Menu_Paginate).
+### <p />
+### MENU template-element to be processed by HTML_Link_Menu core module:
+#_end_
+#_doc_
+<c>&lt;!-- start_menu_ name=<i>element_name</i> //--&gt;</c>
+#_end_
+    menu_item0_ | menu_item1_ | ...
+    
+<!-- end_menu_ //-->
+#_doc_
+### MENU template-element to be processed by HTML_Link_Menu_Paginate core module:<p />
+<c>&lt;!-- start_menu_ name=<i>element_name</i> //--&gt;</c>
+#_end_
+    dynamic_menu_items_
+    
+<!-- end_menu_ //-->
+#_doc_
+### Inside component-type modules MENU template-elements are passed to 
+### and handled by <c>process_MENU</c> hook function.
+### <p />&nbsp;<p />
+#_end_
+
+#_doc_
+### <b>4.2 DBHTML Template-element</b><p />
+### Template-element used to map database table fields value inside the view 
+### template and then render them as application view content. Inside the 
+### hook function, DBHTML template-element content is passed to and 
+### manipulated by DBI_HTML_Map core module. The word pattern 
+### <c>$db_<i>field_name</i>_</c> is used to map database table field name to 
+### be viewed.
+#_end_
+#_doc_
+<c>&lt;!-- start_dbhtml_ name=<i>element_name</i> //--&gt;</c>
+<p />
+<c><i>Field Caption:</i> $db_<i>field_name</i>_</c>
+#_end_
+<!-- end_dbhtml_ //-->
+#_doc_
+### Inside component-type modules DBHTML template-elements are passed to 
+### and handled by <c>process_DBHTML</c> hook function.
+### <p />&nbsp;<p />
+#_end_
+
+#_doc_
+### <b>4.3 LIST Template-element</b><p />
+### Template-element that by convention proposed to be used as content 
+### place-holder for application's data dynamically handled by Table_List_Data 
+### core module. Inside the hook function, LIST template-element content is 
+### passed to and manipulated by TLD_HTML_Map core module. TLD_HTML_Map 
+### instance will have Table_List_Data instance as one of its basic parameter 
+### setting (member instance via aggregation). The word pattern 
+### <c>$tld_<i>column_name</i>_</c> is used to map column names available 
+### from inside Table_List_Data instance.
+### 
+#_end_
+#_doc_
+<c>&lt;!-- start_list_ name=<i>element_name</i> //--&gt;</c>
+<p />
+<c><i>Column Caption:</i> $tld_<i>column_name</i>_</c>
+#_end_
+<!-- end_list_ //-->
+#_doc_
+### Inside component-type modules LIST template-elements are passed to 
+### and handled by <c>process_LIST</c> hook function.
+### <p />&nbsp;<p />
+#_end_
+
+#_doc_
+### <b>4.4 DATAHTML Template-element</b><p />
+### Prior the availability of CGIHTML template-element, DATAHTML 
+### template-element has been mainly used to map CGI parameters inside 
+### the view template files and render them as application view content. 
+### After CGIHTML template-element was introduced, it still remains 
+### as one of standard framework's template-element since it has been 
+### extensively used as a standard template-element to be processed by 
+### database related component-type modules to support dynamic and interactive 
+### view features for table items insert/update/delete operations.
+### <p />
+### Word patterns inside DATAHTML template-element are normally the mapping 
+### of database table field (names and values) to an HTML-form's input 
+### elements. As shown below, <c>$db_<i>field_name</i></c> and 
+### <c>$db_<i>field_name</i>_</c> are two different things. The former is the   
+### input element name represents database table field name to be passed as 
+### one of CGI parameters and the later is the place-holder to render the 
+### coresspond CGI parameter value. HTML-form input elements are named in the 
+### form of <c>$db_<i>field_name</i></c> to adhere the naming convention 
+### requirements imposed by other core module (HTML_DB_Map) that is 
+### responsible for the real database operations inside the framework's 
+### database related component-type modules. 
+#_end_
+#_doc_
+<c>&lt;!-- start_datahtml_ name=<i>element_name</i> //--&gt;</c>
+<p />
+<c>&lt;form method="POST" action="./index.cgi"&gt;</c>
+<p />
+<c><i>Field Caption</i>: &lt;input name="$db_<i>field_name</i>" type="text" value="$db_<i>field_name</i>_"&gt;</c>
+<p />
+#_end_
+<input name="button_submit" type="submit" id="button_submit" value="Submit"/>
+
+</form>
+
+<!-- end_datahtml_ //-->
+#_doc_
+### Inside component-type modules DATAHTML template-elements are passed to 
+### and handled by <c>process_DATAHTML</c> hook function.
+### <p />&nbsp;<p />
+#_end_
+
+#_doc_
+### <b>4.5 CGIHTML Template-element</b><p />
+### Template-element used to map CGI variable/parameter names and render their 
+### values inside view template files. Word patterns used as place-holder to map 
+### CGI variable/parameter values are in the form of 
+### <c>$cgi_<i>var_name</i>_</c>. 
+#_end_
+#_doc_
+<c>&lt;!-- start_cgihtml_ name=<i>element_name</i> //--&gt;</c>
+<p />
+<c><i>CGI Var. Caption:</i> $cgi_<i>var_name</i>_</c>
+#_end_
+<!-- end_cgihtml_ //-->
+#_doc_
+### CGIHTML is the only template-element type that can be nested inside other 
+### paired template-element tags. Inside the application components, nested 
+### CGIHTML template-element have the priority for its hook function to be 
+### called first before its parent hook function. Below is the generic form of 
+### how CGIHTML template-element which might be nested inside other 
+### template-element (DBHTML).
+### <p />
+#_end_
+#_doc_
+<c>&lt;!-- start_dbhtml_ name=<i>element_name</i> //--&gt;</c>
+<p />
+<c><i>Field Caption:</i> $db_<i>field_name</i>_</c>
+#_end_
+#_doc_
+<c>&lt;!-- start_cgihtml_ name=<i>element_name</i> //--&gt;</c>
+<p />
+<c><i>CGI Var. Caption:</i> $cgi_<i>var_name</i>_</c>
+#_end_
+<!-- end_cgihtml_ //-->
+
+<!-- end_dbhtml_ //-->
+#_doc_
+### <p />
+### Inside component-type modules CGIHTML template-elements are passed to 
+### and handled by <c>process_CGIHTML</c> hook function. However, in most 
+### cases, it does not requires overriding implementation by developers 
+### since it already implemented inside CGI_Component core module (the most 
+### top base-module of component-type modules). 
+### <p />&nbsp;<p />
+#_end_

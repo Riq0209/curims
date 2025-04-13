@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Untitled Document</title>
+</head>
+
+<body>
+<!-- start_view_ //-->
+<table width="800" border="0" align="center" cellpadding="1" cellspacing="1" bgcolor="#CCCCCC">
+  <tr bgcolor="#CCCCCC">
+    <td width="15" align="center" colspan="5">
+      <b><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Add Potential Users</font></b>
+    </td>
+  </tr>
+
+  <tr bgcolor="#FFFFCC">
+    <td width="15"></td>
+    <!-- start_menu_ name=caption //-->
+    <td> <b><font size="2" color="#990000">menu_item0_</font></b></td>
+    <td><b><font size="2" color="#990000">menu_item1_</font></b></td>
+    <td><b><font size="2" color="#990000">menu_item2_</font></b></td>
+    <!-- end_menu_ //-->
+    <td align="center" bgcolor="#FFFFCC"><font size="2"><b>Select &amp; Add</b></font></td>
+  </tr>
+
+  <!-- start_list_ //-->
+  <tr bgcolor="$tld_row_color_">
+    <td width="15" height="15" valign="top"><font size="2">$tld_num_.</font></td>
+    <td height="15" valign="top"><font size="2">$tld_login_name_</font></td>
+    <td height="15" valign="top"><font size="2">$tld_full_name_</font></td>
+    <td height="15" valign="top"><font size="2">$tld_description_</font></td>
+    <td align="center" height="15" valign="top"><font size="2"><input type="checkbox" name="login_name_$tld_num_" value="$tld_login_name_"></td>
+  </tr>
+  <!-- end_list_ //-->
+
+  <tr bgcolor="#FFFFCC">
+    <td width="15">&nbsp;</td>
+    <td align="center" colspan="3">
+      <!-- start_cgihtml_ //-->
+      <a href="index.cgi?session_id=$cgi_session_id_&link_id=$cgi_link_id_&open_list=0"><font color="#0000FF" size="1">Close List</font></a>
+      <!-- end_cgihtml_ //-->
+    </td>
+
+    <td align="center">
+    <input name="button_submit" type="submit" id="button_submit" value="Add Selected">
+    </td>
+  </tr>
+
+  <tr bgcolor="#FFFFFF">
+    <td width="15">&nbsp;</td>
+    <td colspan="4">
+      <font title="Item Number/List" color="#FF0000" size="2"><b> Items/List:</b></font>
+	  <input name="inl_multi_select" type="text" id="inl" value="$inl_multi_select_" size="3">
+	  &nbsp;
+
+      <!-- start_menu_ name=list //-->
+      <font size="2">dynamic_menu_items_</font>
+      <!-- end_menu_ //-->
+
+	  <font title="List Set Number" color="#FF0000" size="2"><b>List Set Num. :</b></font>
+	  <select name="lsn_multi_select" onChange="document.f.submit()">
+		<!-- select_ name=lsn_multi_select //-->
+	  </select>
+	  &nbsp;
+
+	  <font title="DB Filter Field" color="#FF0000" size="2"><b>Limit Unique Description in:</b></font>
+	  <select name="filter_by_description" onChange="document.f.submit()">
+	    <option value=""></option>
+		<!-- select_ name=filter_by_description //-->
+	  </select>
+	  &nbsp;
+    </td>
+  </tr>
+</table>
+<!-- end_view_ //-->
+</body>
+</html>

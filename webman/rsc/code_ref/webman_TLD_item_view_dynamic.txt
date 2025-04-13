@@ -1,0 +1,330 @@
+#_title_
+webman_TLD_item_view_dynamic
+#_end_
+
+#_des_
+### Component-type module that provides dynamic control on item listing of 
+### Table_List_Data instance.
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>HTML_Link_Menu (Composition)</li>
+### <li>HTML_Link_Menu_Paginate (Composition)</li>
+### <li>Select_Option (Composition)</li>
+### </ul>
+### <br />
+### <b>Webman-framework's Component-type Modules:</b><br />
+### <ul>
+### <li>CGI_Component::webman_CGI_component:webman_TLD_item_view (Inheritance)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template</b>
+### <p />
+#_end_
+#_code_num_
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //--> &gt; List Title
+<p />
+
+<!-- dynamic_content_ name=tld_items_num_begin //--> -
+<!-- dynamic_content_ name=tld_items_num_end //--> of
+<!-- dynamic_content_ name=tld_items_num_total //--> Records.
+<p />
+
+<table border="1">
+  <!-- start_menu_ name=caption //-->
+  <tr>
+    <th>Num.</th>
+    <th>menu_item0_</th>
+    <th>menu_item1_</th>
+    <th>menu_item2_</th>
+  </tr>
+  <!-- end_menu_ //-->
+
+  <!-- start_list_ name=main //-->
+  <tr>
+    <td align="right">$tld_num_.</td>
+    <td>$tld_column_name_1_</td>
+    <td>$tld_column_name_2_</td>
+    <td>$tld_column_name_n_</td>
+  </tr>
+  <!-- end_list_ //-->
+</table>
+
+<p />
+
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- dynamic_content_ name=form_hidden_field //-->
+
+  Items/List: <input name="inl" type="text" id="inl" value="$inl_" size="3">
+  &nbsp;
+
+  <!-- start_menu_ name=list //-->
+    dynamic_menu_items_
+  <!-- end_menu_ //-->
+  &nbsp;
+
+  List Set Num. :
+  <select name="lsn" onChange="document.tld_view_dynamic.submit()">
+    <!-- select_ name=lsn //-->
+  </select>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Instantiation and Basic Parameter Setting</b>
+### <p />
+### Lines 8-14 is the most practical way to create Table_List_Data instance by 
+### using JSON data entities retrieved from data interoperability service 
+### provided by webman_JSON component-type module. Values for the attributes of  
+### the entity can be a value from the CGI parameters: 
+### (<c><trp><i>attribute_2</i></trp> => $cgi_<trp><i>param_name</i></trp>_</c>). 
+### Manually create Table_List_Data instance is also possible as proposed at 
+### lines 17-19.
+#_end_
+#_code_num_ 8-14:#ffdddd,17-19:#ddffdd 1
+my $component = new webman_TLD_item_view_dynamic;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+### Table_List_Data instance automatically created from the returned JSON
+### formatted text.
+$component->set_Web_Service_URL("http://app_URL_path/index_json.cgi");
+
+$component->set_Web_Service_Entity("entity => entity_name, 
+                                    attribute_1 => value_1,
+                                    attribute_2 => $cgi_param_name_,
+                                    ...,
+                                    attribute_n => value_n");
+
+### Option to manually create an instance of Table_List_Data is also possible.
+#my $tld = new Table_List_Data;
+#...;
+#$component->set_TLD($tld);
+
+#$component->set_List_Selection_Num($num); ### default is 15
+
+$component->set_Order_Field_CGI_Var("order_by_???");
+
+$component->set_Order_Field_Caption("Caption 1:Caption 2:...:Caption n");
+$component->set_Order_Field_Name("field_1:field_2 field_1:...:field_n");
+
+#$component->set_Order_Field_Name_Opt("asc|desc:asc|desc asc|desc:...:asc|desc");
+#$component->set_Order_Field_Mode("str|num:str|num str|num:...:str|num");
+
+#$component->set_Order_Field_Name_Opt_Mode("field_1:field_2 field_1:...:field_n", 
+#                                          "asc|desc:asc|desc asc|desc:...:asc|desc", 
+#                                          "str|num:str|num str|num:...:str|num");
+
+#$component->set_Map_Caption_Field("caption_1_ => field_1_, ..., caption_n_ => field_n_"); ### it's only [1 to 1] mapping
+#$component->set_Default_Order_Field_Selected($order_field_index_); ### default is 0
+
+#$component->set_Customize_TLD_After_Sort(1); ### default is 0
+
+$component->set_Items_View_Num(50);
+$component->set_Items_Set_Num(1); ### set for default set num
+
+#$component->set_INL_Var_Name("???"); ### Items Num./List, default is "inl"
+#$component->set_LSN_Var_Name("???"); ### List Set Num., default is "lsn"
+
+#$component->set_Items_Set_Num_Var("tldisn_???"); ### default is: "tldisn_" . $cgi->param("task"); 
+#$component->set_Dynamic_Menu_Items_Set_Number_Var("dmisn_???"); ### default is: "dmisn_" . $cgi->param("task");
+
+#$component->set_Carried_GET_Data("inl ..."); ### all possible get data except link_name, dmisn, 
+#                                             ### link_id, app_name, and session_id
+                                                                     
+#$component->set_Carried_Hidden_POST_Data("... "); ### all possible hidden post data except link_name, dmisn, 
+#                                                  ### link_id, app_name, and session_id                                                                     
+
+
+#$component->set_Additional_GET_Data("get_data_1=get_value_1&...&get_data_n=get_value_n");                                                      
+#$component->set_Additional_Hidden_POST_Data("post_data_1=post_value_1&...&post_data_n=post_value_n");
+
+#$component->set_Link_Path_Carried_Get_Data("get_data_1_ ... get_data_n_"); ### all possible post data except link_name, link_id, dmisn, app_name & session_id
+
+$component->set_Template_Default($template_file);
+ 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Component-type Generic Function Calls</b>
+### <p />
+#_end_
+#_code_num_ 0 50
+if ($component->auth_Link_Path && $component->authenticate) {
+    $component->run_Task;
+    $component->process_Content;
+    $component->end_Task;
+}
+
+my $content = $component->get_Content;
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Child Module for Customization</b>
+### <p />
+#_end_
+#_code_num_
+package <trp><i>child_module_name</i></trp>;
+
+use webman_TLD_item_view_dynamic;
+
+@ISA=("webman_TLD_item_view_dynamic");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    ### Programmatically generate Table_List_Data instance  
+    ### is highly possible to be done here.  
+    #my $tld = new Table_List_Data;
+    #...;
+    #...;
+    #$this->set_TLD($tld);
+    
+    $this->SUPER::run_Task();
+}
+
+### Example of handling view template with more than one DYNAMIC 
+### template-element. The standard DYNAMIC template element named "link_path" 
+### should be passed to the base module hook function. The new added DYNAMIC 
+### template-element ("other_new_dynamic") can be processed locally inside the 
+### child module hook function. 
+sub process_DYNAMIC { 
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    if ($te_type_name eq "link_path") {
+        ### Just pass the DYNAMIC template-element instance to 
+        ### parent's process_DYNAMIC function.
+        $this->SUPER::process_DYNAMIC($te);
+        
+    } elsif ($te_type_name eq "other_new_dynamic") {
+        ### Process the new added LIST template-element 
+        #$te_content = ...;
+        #...;
+        #...;
+        #return ($te_content);
+    }
+}
+
+sub customize_TLD {
+    my $this = shift @_;
+    
+    my $tld = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $caller_get_data = $cgi->generate_GET_Data("link_id");
+    
+    ### Add new column to represent HTML's CSS class to 
+    ### control the view presentation of HTML-table rows.
+    $tld->add_Column("row_class");
+    
+    my $row_class = "row_odd";
+    
+    for (my $i = 0; $i < $tld->get_Row_Num; $i++) {
+        ### The below implementations assume that the CSS class "row_odd" and 
+        ### "row_even" have been already defined and ready to be used inside 
+        ### the view template. Refer back to section 2 (the proposed view 
+        ### template) and see how the "$tld_row_class_" word pattern act as a 
+        ### place-holder inside the main list template-element.
+        $tld->set_Data($i, "row_class", "$row_class");
+        
+        if ($row_class eq "row_odd") {
+            $row_class = "row_even";
+            
+        } else {
+            $row_class = "row_odd";
+        } 
+        
+        ### Other possible implementations of customization to manipulate the 
+        ### existing column's data of Table_List_Data instance ($tld) to make 
+        ### one of its column becomes an active hypertext links. The scalar 
+        ### ($get_data) should be a list of additional CGI parameters written 
+        ### in GET-data string format ("&param1=value1&param2=$value2&..."). 
+        ### The $link_properties is a string represent the attributes of the 
+        ### HTML <a> tag: <a href="..." $link_properties>...</a> 
+        #my $col_name = "...";
+        
+        #my $get_data = $caller_get_data . "...";
+        #my $link_properties = "...";
+        
+        #my $tld_data = $tld->get_Data($i, $col_name);
+        
+        #$tld_data = "<font color=\"#0099FF\">$tld_data</font>";
+        
+        #$tld->set_Data($i, $col_name, $tld_data);
+        #$tld->set_Data_Get_Link($i, $col_name, "index.cgi?$get_data", $link_properties);       
+        
+    }
+    
+    return $tld;
+}
+
+1;
+#_end_
+#_doc_
+<a href="./txtsrc/webman_TLD_item_view_dynamic_child.txt">Get code...</href>
+#_end_

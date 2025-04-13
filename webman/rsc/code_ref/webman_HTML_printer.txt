@@ -1,0 +1,213 @@
+#_title_
+webman_HTML_printer
+#_end_
+
+#_des_
+### Component-type module used to print out HTML content to be displayed by 
+### the browser. HTML content sources can be a single parameter set to the 
+### component itself or retrieved from particular selected database table 
+### field. For HTML content retrieved from database table field, the component 
+### provides the facilities for user to edit the HTML source code and save it 
+### back into the database.  
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>CGI_HTML_Map (Composition)</li>
+### </ul>
+### <br />
+### <b>Webman-framework's Component-type Modules:</b><br />
+### <ul>
+### <li>CGI_Component::webman_CGI_component (Inheritance)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template</b>
+### <p />
+### There are two types of view template files can be assigned to 
+### webman_HTML_printer module. They are view template to display and view 
+### template to edit the HTML content.
+### <p />
+### <b>1.1 Display-Page</b>
+### <p />
+### Below is the most possible simplest form of display view template for 
+### webman_HTML_printer module with hypertext link to switch to edit mode.   
+#_end_
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=html_content //-->
+<p />
+<!-- start_cgihtml_ //-->
+<a href="index.cgi?link_id=$cgi_link_id_&edit_mode=1">Edit Content</a>
+<!-- end_cgihtml_ //-->
+<!-- end_view_ //-->
+</body>
+</html>
+#_doc_
+### <b>1.2 Edit-Page</b>
+### <p />
+#_end_
+<html>
+<body>
+<!-- start_view_ //-->
+<form method="POST" action="./index.cgi">
+  <!-- start_cgihtml_ //-->
+  <input type="hidden" name="link_id" value="$cgi_link_id_">
+  <input type="hidden" name="save_mode" value="1">
+  <!-- end_cgihtml_ //-->
+  <textarea name="html_content" rows=10 cols=80><!-- dynamic_content_ name=html_content //--></textarea>
+  <br />
+  <input name="button_submit" type="submit" id="button_submit" value="Save" />
+  <input name="button_submit" type="submit" id="button_submit" value="Cancel" />
+</form>
+<!-- end_view_ //-->
+</body>
+</html>
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Instantiation and Basic Parameter Setting</b>
+### <p />
+#_end_
+my $component = new webman_HTML_printer;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+### The HTML content is a parameter of the component itself.
+#$component->set_HTML_Content($html_content);
+
+### The HTML content is retrieved from particular selected database table 
+### field so the edit mode can be applied. The <trp><i>key_field_name</i></trp>
+### can be a CGI parameter of the application. 
+#$component->set_Table_Name($table_name);
+#$component->set_Content_Field_Name($field_name);
+#$component->set_Key_Field_Str("<trp><i>key_field_name</i></trp>='$cgi_<trp><i>key_field_name</i></trp>_'");
+
+#$component->set_Param_Edit_Mode($edit_param_name); ### default is "edit_mode"
+#$component->set_Param_Save_Mode($save_param_name); ### default is "save_mode"
+
+### For display set it to "0" and for edit set it to "1". In most cases, it 
+### will be automatically set at application runtime corresponds to the value 
+### of CGI parameter that used to represent the edit mode (see the 
+### set_Param_Edit_Mode function above).
+#$component->set_Edit_Mode($edit_mode);
+
+#$component->set_Submit_Button_Name($submit_button_name);  ### default is "button_submit"
+#$component->set_Proceed_On_Submit($proceed_button_value); ### default is "Save"
+#$component->set_Cancel_On_Submit($cancel_button_value);   ### default is "Cancel"
+
+$component->set_Template_Default($template_file);
+$component->set_Template_Default_Edit($template_file_edit);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Component-type Generic Function Calls</b>
+### <p />
+#_end_
+if ($component->authenticate) {
+    $component->run_Task; 
+    $component->process_Content;
+    $component->end_Task;
+}
+
+my $content = $component->get_Content;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Child Module for Customization</b>
+### <p />
+### The only customization that could be made is to refine the HTML content 
+### edited inside the edit-page (see section 1.2) before it's saved into the 
+### database. It can be done inside the <c>refine_Saved_Content</c> function.
+#_end_
+package <trp><i>child_module_name</i></trp>;
+
+use webman_HTML_printer;
+
+@ISA=("webman_HTML_printer");
+
+sub new {
+    my $type = shift;
+    
+    my $this = webman_CGI_component->new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $type;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    #$this->set_Error("???");
+    
+    $this->SUPER::run_Task();
+}
+
+### The $this->{html_content} might contains the DYNAMIC_CONTENT 
+### view-element such "<!-- dynamic_content_ name=??? //-->".  If so, the 
+### function below will be invoked by the parent module. The child module 
+### then can customize this function to return other generated content for the 
+### current processed DYNAMIC_CONTENT view-element based on its name.
+sub process_Dynamic_View_Element {
+    my $this = shift @_;
+    
+    my $te_name = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    #$cgi->add_Debug_Text($te_name, __FILE__, __LINE__);
+    
+    if ($te_name eq "???") {
+        return "???";
+        
+    } else {
+        $this->SUPER::process_Dynamic_View_Element($te_name);
+    }
+}
+
+sub refine_Saved_Content {
+    my $this = shift @_;
+    
+    my $content = shift @_;
+    
+    ### The below content refinement might be required if the special textarea 
+    ### element named "html_content" in section 1.2 is intended to be  
+    ### integrated with other WYSIWYG client-based text editor. It's based on 
+    ### testing that has been with CKEditor version 4.2.2.
+    #$content =~ s/\%09//g; 
+    
+    return $content;
+}
+
+1;

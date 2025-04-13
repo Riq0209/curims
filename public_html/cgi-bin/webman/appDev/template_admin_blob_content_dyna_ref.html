@@ -1,0 +1,53 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<!-- start_view_ //-->
+<br />
+<form name="form1" method="post" action="" enctype="multipart/form-data">
+  <input type="hidden" name="task" value="dyna_ref_add">
+  <input type="hidden" name="$db_blob_id">
+  <!-- dynamic_content_ //-->
+  <table width="700" border="1" cellpadding="1" cellspacing="1">
+    <tr>
+      <td width="175"><b><font size="2">Dynamic Content Num.</font></b></td>
+      <td><b><font size="2">Dynamic Module Name</font></b></td>
+      <td width="175" align="center"><b><font size="2">Operations</font></b></td>
+    </tr>
+	<!-- start_list_ //-->
+    <tr>
+      <td width="175"><font size="2">$tld_dynamic_content_name_</font></td>
+      <td><font size="2">$tld_dyna_mod_name_</font></td>
+      <td width="255" align="center">
+	  <font size="2">
+	  <a href="index.cgi?$caller_get_data_&mode=dyna_ref_param&scdmr_id=$tld_scdmr_id_&dyna_mod_name=$tld_dyna_mod_name_&dynamic_content_num=$tld_dynamic_content_num_"><font color="#0099FF">Set Param</font></a> <font color="#0099FF">[$tld_param_num_]</font> |
+	  <a href="index.cgi?$caller_get_data_&mode=dyna_ref_param_copy&scdmr_id=$tld_scdmr_id_&dyna_mod_name=$tld_dyna_mod_name_&dynamic_content_num=$tld_dynamic_content_num_"><font color="#0099FF">Copy Param</font></a> |
+	  <a href="index.cgi?$caller_get_data_&mode=dyna_ref&scdmr_id=$tld_scdmr_id_&task=dyna_ref_delete"><font color="#0099FF">Delete</font></a>
+	  </font>
+	  </td>
+    </tr>
+	<!-- end_list_ //-->
+    <tr>
+      <td width="175"> <font size="2">
+        <select name="$db_dynamic_content_name">
+          <!-- select_ //-->
+        </select>
+        </font></td>
+      <td> <font size="2">
+        <select name="$db_dyna_mod_name">
+		<!-- select_ //-->
+        </select>
+        </font></td>
+      <td width="175" align="center">
+        <input type="submit" name="submit" value="Add">
+      </td>
+    </tr>
+  </table>
+</form>
+
+<!-- end_view_ //-->
+</body>
+</html>

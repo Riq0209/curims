@@ -1,0 +1,15 @@
+    ### keys to change: __table_name__, __field_fk__, __field_order__
+    
+    $dbu->set_Table("__table_name__");
+    my $order_num = $dbu->count_Item("__field_fk__", $cgi->param("__field_fk__")) + 1;
+
+    #$cgi->add_Debug_Text("SQL = " . $dbu->get_SQL, __FILE__, __LINE__, "DATABASE");
+
+    my $__field_order__ = $order_num;
+
+    ### example of extra order field formatting
+    #if ($__field_order__ < 10) { 
+    #    $__field_order__ = "0" . $order_num; 
+    #}
+
+    $cgi->push_Param("\$db___field_order__", $__field_order__);

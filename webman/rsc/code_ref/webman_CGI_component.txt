@@ -1,0 +1,178 @@
+#_title_
+webman_CGI_component
+#_end_
+
+#_des_
+### Component type module that inherits CGI_Component core module to further 
+### define how component should exist and behave within the framework.<p />
+### Below are Webman-framework's component specifications which particularly 
+### supported by webman_CGI_component module.
+### <ol>
+### <li>Internally provide access control facilities at application link  
+### structure level.</li>
+### <br />
+### <li>Provide function to set component's parameters at application runtime  
+### through queries from database table.</li>
+### <br />
+### </ol>
+### The implementation of these specifications are accomplished inside 
+### <c>set_Module_DB_Param</c> and <c>auth_Link_Path</c> functions (see 
+### section 2).
+
+### 
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>CGI_Component (Inheritance)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. Instantiation and Basic Parameter Setting</b><p /> 
+### The passed arguments <c>$cgi</c> and <c>$db_conn</c> are other 
+### Webman-framework core modules instances. The <c>$cgi</c> is an instance of 
+### GMM_CGI module and the <c>$db_conn</c> is an instance of database connection 
+### created using DBI module.<p />
+#_end_
+my $component = new webman_CGI_component;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Component-type Generic Function Calls</b><p /> 
+### Other generic functions to be called following Webman-framework 
+### specificatons to run the module as a framework's component. Many of the 
+### functions are inherited from the CGI_Component core base module.
+#_end_
+### Start set component specific parameters
+#$component->set_???;
+
+### Set component specific parameters from database table
+$component->set_Module_DB_Param;
+
+if ($component->auth_Link_Path && $component->authenticate) {
+    $component->run_Task;
+    $component->process_Content;
+    $component->end_Task;
+}
+
+my $content = $component->get_Content;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Child Module for Customization</b><p /> 
+### Basic skeleton code to use webman_CGI_component as a base module. This is 
+### actually the basic implementation of all Webman-framework's standard 
+### component type modules.
+#_end_
+#_doc_
+<c>package <i>child_module_name</i>;</c>
+#_end_
+use webman_CGI_component;
+
+@ISA=("webman_CGI_component");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    $this->{template_default} = undef;
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    ### Skeleton code to check if current user's groups are match with  
+    ### specific intended group name.
+    #my $group_name = "???";
+    #my $match_group = $this->match_Group($group_name, @groups);
+}
+
+sub process_Content {
+    $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    ### Option to change default template view.
+    #if (some condition...) {
+    #    $this->set_Template_File("other_template_file.html");
+    #}
+    
+    ### The heart of "Template Method" design pattern that call "hook" 
+    ### functions to process and manipulate template view elements
+    $this->SUPER::process_Content;  
+}
+
+### The skeleton of "hook" function to be redefined to process template 
+### elements content. <trp><i>TE_TYPE_</i></trp> can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, 
+### SELECT, DATAHTML, CGIHTML, etc.
+sub process_<trp><i>TE_TYPE_</i></trp> { 
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    ### Start process template element content.
+    #???
+    
+    $this->add_Content($te_content);
+}
+
+sub end_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    ### Skeleton code to check if current user's groups are match with  
+    ### specific intended group name.
+    #my $group_name = "???";
+    #my $match_group = $this->match_Group($group_name, @groups);
+    
+    $this->SUPER::end_Task;
+}
+
+1;

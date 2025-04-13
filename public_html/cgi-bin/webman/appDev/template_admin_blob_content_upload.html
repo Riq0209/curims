@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<!-- start_view_ //-->
+<form name="form1" method="post" action="" enctype="multipart/form-data">
+  <input type="hidden" name="task" value="reload_phase4">
+  <input type="hidden" name="mode">
+  <!-- dynamic_content_ //-->
+  <input type="hidden" name="$db_blob_id">
+  <input type="hidden" name="$db_content">
+  <input type="hidden" name="$db_filename">
+  <input type="hidden" name="$db_extension">
+  <input type="hidden" name="$db_owner_entity_id">
+  <input type="hidden" name="$db_owner_entity_name">
+  <input type="hidden" name="$db_upload_time">
+  <input type="hidden" name="$db_upload_date">
+  <input type="hidden" name="$db_mime_type">
+  <table width="100%" border="0">
+    <tr> 
+      <td width="75" align="right"><font size="2"><b>Reload File:</b></font></td>
+      <td><font size="2"> 
+        <!-- start_datahtml_ //-->
+        <a href="../web_man_blob_content_printer_v2.cgi?blob_id=blob_id_" target="_blank"><font color="#0099FF">$filename_</font></a> 
+        <!-- end_datahtml_ //-->
+        </font></td>
+    </tr>
+    <tr> 
+      <td width="75" align="right"><font size="1">&nbsp;</font></td>
+      <td><font size="1">&nbsp;</font></td>
+    </tr>
+    <tr> 
+      <td width="75" align="right"><font size="1">&nbsp;</font></td>
+      <td><font size="1">&nbsp;</font><b><font size="2">Requires to upload files 
+        as listed below: &nbsp;&nbsp;</font></b></td>
+    </tr>
+    <tr> 
+      <td width="75" align="right"><font size="1">&nbsp;</font></td>
+      <td><font size="1">&nbsp;</font></td>
+    </tr>
+    <tr> 
+      <td width="75" align="right"><font size="1">&nbsp;</font></td>
+      <td> 
+        <table width="100%" border="1" cellpadding="1" cellspacing="1">
+          <!-- start_list_ //-->
+          <tr> 
+            <td width="25" align="right"><font size="2">$tld_num_.</font></td>
+            <td width="250"><font size="2">$tld_filename_</font></td>
+            <td>
+              <input type="file" name="file" size="35">
+            </td>
+          </tr>
+          <!-- end_list_ //-->
+        </table>
+      </td>
+    </tr>
+    <tr> 
+      <td width="75" align="right"><font size="1">&nbsp;</font></td>
+      <td><font size="1">&nbsp;</font></td>
+    </tr>
+    <tr> 
+      <td width="75" align="right">&nbsp;</td>
+      <td> 
+        <input type="submit" name="submit" value="Upload">
+      </td>
+    </tr>
+  </table>
+</form>
+<br>
+<!-- end_view_ //-->
+</body>
+</html>

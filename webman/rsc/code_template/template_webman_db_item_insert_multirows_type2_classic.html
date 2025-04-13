@@ -1,0 +1,53 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+<p />
+
+<form method="POST" action="./index.cgi">
+  <!-- start_cgihtml_ //-->
+  <input type="hidden" name="link_id" value="$cgi_link_id_">
+  <b>Row Number:</b>
+  <input type="text" name="__irn_cgi_var_name__" size="3" value="$cgi___irn_cgi_var_name___">
+  <!-- end_cgihtml_ //-->
+
+  <input name="button_submit" type="submit" id="button_submit" value="Change" />
+</form>
+
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+<table border="1">
+  <tr>
+    <th align="right" valign="top">Num. </th>
+__start_caption__
+    <th valign="top">__field_caption__</th>
+__end_caption__
+  </tr>
+
+  <!-- start_datahtml_ name=form_db_field //-->
+  <tr>
+    <td align="right" valign="top">
+      <b>$row_num_. </b>
+    </td>
+__start_field__
+    <td valign="top">
+      __input_form_element__
+      </br>
+      __field_error__
+    </td>
+ __end_field__
+  </tr>
+  <!-- end_datahtml_ //-->
+
+  <tr>
+    <td align="right" colspan="__colspan__">
+      <input name="button_submit" type="submit" id="button_submit" value="Proceed" />
+      <input name="button_submit" type="submit" id="button_submit" value="Cancel" />
+    </td>
+  </tr>
+</table>
+</form>
+__text2db_link__
+<!-- end_view_ //-->
+</body>
+</html>

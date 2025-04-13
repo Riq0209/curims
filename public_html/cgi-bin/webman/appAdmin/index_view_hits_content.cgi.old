@@ -1,0 +1,88 @@
+#! C:/xampp/perl/bin/perl
+
+unshift (@INC, "../../");
+
+use DBI;
+use CGI::Carp qw(fatalsToBrowser);
+
+require GMM_CGI;
+require DB_Utilities;
+
+use webman_main;
+
+my $cgi = new GMM_CGI;
+my $dbu = new DB_Utilities;
+
+my $dbi_conn = $dbu->make_DBI_Conn("../../../../../webman/conf/dbi_connection.conf"); ### 15/05/2009
+
+my $hit_id = $cgi->param("hit_id");
+my $app_name_in_control = $cgi->param("app_name_in_control");
+
+$dbu->set_DBI_Conn($dbi_conn);   ### option 1
+
+$dbu->set_Table("webman_" . $app_name_in_control . "_hit_info_content");
+my $hit_content = $dbu->get_Item("content", "hit_id", "$hit_id");
+
+my $sql = $dbu->get_SQL;
+
+$dbu->set_Table("webman_" . $app_name_in_control . "_hit_info_query_string");
+my $query_string = $dbu->get_Item("query_string", "hit_id", "$hit_id");
+my @query_array = split(/\&/, $query_string);
+
+$dbu->set_Table("webman_" . $app_name_in_control . "_hit_info");
+my $hit_session_id = $dbu->get_Item("session_id", "hit_id", "$hit_id");
+
+my @ahr = $dbu->get_Items("hit_id", "session_id", "$hit_session_id", "date, time", undef);
+
+my $hit_id_prev = undef;
+my $hit_id_next = undef;
+
+for (my $i =0; $i < @ahr; $i++) {
+    if ($ahr[$i]->{hit_id} eq $hit_id) {
+        if ($i > 0) {
+            $hit_id_prev = $ahr[$i-1]->{hit_id};
+        }
+        
+        if ($i < $#ahr) {
+            $hit_id_next = $ahr[$i+1]->{hit_id};
+        }        
+    }
+}
+
+my $prev_link = "&lt;&lt;";
+my $next_link = "&gt;&gt;";
+
+if ($hit_id_prev ne undef) {
+    $prev_link = "<a href=\"index_view_hits_content.cgi?hit_id=$hit_id_prev&app_name_in_control=$app_name_in_control\"><font color=\"##0099FF\">$prev_link</font></a>";
+
+}
+
+if ($hit_id_next ne undef) {
+    $next_link = "<a href=\"index_view_hits_content.cgi?hit_id=$hit_id_next&app_name_in_control=$app_name_in_control\"><font color=\"##0099FF\">$next_link</font></a>";
+}
+
+
+my $page_properties = "<style type=\"text/css\"><!-- body{font-family:Geneva, Arial, Helvetica, sans-serif;} --></style>";
+
+$cgi->print_Header;
+$cgi->start_HTML($app_name, $page_properties);
+
+print "SQL: $sql<br>\n";
+print "<center><font size=\"2\">$prev_link | $hit_id | $next_link</font></center>\n";
+$hit_content =~ s/\\ / /g;
+$hit_content =~ s/\\"/"/g;
+print $hit_content;
+
+print "<p>\n<table border=\"1\">\n";
+print "<tr><td><b>Variable Name</b></td><td><b>Value</b></td><tr>\n";
+
+foreach my $item (@query_array) {
+    my @data = split(/=/, $item);
+    
+    print "<tr><td>" . $data[0] . "</td><td>" . $data[1] . "</td><tr>\n";
+}
+
+print "</table>\n";
+
+$cgi->end_HTML();
+

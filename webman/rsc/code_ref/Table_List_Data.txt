@@ -1,0 +1,160 @@
+#_title_
+Table_List_Data
+#_end_
+
+#_des_
+### The core module to dynamically handle application's data in more organized 
+### and structured manner at application runtime. The Table_List_Data istance 
+### will exists as dynamic data structure to hold applicaton's data persisted 
+### in the form of rows and columns, and provide the logical functions to 
+### operate the data. It might also be used as an alternative to handle data 
+### items from database table besides the standard forms of data structure 
+### acquired via CPAN's DBI module.<p />
+### This module also offer advantage for displaying its data items content in 
+### HTML document format. It can be done conveniently by just passed its 
+### instance to TLD_HTML_Map module.
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. Instantiation and Basic Parameter Setting</b><p />
+#_end_
+
+my $tld = new Table_List_Data;
+
+#_doc_
+<b>1.1 Add Columns and Data Items</b><p />
+### The arguments <c>$column_1</c>, <c>...</c>, and <c>$column_n</c> are the 
+### columns name to be added. An arrays of data <c>@data_1</c>, <c>...</c>, 
+### and <c>@data_n</c> should have their length equal with the number of 
+### columns added. 
+#_end_
+$tld->add_Column($column_1);
+...
+$tld->add_Column($column_n);
+
+
+$tld->add_Row_Data(@data_1);
+...
+$tld->add_Row_Data(@data_n);
+
+#_doc_
+### An array of hash references can also be used to simultaneously adding the 
+### columns and data items (rows). If they are still not exist, the columns 
+### names are automatically added using the hash key names <c>$key_name_1</c>, 
+### <c>...</c>, and <c>$key_name_n</c>.
+#_end_
+my @ahr = ({$key_name_1 => $value_1, ..., $key_name_n => $value_n}, {...}, ...);
+
+$tld->add_Array_Hash_Reference(@ahr);
+
+#_doc_
+### <b>1.2 Instance Creation via  DBI_HTML_Map Module</b><p />
+### Instead of manually instantiate and add the data items into 
+### Table_List_Data instance, it's more convenient to do so by using 
+### DBI_HTML_Map module. Using DBI_HTML_Map module instance (<c>$dbihtml</c>), 
+### all database table column names and row items (data) returned by the SQL 
+### command defined in <c>$sql</c> argument will be created and copied into 
+### <c>$tld</c> instance created by the <c>get_Table_List_Data</c> function.  
+#_end_
+my $dbihtml = new DBI_HTML_Map;
+
+$dbihtml->set_DBI_Conn($db_conn);
+$dbihtml->set_SQL($sql);
+
+$dbihtml->set_Items_View_Num($num_view);
+$dbihtml->set_Items_Set_Num($num_set);
+
+my $tld = $dbihtml->get_Table_List_Data;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Insert (Shifting) Data Items</b></p>
+### Data items can be added at specific row index and automatically shift down 
+### other current existing items to the next rows.
+#_end_
+my $array_ref = [$value_1, ..., $value_n];
+$tld->insert_Row_Data($row_index, $array_ref);
+
+#_doc_
+### As with adding columns and data items, shifting data items can also be 
+### done by using an array of hash references.
+#_end_
+my @ahr = ({$key_name_1=>$value_1, ..., $key_name_n=>$value_n}, {...}, ...);
+$tld->insert_Array_Hash_Reference($row_index, @ahr);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Update Column Data</b><p />
+### Update column data at specific row index (<c>$index_row</c>) for the 
+### column with name <c>$column_name</c>.
+#_end_
+$tld->set_Data($index_row, $column_name, $new_data);
+#_doc_
+### The column data might also be used to represent HTML hypertext links. The 
+### argument <c>$get_link</c> is a standard HTTP-GET query string of the HTML 
+### link tag (<c>&lt;a ...&gt;...&lt;/a&gt;</c>). Other properties of the HTML 
+### link tag can be set via <c>$link_properties</c> argument.
+#_end_
+$tld->set_Data_Get_Link($index_row, $column_name, $get_link, $link_properties);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Sorting Data Items</b><p />
+### The first string argument <c>"column_1 ... column_n"</c> (separated by 
+### single spaces) are the column's names to be imposed by the sort operation. 
+### Sort order types (ascending/descending) for each columns are defined by 
+### <c>"sort_order_1 ... sort_order_n"</c> respectively and their values can 
+### be either <c>"asc"</c> or <c>"desc"</c>. The last string argument 
+### <c>"column_type_1 ... column_type_n"</c> represents how the sort operation 
+### will be applied on each columns. Use the options of <c>"str"</c> or 
+### <c>"num"</c> to sort the involved columns as a string or numerical data.
+#_end_ 
+$tld->sort_Data("column_1 ... column_n", "sort_order_1 ... sort_order_n", "column_type_1 ... column_type_1");
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>5. Access to and Information of Data Items</b><p />
+### Get current columns number and total row items number.
+#_end_
+my $num_row = $tld->get_Row_Num;
+my $num_col = $tld->get_Column_Num;
+
+#_doc_
+Get column name at specific column index (<c>$index_col</c>).
+#_end_
+my $column_name = $tld->get_Column_Name($index_col);
+
+#_doc_
+### Get column data at specific row index (<c>$index_row</c>) for the column 
+### with name <c>$column_name</c>.
+#_end_
+my $column_data = $tld->get_Data($index_row, $column_name);
+
+#_doc_
+### Next is the possible logical operations can be used to display all columns 
+### data in each rows from Table_List_Data instance by combining all previous 
+### functions explained in this section.
+#_end_
+my $num_row = $tld->get_Row_Num;
+my $num_col = $tld->get_Column_Num;
+
+for (my $index_row = 0; $index_row < $num_row; $index_row++) {
+    print "Row number ", $index_row + 1, "\n";
+    
+    for (my $index_col = 0; $index_col < $num_col; $index_col++) {
+        my $column_name = $tld->get_Column_Name($index_col);
+        my $column_data = $tld->get_Data($index_row, $column_name);
+        
+        print "$column_name = $column_data\n";
+    }
+    print "\n";
+}
+
+#_doc_
+### Get data items in HTML table string format for quick content display 
+### purpose. 
+#_end_
+my $html_table_str = $tld->get_Table_List;
+
+

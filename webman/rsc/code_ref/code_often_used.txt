@@ -1,0 +1,30 @@
+$cgi->add_Debug_Text("", __FILE__, __LINE__);
+
+$cgi->convert_GET_Format_CharToCode($value);
+
+my %map_var_val = $cgi->get_Param_Val_Hash;
+
+
+###############################################################################
+$cgi->push_Param("var_name", $var_val); ### use both set_Param_Val and add_Param 
+                                        ### internally
+
+if (!$cgi->set_Param_Val("var_name", $var_val)) {
+    $cgi->add_Param("var_name", $var_val);
+}
+
+###############################################################################
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+###############################################################################

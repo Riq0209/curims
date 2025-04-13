@@ -1,0 +1,85 @@
+#_title_
+FTP_Service
+#_end_
+
+#_des_
+### The core module that acts as wrapper for functions offered by CPAN's 
+### Net::FTP module. It's intensively used inside the webman_FTP_upload 
+### component-type module to support the implementation of file upload 
+### operation/maintenance from client browser to application server host. 
+#_end_
+
+#_dep_
+### <b>CPAN's Modules:</b><br />
+### <ul>
+### <li>Net::FTP (Composition)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. Instantiation and Basic Parameter Setting</b><p /> 
+### The <c>$cgi</c> is an instance of GMM_CGI core module used by FTP_Service 
+### instance (<c>$ftp_srvc</c>) to retrieve CGI parameters which related with 
+### file upload operation/maintenance.
+#_end_
+my $ftp_srvc = new FTP_Service;
+
+$ftp_srvc->set_CGI($cgi);
+$ftp_srvc->set_FTP_Conn($host, $login, $password);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. File Upload Operation</b><p /> 
+### File upload operation normally requires the module to be composed together 
+### with other component-type module. The Webman-framework composes FTP_Service 
+### core module inside webman_FTP_upload component-type module. The main role 
+### of component-type module is to provide the mechanism to upload and save 
+### client's files into the temporary directory (<c>$dir_temp</c>) before they 
+### are copied/saved into the target upload directory (<c>$dir_upload</c>).
+#_end_
+$ftp_srvc->set_Dir_Temp($dir_temp);
+$ftp_srvc->set_Dir_Upload($dir_upload);
+
+#_doc_
+### The <c>$file_name_list</c> is a reference of array that store the names of 
+### files being uploaded. It can be supplied by the component-type module 
+### that used to handle the task to save the uploaded files into the temporary 
+### directory. If omitted, the FTP_Service module can automatically get the 
+### uploaded file name list directly from the <c>$cgi</c> instance as set 
+### previously in section 1. The returned <c>$file_info</c> is a reference of 
+### array of hash reference of details information of the uploaded files. It's 
+### items are hash references with keys ("dir_upload", "name", "ext", 
+### "status", and "save_mode") to represent the file information data.
+#_end_
+my $file_name_list = ...;
+my $file_info = $ftp_srvc->generate_File_Info($file_name_list);
+
+#_doc_
+### Modifications of <c>$file_info</c> array reference item's keys as hash 
+### references outside the implementation of <c>$ftp_srvc</c> instance 
+### functions will also affect the way of how the <c>$ftp_srvc</c> instance 
+### will react on the save operation. For example, if the file information key 
+### "status" is detected as "Exist", the developers have the option to prevent 
+### it from being saved by setting the "save_mode" key to "0".
+#_end_
+### Example of code to modify files information keys/values before 
+### save the files  into the upload directory.
+foreach my $file (@{$file_info}) {
+    if ($file->{"status"} eq "Exist") {
+        $file->{save_mode} = 0;
+    }
+}
+
+#_doc_
+### The <c>$file_info_saved</c> is a reference of array of hash reference like 
+### the <c>$file_info</c> above, returned just after the file save operation 
+### is completed. However, its item number might be less than 
+### <c>$file_info</c> since developers might prevent certain files from being 
+### saved as previously demonstrated.  
+#_end_
+### Saved uploaded files into upload directory using FTP service.
+my $file_info_saved = $ftp_srvc->save_Files;
+
+### Close ftp connection.
+$ftp_srvc->close_FTP_Conn;

@@ -1,0 +1,69 @@
+### Database item handling options:
+2
+
+### Multi row database operation(s) support:
+3
+
+### Provide text-based database input support? [y/n]:
+y
+
+### Define unique key-field entry? [y/n]: 
+y
+
+### Text-based database input unique key-field entry.
+### Unique key-field(s) for text->db insert/update/delete operations:
+login_name
+
+### wmcudas_user > wmcudas_userapps > wmcudas_apps [y/n]: 
+y
+
+### wmcudas_user > wmcudas_usergroup > wmcudas_group [y/n]: 
+y
+
+### Apply filter for item listing? [y/n]: 
+y
+
+### Unique key-field(s) for database item list operation:
+login_name full_name description
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+6
+
+### Database item handling options:
+3
+
+### wmcudas_apps > wmcudas_groupapps > wmcudas_group [y/n]: 
+n
+
+### Apply filter for item listing? [y/n]: 
+n
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+6
+
+### Warning!!! link_id '6' already has a reference to 'webman_component_selector' module!!!
+### Proceed? [y/n]:
+y
+
+### Database item handling options:
+3
+
+### Apply filter for item listing? [y/n]: 
+n
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+6
+
+### Warning!!! link_id '6' already has a reference to 'webman_component_selector' module!!!
+### Proceed? [y/n]:
+y
+

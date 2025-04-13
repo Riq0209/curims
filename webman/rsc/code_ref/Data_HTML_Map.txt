@@ -1,0 +1,126 @@
+#_title_
+Data_HTML_Map
+#_end_
+
+#_des_
+### The core module used to render CGI parameters values inside the view 
+### template before CGI_HTML_Map module was available. After the availability 
+### of CGI_HTML_Map module, Data_HTML_Map module was specifically used to 
+### render CGI parameters' values which represent the values of database 
+### table fields involved in the insert/update/delete operations. It's 
+### actually used to support dynamic and interactive view features for 
+### database table items insert/update/delete operations.
+### <p />
+### This module has been used inside the following Webman-framework's 
+### component type modules: webman_db_item_insert, webman_db_item_update, 
+### webman_db_item_delete, webman_db_item_insert_multirows, 
+### webman_db_item_update_multirows, and webman_db_item_delete_multirows. 
+### 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template</b><p />
+### Below is the most generic example of view template contains HTML-form 
+### input elements represents database table field names to be used in 
+### conjunction with Data_HTML_Map module. The paired template tags 
+### <c>&lt;!-- start_datahtml_ name=form_db_field //--&gt;</c> and 
+### <c>&lt;!-- end_datahtml_ //--&gt;</c>  are used to mark input elements 
+### involved, which also become the content parts to DATAHTML 
+### template-element (lines 06-11). The input elements which will be later 
+### passed as CGI parameters are named in the form of 
+### <c>$db_<i>field_name_1</i></c>, <c>...</c>, till 
+### <c>$db_<i>field_name_n</i></c> to adhere the naming convention requirements 
+### imposed by other core module (HTML_DB_Map) that is responsible for the real 
+### database operations. 
+### <p />
+### Note that in the below view template, <c>$db_<i>field_name_1</i></c> and 
+### <c>$db_<i>field_name_1</i>_</c> are two different things. The former is 
+### the input element name to be passed as one of the CGI parameters as 
+### explained above. The later is template-element's word pattern, treated by 
+### Data_HTML_Map module as a place-holder to render the coresspond CGI 
+### parameter value.
+#_end_
+#_code_num_ 6-11
+<html>
+<body>
+<!-- start_view_ //-->
+<form method="POST" action="./index.cgi">a
+  <!-- start_datahtml_ name=form_db_field //-->
+    field_caption_1_ : <input name="$db_field_name_1" type="text" value="$db_field_name_1_">
+    <p />
+    ...
+    ...
+    field_caption_n_ : <input name="$db_field_name_n" type="text" value="$db_field_name_n_">
+    <p />
+  <!-- end_datahtml_ //-->
+  
+  <input name="button_submit" type="submit" id="button_submit" value="Proceed"/>
+  <input name="button_submit" type="submit" id="button_submit" value="Cancel"/>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>
+#_end_
+#_doc_
+### In the context of Webman-framework's component implementation, the above 
+### DATAHTML template-element will be passed to and processed inside 
+### <c>process_DATAHTML</c> hook function (see section 4). 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Instantiation and Basic Parameter Setting</b><p />
+### The passed argument <c>$cgi</c> is other Webman-framework core module  
+### instance. The <c>$cgi</c> is an instance of GMM_CGI module.
+#_end_
+my $data_HTML = new Data_HTML_Map;
+    
+$data_HTML->set_CGI($cgi);
+
+### Option to escape basic HTML's tag characters ('&', '<', '>', '"') to 
+### ("&amp;", "&lt;", "&gt;", "&quot;") respectively. The argument $num 
+### can be set to 0 or 1.
+#$data_HTML->set_Special_Tag_View($num);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Processing Template Element Content</b><p />
+#_end_
+$data_HTML->set_HTML_Code($te_content);
+    
+my $content = $data_HTML->get_HTML_Code;
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Implementation Inside Hook Function</b><p />
+#_end_
+sub process_DATAHTML { 
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $te_content = $te->get_Content;
+    my $te_type_num = $te->get_Type_Num;
+    my $te_type_name = $te->get_Name;
+    
+    ### Start process template element content.
+    if ($te_type_name eq "form_db_field") {
+        my $data_HTML = new Data_HTML_Map;
+    
+        $data_HTML->set_CGI($cgi);    
+        $data_HTML->set_HTML_Code($te_content);
+
+        ### Option to escape basic HTML's tag characters ('&', '<', '>', '"') to 
+        ### ("&amp;", "&lt;", "&gt;", "&quot;") respectively. The argument $num 
+        ### can be set to 0 or 1.
+        #$data_HTML->set_Special_Tag_View($num);
+
+        my $content = $data_HTML->get_HTML_Code;    
+    
+        $this->add_Content($content);
+    }
+}

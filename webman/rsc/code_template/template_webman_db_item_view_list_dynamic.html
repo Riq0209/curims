@@ -1,0 +1,43 @@
+<html>
+<body>
+<!-- start_view_ //-->
+__view_title__
+<p />
+
+<!-- dynamic_content_ name=db_items_num_begin //--> -
+<!-- dynamic_content_ name=db_items_num_end //--> of
+<!-- dynamic_content_ name=db_items_num_total //--> Records.
+<p />
+
+<table border="1">
+  <tr>
+    __field_caption_cols__
+  </tr>
+  <!-- start_list_ name=main //-->
+  <tr>
+    __field_name_cols__
+  </tr>
+  <!-- end_list_ //-->
+</table>
+
+<p />
+
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- dynamic_content_ name=form_hidden_field //-->
+
+  Items/List: <input name="inl" type="text" id="inl" value="$inl_" size="3">
+  &nbsp;
+
+  <!-- start_menu_ name=list //-->
+    dynamic_menu_items_
+  <!-- end_menu_ //-->
+  &nbsp;
+
+  List Set Num. :
+  <select name="lsn" onChange="document.tld_view_dynamic.submit()">
+    <!-- select_ name=lsn //-->
+  </select>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

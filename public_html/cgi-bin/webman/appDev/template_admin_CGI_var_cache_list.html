@@ -1,0 +1,88 @@
+<html>
+<body>
+<!-- start_view_ //-->
+
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- dynamic_content_ name=form_hidden_field //-->
+
+<table border="1" style="font-size: 13px">
+  <!-- start_menu_ name=caption //-->
+  <tr>
+    <th>Num.</th>
+    <th>menu_item0_</th>
+    <th>menu_item1_</th>
+    <th>menu_item2_</th>
+    <th>menu_item3_</th>
+    <th>menu_item4_</th>
+  </tr>
+  <!-- end_menu_ //-->
+
+  <!-- start_list_ name=main //-->
+  <tr>
+    <td align="right">$tld_num_.</td>
+
+    <td>$tld_session_id_</td>
+    <td>$tld_link_id_</td>
+    <td>$tld_name_</td>
+    <td>$tld_value_</td>
+    <td>$tld_active_mode_</td>
+
+  </tr>
+  <!-- end_list_ //-->
+
+  <tr bgcolor="#EEEEEE" style="font-size: 13px">
+    <td align="right">...</td>
+
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+
+  </tr>
+</table>
+
+<p style="font-size: 13px">
+  Items/List: <input name="inl_cgi_var_cache" type="text" id="inl_cgi_var_cache" value="$inl_cgi_var_cache_" size="3">
+  &nbsp;
+
+  <!-- start_menu_ name=list //-->
+    dynamic_menu_items_
+  <!-- end_menu_ //-->
+  &nbsp;
+
+  List Set Num. :
+  <select name="lsn_cgi_var_cache" onChange="document.tld_view_dynamic.submit()">
+    <!-- select_ name=lsn_cgi_var_cache //-->
+  </select>
+
+  <p />
+
+  <!-- start_cgihtml_ //-->
+  <div style="font-size: 13px">
+  <b><font color="#557755">Filter(s) [ </font></b>
+  &nbsp;
+
+  <div style="display:inline; background:#CCDDCC; padding:6px 2px 6px 2px;">
+  <b>Session ID:</b>
+  <input type="text" name="filter_session_id" size="10" value="$cgi_filter_session_id_">
+  </div>
+  &nbsp;
+
+  <div style="display:inline; background:#CCDDCC; padding:6px 2px 6px 2px;">
+  <b>Link ID:</b>
+  <input type="text" name="filter_link_id" size="10" value="$cgi_filter_link_id_">
+  </div>
+  &nbsp;
+
+  <input type="submit" name="button_submit" value="Refresh List">
+  &nbsp;
+  <b><font color="#557755">]</font></b>
+  </div>
+  <!-- end_cgihtml_ //-->
+</p>
+
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

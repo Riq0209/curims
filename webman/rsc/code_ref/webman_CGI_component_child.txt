@@ -1,0 +1,166 @@
+### Instantiation #############################################################
+
+sub other_webman_CGI_component_child_subroutine {
+    my $this = shift @_;
+    
+    ### Enable the next line if current child subroutine is specifically 
+    ### intended to process particular view template element.
+    #my $te = shift @_; 
+    
+    my $link_id = $this->get_Current_Link_ID;
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $dbu = $this->get_DBU;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $component = new webman_CGI_component_child_name_;
+
+    #$component->set_Template_Default("template_???.html");
+
+    $component->set_CGI($cgi);
+    $component->set_DBI_Conn($db_conn); ### option 2
+    
+    $component->set_Link_Path($this->get_Link_Path);
+    $component->set_My_Link_Level($this->get_My_Link_Level);
+    
+    ### Unmark the next 2 lines to enable component global parameters setting 
+    ### via framework's Component Runtime Parameters (CRP) database table 
+    ### without need to call the component inside the framework main 
+    ### controller (webman_main.pm)
+    #$component->set_Current_Dynamic_Content_Name($te->get_Name); ### 26/05/2011
+    #$component->set_Module_DB_Param; ### 26/05/2011
+
+
+    if ($component->auth_Link_ID($this->{active_link_id}, undef, 0) && 
+        $component->authenticate($login_name, \@groups, "webman_". $cgi->param("app_name") . "_comp_auth")) {
+        $component->run_Task;
+        $component->process_Content;
+        $component->end_Task;
+    }
+
+    my $content = $component->get_Content;
+
+    $this->add_Content($content);
+}
+
+
+### Customization #############################################################
+
+package child_component_name_;
+
+use webman_CGI_component;
+
+@ISA=("webman_CGI_component");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    $this->{template_default} = undef;
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub set_Template_Default {
+    my $this = shift @_;
+    
+    my $template_file = shift @_;
+    
+    $this->{template_default} = $template_file;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    #$this->set_Error("???");
+    
+    $this->SUPER::run_Task();
+}
+
+sub process_Content {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    $this->set_Template_File($this->{template_default});
+    
+    $this->SUPER::process_Content;  
+}
+
+sub process__TE_TYPE_ { ### _TE_TYPE_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
+    my $this = shift @_;
+    my $te = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    my $te_content = $te->get_Content;
+    my $te_type_name = $te->get_Name;
+    
+    #$te_content = ...;
+    #$te->set_Content($te_content);
+    
+    $this->SUPER::process__TE_TYPE_($te);
+    
+    #if ($this->get_Error eq "") {
+    #   $this->add_Content($te_content);
+        
+    #} else {
+    #   $this->add_Content($this->get_Error);
+    #}
+}
+
+sub end_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    $this->SUPER::end_Task();
+}
+
+1;

@@ -1,0 +1,45 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<!-- start_view_ //-->
+<table border="1">
+  <tr>
+    <th colspan="7" align="center">
+      <a href="<!-- dynamic_content_ name=cal_prev_week //-->">&lt;&lt;</a>
+      | Weekly Calendar Title |
+      <a href="<!-- dynamic_content_ name=cal_next_week //-->">&gt;&gt;</a>
+    </th>
+  </tr>
+
+  <tr>
+    <!-- start_list_ name=col_view_day //-->
+    <td align="center" style="$tld_column_style_">$tld_week_day_<br />$tld_week_date_</td>
+    <!-- end_list_ //-->
+  </tr>
+
+  <tr>
+    <!-- start_list_ name=col_view_content //-->
+    <td valign="top" style="$tld_column_style_">$tld_week_date_content_</td>
+    <!-- end_list_ //-->
+  </tr>
+
+  <tr>
+    <form method="POST" action="./index.cgi">
+    <th colspan="7" align="center">
+        Week's Date (yyyy-mm-dd):
+        <input type="text" size="10" name="calendar_key_date">
+        <input type="submit" name="button_submit" value="Go">
+        <!-- start_cgihtml_ //-->
+        <input type="hidden" name="link_id" value="$cgi_link_id_">
+        <!-- end_cgihtml_ //-->
+    </th>
+    </form>
+  </tr>
+</table>
+<!-- end_view_ //-->
+</body>
+</html>

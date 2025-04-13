@@ -1,0 +1,90 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<b>$cgi_group_name_</b>
+<!-- end_cgihtml_ //-->
+&gt;
+Apps
+&gt;
+ List
+<p />
+
+<!-- dynamic_content_ name=db_items_num_begin //--> -
+<!-- dynamic_content_ name=db_items_num_end //--> of
+<!-- dynamic_content_ name=db_items_num_total //--> Records.
+<p />
+
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- dynamic_content_ name=form_hidden_field //-->
+
+<table border="1">
+  <!-- start_menu_ name=caption //-->
+  <tr>
+    <th>Num.</th>
+    <th>menu_item0_</th>
+    <th>menu_item1_</th>
+    <th>menu_item2_</th>
+    <th>menu_item3_</th>
+    <th align="center">Operations</th>
+  </tr>
+  <!-- end_menu_ //-->
+
+  <!-- start_list_ name=main //-->
+  <tr class="$tld_row_class_">
+    <td align="right">$tld_num_.</td>
+
+    <td>$tld_dns_</td>
+    <td>$tld_path_</td>
+    <td>$tld_app_name_</td>
+    <td>$tld_description_</td>
+
+    <td align="center">
+      <!-- start_cgihtml_ //-->
+      <a href="index.cgi?link_id=$cgi_link_id_&id_groupapps_36base=$tld_id_groupapps_36base_&task=wmcudas_group_apps_remove">Remove</a>
+      <!-- end_cgihtml_ //-->
+    </td>
+
+  </tr>
+  <!-- end_list_ //-->
+
+  <tr bgcolor="#EEEEEE">
+    <td align="right">...</td>
+
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+
+    <td align="center">
+      <!-- start_cgihtml_ //-->
+      <a href="index.cgi?link_id=$cgi_link_id_&task=wmcudas_group_apps_add">Add</a>
+      <!-- end_cgihtml_ //-->
+    </td>
+  </tr>
+</table>
+
+<p />
+
+  Items/List: <input name="inl_wmcudas_apps" type="text" id="inl_wmcudas_apps" value="$inl_wmcudas_apps_" size="3">
+  &nbsp;
+
+  <!-- start_menu_ name=list //-->
+    dynamic_menu_items_
+  <!-- end_menu_ //-->
+  &nbsp;
+
+  List Set Num. :
+  <select name="lsn_wmcudas_apps" onChange="document.tld_view_dynamic.submit()">
+    <!-- select_ name=lsn_wmcudas_apps //-->
+  </select>
+
+  <p />
+
+
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

@@ -1,0 +1,36 @@
+DROP PROCEDURE IF EXISTS drop_table_like;
+
+delimiter //
+CREATE PROCEDURE drop_table_like(pattern VARCHAR(255))
+BEGIN
+
+DECLARE stop INT DEFAULT 0;
+DECLARE t_name VARCHAR(64);
+
+DECLARE cur CURSOR FOR SELECT table_name FROM information_schema.tables WHERE table_name LIKE pattern;
+    
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET stop = 1;
+
+
+OPEN cur;
+
+REPEAT
+
+    FETCH cur INTO t_name;
+
+    IF NOT stop THEN
+
+        SET @drop_stmt := concat('DROP TABLE ', t_name);
+
+        PREPARE stmt FROM @drop_stmt;
+        EXECUTE stmt;
+        DROP PREPARE stmt;
+        
+    END IF;
+    
+UNTIL stop END REPEAT;
+
+CLOSE cur;
+
+END //
+delimiter ;

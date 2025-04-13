@@ -1,0 +1,29 @@
+#_title_
+HTML_Link_Path
+#_end_
+
+#_des_
+### The core module to dynamically generate application link path. 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. Instantiation and Basic Parameter Setting</b><p />
+### 
+#_end_
+
+my $link_path = new HTML_Link_Path;
+
+$link_path->set_Captions("Link Caption 1", ..., "Link Caption n");
+$link_path->set_Links($link_url_1, ..., $link_url_n);
+$link_path->set_Additional_GET_Data("param_1=value_1&...&param_n=value_n");
+
+$link_path->set_Separator_Tag($tag_separator);
+$link_path->set_Active_Link_Color($color_link_active);
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Generate Link Path</b><p />
+### 
+#_end_
+my $link_path_content = $link_path->get_Link_Path;

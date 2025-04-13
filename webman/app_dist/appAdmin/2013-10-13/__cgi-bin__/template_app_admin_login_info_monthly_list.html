@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Untitled Document</title>
+</head>
+
+<body>
+<!-- start_view_ //-->
+<br>
+<center>
+  <table width="640"  border="0" cellpadding="1" cellspacing="1" bgcolor="#CCCCCC">
+    <tr bgcolor="#FFFFCC">
+      <td align="right"><strong><font size="2">Num.</font></strong></td>
+      <td align="center" bgcolor="#FFFFCC">
+        <!-- start_menu_ name=caption //-->
+        <font size="2" color="#990000"><strong>menu_item0_</strong></font>
+      </td>
+
+      <td align="center" bgcolor="#FFFFCC"><strong><font size="2" color="#990000">menu_item1_</font></strong></td>
+      <td align="center" bgcolor="#FFFFCC"><strong><font size="2" color="#990000">menu_item2_</font></strong></td>
+
+      <td align="center" bgcolor="#FFFFCC">
+        <strong><font size="2" color="#990000">menu_item3_</font></strong>
+        <!-- end_menu_ //-->
+      </td>
+
+      <td align="center" bgcolor="#FFFFCC"><strong><font size="2">Operations</font></strong></td>
+    </tr>
+    <!-- start_list_ name=main //-->
+    <tr bgcolor="$tld_row_color_">
+      <td align="right"><font size="2">$tld_num_.</font></td>
+      <td align="center" bgcolor="$tld_row_color_"><font size="2">  $tld_yearmonth_</font></td>
+      <td align="center" bgcolor="$tld_row_color_"><font size="2">$tld_total_user_</font></td>
+      <td align="center" bgcolor="$tld_row_color_"><font size="2">$tld_total_login_</font></td>
+      <td align="center" bgcolor="$tld_row_color_"><font size="2">$tld_total_hits_</font></td>
+
+      <td align="center" bgcolor="$tld_row_color_">
+        <a href="index.cgi?$tld_caller_get_data_&yearmonth=$tld_yearmonth_">
+            <font size="2" color="#0099FF">Delete</font>
+        </a>
+      </td>
+    </tr>
+    <!-- end_list_ //-->
+    <form name="tld_view_dynamic" method="post" action="index.cgi">
+    <tr align="center" bgcolor="#FFFFCC">
+      <td colspan="6">       <font size="2" title="Item Number/List" color="#FF0000"><b>Items/List:</b></font>
+        <input name="inl" type="text" id="inl" value="$inl_" size="3">
+        &nbsp;
+        <!-- start_menu_ name=list //-->
+        <font size="2">dynamic_menu_items_</font>
+        <!-- end_menu_ //-->
+        &nbsp;
+        <font size="2" title="List Set Number" color="#FF0000"><b>List Set Num. :</b></font>
+        <select name="lsn" onChange="document.tld_view_dynamic.submit()">
+          <!-- select_ name=lsn //-->
+        </select>
+        <!-- dynamic_content_ name=form_hidden_field //-->
+        </td>
+    </tr>
+    </form>
+  </table>
+
+</center>
+<!-- end_view_ //-->
+</body>
+</html>

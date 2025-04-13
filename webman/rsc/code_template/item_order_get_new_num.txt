@@ -1,0 +1,5 @@
+    ### keys to change: __table_name__, __field_fk__, __field_order__
+    
+    $dbu->set_Table("__table_name__");
+    my $__field_order__ = $dbu->get_MAX_Item("__field_order__", "__field_fk__", $cgi->param("__field_fk__")) + 1;
+    $cgi->push_Param("\$db___field_order__", $__field_order__);

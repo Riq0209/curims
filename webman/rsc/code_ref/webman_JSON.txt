@@ -1,0 +1,273 @@
+#_title_
+webman_JSON
+#_end_
+
+#_des_
+### Component-type module that provides data interoperability service over 
+### http-text/plain communication. The data passed is actually a list of 
+### attributes and values of a selected data entity fabricated using JSON  
+### (JavaScript Object Notation) string format/structure. The data entities 
+### are normally an operation-based references to database tables of the 
+### application. 
+#_end_
+
+#_dep_
+### <b>CPAN's Modules:</b><br />
+### <ul>
+### <li>JSON (Composition)</li>
+### </ul>
+### <br />
+### <b>Webman-framework's Component-type Modules:</b><br />
+### <ul>
+### <li>CGI_Component::webman_CGI_component (Inheritance)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. JSON-format Data</b>
+### <p />
+### Below is a general form of JSON string structure used to fabricate data  
+### entity attributes and values:
+#_end_
+[ { "error":"...", "list":[...] } ]
+#_doc_
+### In the context of JSON specification it's a list of a single hash with 
+### <c>error</c> and <c>list</c> as the hash keys. The <c>error</c> key is 
+### mapped to a string to store any errors occurs when clients try to access 
+### the service. Possible errors that might be captured are including invalid 
+### access to restricted entities and database query error on tables referred 
+### by the entities. If there are no errors captured the <c>error</c> key is 
+### mapped to null. The next key (<c>list</c>) is mapped to a list of hashes 
+### with their keys and values are the attributes and values of the current 
+### retrieved entity.  
+#_end_
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Default Implementations</b>
+### <p />
+### The framework implements webman_JSON based component-type modules 
+### runtime inside single CGI script called <c>index_JSON.cgi</c>. This CGI 
+### script is allocated inside framework's CGI-bin directory together with 
+### main-controller's runtime CGI script (<c>index.cgi</c>). The 
+### <c>index_JSON.cgi</c> script still actually use the framework's 
+### main-controller to execute webman_JSON based/type modules but limited to 
+### which referred by nodes under <c>Root --&gt; json_entities_</c> link 
+### path structure. Underneath this link path structure the framework provides 
+### two default reference nodes of webman_JSON based/type modules as follows:
+### <p /> 
+#_end_
+Root
+|
+|--json_entities_
+   |
+   |--authentication
+   |
+   |--users
+#_doc_
+### The reference nodes <c>authentication</c>, <c>users</c>, and any other 
+### new nodes added will become the name of entities available for data  
+### interoperability service provided. These entity names are passed to 
+### <c>index_JSON.cgi</c> script using special CGI parameter named 
+### <c>entity</c> via HTTP POST/GET method. For each entities there might 
+### be attributes and their values passed together to  filter or scope the 
+### returned data. 
+### <p />
+### The <c>authentication</c> node is a reference to 
+### webman_JSON_authentication module that is a child of webman_JSON  
+### component-type modules. It has two attributes to be processed that  
+### are the <c>login</c> and the <c>password</c>. As a publicly accessed   
+### component, it provides service to authenticate users who are registered   
+### with the application. For any success authentication, it will return valid 
+### session ID which later can be used as a privilege-key for successive 
+### access to other restricted application resources. The <c>authentication</c> 
+### entity might also be used on other users who are registered out from the 
+### scope of JSON data interoperability service (users who are registered to 
+### only use the main web application host by the framework). The plain text 
+### data returned from <c>authentication</c> entity is in the form of 
+### JSON-formatted text as belows:
+#_end_
+[
+    {
+       "error":null,
+       "list":
+       [
+          {
+             "session_id":"1661865234375",
+             "web_service_url":null,
+             "groups":[
+                "ADMIN",
+                "COM_JSON"
+             ],
+             "login_name":"foo",
+             "full_name":"FOO FULL NAME",
+             "description":"JASON Based Service Users"
+          }
+       ]
+    }
+]
+#_doc_
+### 
+### <p />
+### The <c>users</c> node is simply a black-box implementation of 
+### webman_JSON component-type module that provide current list of users 
+### registered inside current application where the JSON data service is 
+### derived from.
+### <p />
+### Implementing JSON data service as a framework's component-type modules 
+### inside standard application's link structure will give the benefit of 
+### using the built-in security control provide by the framework at both link 
+### and component levels. This is very important and convenient in term of 
+### access control management since the service might be used and manipulated 
+### by other various external client's resources.
+#_end_
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Instantiation and Basic Parameter Setting</b>
+### <p />
+### There is only one basic parameter setting regarding to the main function 
+### of the module that is the SQL string command (line 6) used to query 
+### database table items reffered by JSON service entities.
+### 
+#_end_
+#_code_num_ 6-6:#ffdddd 1
+my $component = new webman_JSON;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+$component->set_SQL("select * from ...");
+ 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Component-type Generic Function Calls</b>
+### <p />
+### The proposed component-type generic function calls is slightly different 
+### since the module not primarily purposes to support the view presentation of 
+### the applications but to retrieved the queried items from database tables  
+### referred by service entities and convert them into JSON-formatted text 
+### data (line 12). The JSON-formatted text later might be used internally  
+### by the caller's runtime (lines 18-26) or passed to the client who make a 
+### call to the service via http-text/plain connection (lines 31-32).  
+#_end_
+#_code_num_ 12-12:#ffdddd,18-26:#ddffdd,31-32:#ffddff 8
+my $json_text = undef;
+
+if ($component->auth_Link_Path && $component->authenticate) {
+    $component->run_Task;
+    $json_text = $component->get_Content_JSON;
+}
+
+### Manipulate the returned JSON-formatted text using CPAN's JSON 
+### module in the case of the module is run for internal data 
+### implementations inside the caller's runtime.
+#my $json = new JSON;
+
+#$json->indent([1]);
+#my $data = $json->decode($json_text);
+
+#foreach my $item (@{$data}) {
+    #...
+    #...
+#}
+
+### The implementations if the module is run inside the CGI main 
+### script and the returned JSON-format text is used for data 
+### interoperability service over http-text/plain connection. 
+#print "Content-type: text/plain\n\n";
+#print $json_text;
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>5. Child Module for Customization</b>
+### <p />
+### Most common customizations are to manipulate the constructed JSON-formatted 
+### text before it's passed to the client (lines 50-?58), and programmatically 
+### modify the SQL string command to support more complex database query logic 
+### (line 71). 
+#_end_
+
+#_code_num_ 50-58:#ffdddd,71-71:#ddffdd 1
+package <trp><i>child_module_name</i></trp>;
+
+use webman_JSON;
+
+@ISA=("webman_JSON");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    #$this->set_Error("???");
+    
+    $this->SUPER::run_Task;
+    
+    my $json_hash_ref = $this->decode_JSON_Text($this->get_Content_JSON);
+    
+    ### Next is to customize $json_hash_ref
+    #$json_hash_ref->{error} = ...;
+    
+    foreach my $item (@{$json_hash_ref->[0]->{list}}) {
+        #$item->{attribute_1} = ...;
+        #...;
+        #$item->{attribute_n} = ...;
+    }
+    
+    $this->{content_json} = $this->encode_JSON_Text($json_hash_ref);
+}
+
+sub customize_SQL { 
+    my $this = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $sql = $this->{sql};
+    
+    ### Next to customize the $sql string.
+    #$sql = ...;
+    
+    return $sql;
+}
+
+1;
+#_end_
+#_doc_
+<a href="./txtsrc/webman_JSON_child.txt">Get code...</href>
+#_end_

@@ -1,0 +1,469 @@
+#_title_
+webman_db_item_update_multirows
+#_end_
+
+#_des_
+### Multi phases component-type module that provides dynamic control on 
+### database table items for multi-rows update operation.
+### 
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>CGI_HTML_Map (Composition)</li>
+### <li>Data_HTML_Map (Composition)</li>
+### <li>DBI_HTML_Map (Composition)</li>
+### <li>HTML_DB_Map (Composition)</li>
+### </ul>
+### <br />
+### <b>Webman-framework's Component-type Modules:</b><br />
+### <ul>
+### <li>CGI_Component::webman_CGI_component (Inheritance)</li>
+### <li>webman_link_path_generator (Composition)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template</b>
+### <p />
+### There are two view template files might be assigned to a single 
+### webman_db_item_update_multirows module. First is an update form page for 
+### item's field entries and the second is a confirmation page for displaying 
+### back fields and their values entered before proceed with the update 
+### operation. If there is no second view template assigned to the module the 
+### confirmation phase will be skipped. 
+### <p />
+### <b>1.1 Update Form Page</b>
+### <p />
+### The DYNAMIC_CONTENT template-element (line 4) named <c>link_path</c> will 
+### be processed by <c>webman_link_path_generator</c> module inside  
+### <c>process_DYNAMIC</c> hook function. It's used as place-holder to render 
+### current application's link path when webman_db_item_update_multirows 
+### module is called. The next DYNAMIC_CONTENT template-element (line 7) named 
+### <c>form_hidden_field</c> is used as place-holder for HTML-form's hidden 
+### input-element. This hidden input-element is used as an entity to pass the 
+### parameter named <c>link_id</c> (via POST-method) which is the standard CGI 
+### parameter name used to refer nodes' IDs that construct the overall 
+### application's link structure. The logic is to use again node's link-id 
+### which is used to call webman_db_item_update_multirows module previously.
+### <p />
+### The DATAHTML template-element (lines 17-33) named <c>form_db_field</c> is 
+### passed to <c>process_DATAHTML</c> hook function and manipulated by 
+### Data_HTML_Map core module. The rows of input-elements enclosed inside the  
+### DATAHTML template-element are intended to be passed as CGI parameters 
+### using a series of parameter's names as follows: 
+#_end_
+$db_<trp><i>field_name_1</i></trp>_0, ..., $db_<trp><i>field_name_n</i></trp>_0,
+$db_<trp><i>field_name_1</i></trp>_1, ..., $db_<trp><i>field_name_n</i></trp>_1,
+...
+$db_<trp><i>field_name_1</i></trp>_n, ..., $db_<trp><i>field_name_n</i></trp>_n
+#_doc_
+### Thus, the input-element names and template's word patterns used are in the 
+### form of <c>$db_<i>field_name_1</i>_$row_idx</c> till 
+### <c>$db_<i>field_name_n</i>_$row_idx</c> and 
+### <c>$db_<i>field_name_1</i>_$row_idx_</c> till
+### <c>$db_<i>field_name_n</i>_$row_idx_</c>. Note that 
+### <c>$db_<i>field_name_1</i>_$row_idx</c> and 
+### <c>$db_<i>field_name_1</i>_$row_idx_</c> are two different things. The 
+### former is an input-element name to be passed as CGI parameter representing 
+### item field name and value involved in the update operation. The later is 
+### template-element's word pattern, treated by Data_HTML_Map module as a 
+### place-holder to render the coresspond CGI parameter value.
+### <p />
+### CGI parameters mapped by the word patterns 
+### <c>$db_<i>field_name_1</i>_</c>, <c>...</c>, 
+### <c>$db_<i>field_name_n</i>_</c> are already made available at the first 
+### time the update form page was loaded for the purpose of displaying current 
+### field values from the database prior the update operation. It's done by 
+### injecting all item's field names and values involved as CGI parameters 
+### named in the form of aforementioned word patterns before start processing 
+### the DATAHTML template-element. Items's field names and values are 
+### retrieved from Table_List_Data instance, created by DBI_HTML_Map core 
+### module using SQL string command automatically or manually constructed via  
+### module's basic parameter settings that will be explained in the next main  
+### section (section 2, code lines 6-7 or line 12).
+### <p />
+### Other template's word patterns <c>$fe_<i>field_name_1</i>_$row_idx_</c> 
+### till <c>$fe_<i>field_name_n</i>_$row_idx_</c> are used as place-holders 
+### for highlighting errors on field values entered.
+### <p />
+### Two form's submit buttons (lines 38-39) with identical name 
+### <c>button_submit</c> but having two different values (<c>Proceed</c> and 
+### <c>Cancel</c>) are the default settings to provide users the options to 
+### proceed or cancel the submission of update form. In other word the module 
+### by default will check the input type element named <c>button_submit</c> 
+### and look at its value either <c>Proceed</c> or <c>Cancel</c> before 
+### decide to continue or cancel the update form submission.
+#_end_
+#_code_num_ 4-4:#ffdddd,7-7:#ddffdd,17-33:#ffddff,38-39:#ddffff 1
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //--> &gt; Update Items
+<p />
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+<table border="1">
+  <tr>
+    <td align="right" valign="top"><b>Num. </b></td>
+    <td valign="top">field_caption_1</td>
+    ...
+    <td valign="top">field_caption_n</td>
+  </tr>
+
+  <!-- start_datahtml_ name=form_db_field //-->
+  <tr>
+    <td align="right" valign="top">
+      <b>$row_num_. </b>
+    </td>
+    <td valign="top">
+      <input name="$db_field_name_1_$row_idx" type="text" id="$db_field_name_1_$row_idx" value="$db_field_name_1_$row_idx_">
+      </br>
+      <font color="#FF0000">$fe_field_name_1_$row_idx_</font>
+    </td>
+    ...
+    ...
+    <td valign="top">
+      <input name="$db_field_name_n_$row_idx" type="text" id="$db_field_name_n_$row_idx" value="$db_field_name_n_$row_idx_">
+      </br>
+      <font color="#FF0000">$fe_field_name_n_$row_idx_</font>
+    </td>
+  </tr>
+  <!-- end_datahtml_ //-->
+
+  <tr>
+    <td align="right" colspan="6">
+      <input name="button_submit" type="submit" id="button_submit" value="Proceed" />
+      <input name="button_submit" type="submit" id="button_submit" value="Cancel" />
+    </td>
+  </tr>
+</table>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>
+#_end_
+#_doc_
+### <b>1.2 Confirmation Form Page</b>
+### <p />
+### The two DYNAMIC_CONTENT template-elements (lines 4 and 7) are play the 
+### same roles as explained in update form page above. The DATAHTML 
+### template-element (lines 18-23) is also the same as in update form page but 
+### doesn't contain form's input-elements and word patterns for highlighting 
+### field entries errors. At the time confirmation form page processed by the 
+### module, all CGI parameters passed from the previous update form page are 
+### already cached into the database. DATAHTML template-element is solely used 
+### to display back item's field values held by these cached CGI parameters 
+### for confirmation purpose.
+### <p />
+### Three form's submit buttons (lines 28-30) with identical name 
+### <c>button_submit</c> but having three different values (<c>Confirm</c>, 
+### <c>Edit</c>, and <c>Cancel</c>) are the default settings to provide users 
+### the options to confirm or cancel the update operation, or back to update  
+### form page to edit the field entries. In other word the module by default 
+### will check the input-element named <c>button_submit</c> and look at its 
+### value either <c>Confirm</c>, <c>Edit</c>, or <c>Cancel</c> before decide
+### to continue or cancel the update operation, or going back to update 
+### form page to edit the previous data entries..
+#_end_
+#_end_
+#_code_num_ 4-4:#ffdddd,7-7:#ddffdd,18-23:#ffddff,28-30:#ddffff 1
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //--> &gt; Update Items
+<p />
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+
+<table border="1">
+  <tr>
+    <td align="right" valign="top"><b>Num. </b></td>
+    <td valign="top">field_caption_1</td>
+    ...
+    <td valign="top">field_caption_n</td>
+  </tr>
+
+  <!-- start_datahtml_ name=form_db_field //-->
+  <tr>
+   <td align="right" valign="top"><b>$row_num_. </b></td>
+   <td>$db_field_name_1_$row_idx_</td>
+   ...
+   <td>$db_field_name_n_$row_idx_</td>
+  </tr>
+  <!-- end_datahtml_ //-->
+
+  <tr>
+    <td align="right" colspan="6">
+      <input name="button_submit" type="submit" id="button_submit" value="Confirm"/>
+      <input name="button_submit" type="submit" id="button_submit" value="Edit"/>
+      <input name="button_submit" type="submit" id="button_submit" value="Cancel"/>
+    </td>
+  </tr>
+</table>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>2. Instantiation and Basic Parameter Setting</b>
+### <p />
+### All basic parameters to be set are exactly the same as explained in 
+### webman_db_item_update module documentation. The difference is the way of  
+### CGI parameters representing update's key-field set via function calls 
+### (lines 6-7 or line 12) are passed to the module. Since the module is used 
+### to support multi-rows update operation, update's key-fields need to be 
+### passed as CGI parameters named in the form of 
+### <c><i>key_field_name</i>_0</c>, <c><i>key_field_name</i>_1</c>, <c>...</c>, 
+### till <c><i>key_field_name</i>_n</c>.
+### <p />
+#_end_
+#_code_num_ 6-7:#ffdddd,12-12:#ddffdd,17-19:#ffddff,21-21:#ddffff,29-29:#ffeedd,33-33 1
+my $component = new webman_db_item_update_multirows;
+
+$component->set_CGI($cgi);
+$component->set_DBI_Conn($db_conn);
+
+$component->set_Table_Name($table_name);
+$component->set_Update_Keys_Str("key_field_name='\$cgi_key_field_name_'");
+
+### The next function call is not necessary if the previous two function calls 
+### is completed and complex key-field or tables joint for viewing current 
+### item to be updated is not required. 
+### $component->set_SQL_View("select * from $table_name where key_field_1='\$cgi_key_field_1_' and ... and key_field_n='\$cgi_key_field_n_'");
+
+### Option to debug SQL satement generated by the module.
+#$component->set_SQL_Debug(1);
+
+$component->set_Check_On_CGI_Data("\$db_field_name_1 ... \$db_field_name_n"); 
+$component->set_Check_On_Fields_Duplication("field_name_1 field_name_2&field_name_3 ... field_name_n");
+$component->set_Check_On_Fields_Existence("field_name_1=>table_name_1, ..., field_name_n=>table_name_n");
+
+#$component->set_Limit_On_Fields("field_name_1 ... field_name_n");
+
+#$component->set_Submit_Button_Name($submit_button_name);  ### default is "button_submit"
+#$component->set_Proceed_On_Submit($proceed_button_value); ### default is "Proceed"
+#$component->set_Confirm_On_Submit($confirm_button_value); ### default is "Confirm"
+#$component->set_Edit_On_Submit($edit_button_value);       ### default is "Edit"
+#$component->set_Cancel_On_Submit($cancel_button_value);   ### default is "Cancel"
+
+#$component->set_Last_Phase_CGI_Data_Reset("param_name_1 param_name_2 ... param_name_n");
+
+### Option to automatically change the current active page by going 
+### to other URL when last phase has been reached.
+#$component->set_Last_Phase_URL_Redirect($url);
+
+### Update form page template.
+$component->set_Template_Default($template_file);
+
+### Don't assign confirm view template if want to skip the confirmation phase. 
+$component->set_Template_Default_Confirm($template_file_confirm);
+ 
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>3. Component-type Generic Function Calls</b>
+### <p />
+### The implementation below is exactly the same as explained in 
+### webman_db_item_update module. 
+#_end_
+#_code_num_ 43-43:#ffdddd,45-48:#ddffdd,56-58,59-59:#ffddff,60-61,62-62:#ddffff,63-63 41
+if ($component->authenticate) {
+    ### $status == 1 if update operation is proceed and succeed.
+    my $status = $component->run_Task;
+    
+    if ($status) {
+        ### Do other extra tasks if update operation is succeed.
+        ### ...
+    }    
+
+    $component->process_Content;
+}
+
+my $content = undef;
+
+if ($component->last_Phase) {
+    $component->end_Task;
+
+    ### Set to other related content .
+    #$content = "...";
+
+    ### Jump to other URL.
+    #$cgi->redirect_Page($url);
+
+} else {
+    $content = $component->get_Content;
+}
+#_end_
+#_doc_
+### The next proposed implementations is the more simple version but requires 
+### internal customizations inside child module implementations such as shown 
+### in the next section (section 4).
+#_end_
+#_code_num_ 0 41
+if ($component->authenticate) {
+    $component->run_Task; 
+    $component->process_Content;
+}
+
+if ($component->last_Phase) {
+    $component->end_Task;
+}
+
+my $content = $component->get_Content;
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>4. Child Module for Customization</b>
+### <p />
+### Child module implementation for customizations are almost the same with 
+### webman_db_item_update module. However, CGI parameters manipulation 
+### (lines 105-111) requires the consideration of handling them as a 
+### multi-rows HTML-form's  input-elements (lines 107-113).
+#_end_
+#_code_num_ 43-58:#ffdddd,62-64:#ddffdd,88-92:#ffddff,107-113:#ddffff 1
+package <trp><i>child_module_name</i></trp>;
+
+use webman_db_item_update_multirows;
+
+@ISA=("webman_db_item_update_multirows");
+
+sub new {
+    my $class = shift;
+    
+    my $this = $class->SUPER::new();
+    
+    #$this->set_Debug_Mode(1, 1);
+    
+    bless $this, $class;
+    
+    return $this;
+}
+
+sub get_Name {
+    my $this = shift @_;
+    
+    return __PACKAGE__;
+}
+
+sub get_Name_Full {
+    my $this = shift @_;
+    
+    return $this->SUPER::get_Name_Full . "::" . __PACKAGE__;
+}
+
+sub run_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    my $match_group = $this->match_Group($group_name_, @groups);
+    
+    if ($this->init_Phase) {
+        ### init. phase extra tasks        
+        #$cgi->add_Debug_Text("init_Phase", __FILE__, __LINE__, "TRACING");
+        
+    } elsif ($this->confirm_Phase) {
+        ### confirm phase extra tasks
+        #$cgi->add_Debug_Text("confirm_Phase", __FILE__, __LINE__, "TRACING");
+        
+    } elsif ($this->edit_Phase) {
+        ### edit phase extra tasks
+        #$cgi->add_Debug_Text("edit_Phase", __FILE__, __LINE__, "TRACING");
+        
+    } else {
+        ### last phase extra tasks
+        #$cgi->add_Debug_Text("last_Phase", __FILE__, __LINE__, "TRACING");
+    }
+    
+    my $status = $this->SUPER::run_Task();
+    
+    if ($status) {
+        ### extra tasks after update operation is succeed
+    }
+}
+
+sub end_Task {
+    my $this = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    my $login_name = $this->get_User_Login;
+    my @groups = $this->get_User_Groups;
+    
+    ### Skeleton code to check if current user's groups are match with  
+    ### specific intended group name.
+    #my $group_name = "???";
+    #my $match_group = $this->match_Group($group_name, @groups);
+    
+    ### It's mandatory to call this for multi phases modules
+    ### to reset some of the no longer required CGI data.
+    $this->SUPER::end_Task();
+    
+    ### Put other extra end-task jobs after this line.
+    
+    ### Set to other related content.
+    #$this->set_Content("...");
+    
+    ### Jump to other URL.
+    #$cgi->redirect_Page($url);
+}
+
+### This function will be iteratively called inside the loop logical structure 
+### that uses HTML_DB_Map core module to update each row of items which 
+### previously selected by the user. The loop logical structure is implemented 
+### inside the run_Task function of the based-module.
+sub customize_CGI_Data { ### 11/10/2011
+    my $this = shift @_;
+    my $te = shift @_;
+
+    my $cgi = $this->get_CGI;
+    my $dbu = $this->get_DBU;
+    my $db_conn = $this->get_DB_Conn;
+    
+    ### Example on how to add/update other linked table primary keys 
+    ### (linked_table_PK) that act as a foreign keys inside current table 
+    ### by refering to one of current table field that act as a unique keys 
+    ### inside the linked table (linked_table_UK)
+    #$dbu->set_Table("linked_table_name");
+    #my $linked_table_PK = $dbu->get_Item("linked_table_PK", "linked_table_UK", $cgi->param("\$db_linked_table_UK"));            
+    #$cgi->push_Param("\$db_linked_table_PK", $linked_table_PK);
+}
+
+### Provide more flexibility inside the child module so developers can 
+### further refine the final constructed form-field-row string using Perl's  
+### regular expression and string substitutions.
+sub refine_Form_DB_Field_Row_Str {
+    my $this = shift @_;
+    my $str = shift @_;
+    
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $db_interface = $this->get_DB_Interface;
+    
+    #for (my $row_idx = 0;  $row_idx < @{$this->{update_key_field_list}}; $row_idx++) {
+        #$str =~ ....;
+    #}
+    
+    return $str;
+}
+
+1;
+#_end_
+#_doc_
+<a href="./txtsrc/webman_db_item_update_multirows_child.txt">Get code...</href>
+#_end_

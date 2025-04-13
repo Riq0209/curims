@@ -1,0 +1,73 @@
+_title_
+webman_FTP_list
+#_end_
+
+#_des_
+### Component-type module that provides facility for directory content list  
+### operation by using FTP functions wrapped by FTP_Service core module. It's 
+### intended to be used to manage files that previoulsy uploaded to server 
+### directory by the client by using the webman_FTP_upload component-type 
+### module. The major tasks of customization to be done from inside the  
+### webman_FTP_list component-type module is to override the functions that 
+### automatically called when "directory select" or "file select" event is  
+### occured.
+#_end_
+
+#_dep_
+### <b>Webman-framework's Core Modules:</b><br />
+### <ul>
+### <li>CGI_HTML_Map (Composition)</li>
+### <li>FTP_Service (Composition)</li>
+### <li>Table_List_Data (Composition)</li>
+### <li>TLD_HTML_Map (Composition)</li>
+### </ul>
+### <br />
+### <b>Webman-framework's Component-type Modules:</b><br />
+### <ul>
+### <li>CGI_Component::webman_CGI_component (Inheritance)</li>
+### <li>webman_link_path_generator (Composition)</li>
+### </ul>
+#_end_
+
+#_sec_ ------------------------------------------------------------------------
+#_doc_
+### <b>1. View Template</b>
+### <p />
+### The proposed view template still applies the form with method "POST" 
+### Though the events of "file select" and "directory select" is happen 
+### though ...
+#_end_
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //--> &gt; Directory Content List
+<p />
+<form method="POST" action="./index.cgi">
+  <!-- dynamic_content_ name=form_hidden_field //-->
+  <table border="1">
+    <tr>
+      <td colspan="4">
+        <b>Directory Path:</b> <!-- dynamic_content_ name=dir_path //-->
+      </td>
+    </tr>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Size</th>
+      <th>Date-Time</th>
+    </tr>
+
+    <!-- start_list_ name=dir_content_list //-->
+    <tr class="$tld_row_class_">
+      <td>$tld_name_</td>
+      <td align="center">$tld_type_</td>
+      <td align="right">$tld_size_</td>
+      <td align="center">$tld_date_time_</td>
+
+    </tr>
+    <!-- end_list_ //-->
+  </table>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>
