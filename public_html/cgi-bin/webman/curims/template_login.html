@@ -1,50 +1,96 @@
+<!DOCTYPE html>
 <html>
 <head>
-<title>Untitled Document</title>
+<title>UTM Login Page</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #7F1D1D;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .login-card {
+    background: #ffffff;
+    width: 500px;
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    text-align: center;
+  }
+
+  .login-card img {
+    width: 120px;
+    margin-bottom: 10px;
+  }
+
+  .guest-button {
+    background-color: #4B5563;
+    color: #ffffff;
+    padding: 10px 40px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 20px 0;
+    cursor: pointer;
+  }
+
+  .login-card input[type="text"],
+  .login-card input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    background-color: #f1f1f1;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+
+  .login-card input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #4b0d0d;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+
+  .login-card input[type="submit"]:hover {
+    background-color: #5c1b1b;
+  }
+</style>
 </head>
+
 <body>
-<!-- start_view_ //-->
-<table border="1" width="100%">
-  <tr>
-    <td colspan="2">
-      <div align="center"><h2>$app_name_ Application Header</h2></div>
-    </td>
-  </tr>
 
-  <tr>
-    <td align="center" valign="top">
-      <br>
-      <table border="1" width="640">
-        <tr>
-          <td align="center"><b>Registered User</b></td>
-          <td align="center"><b>Guest</b></td>
-        </tr>
+<div class="login-card">
+  <!-- Logo (You can replace the src with your real logo file) -->
+  <img src="img/utm-logo.png" alt="UTM Logo" style="width: 300px; height: auto;">
 
-        <tr>
-          <td align="center">
-            <form method="POST" action="index.cgi">
-            <table>
-              <tr><td align="right">Login:    </td><td><input name="login" type="text" id="login" size="15"></td></tr>
-              <tr><td align="right">Password: </td><td><input name="password" type="password" id="password" size="15"></td></tr>
-              <tr><td></td><td><input name="button_submit" type="submit" value="Login"></td></tr>
-            </table>
-            </form>
-          </td>
-          <td align="center">
-            <p>Service may limited for view only.</p>
-            <a href="index.cgi?login=guest&password=guest">Guest Login</a>
-          </td>
-        </tr>
-      </table>
-      <br>
-    </td>
-  </tr>
+  <br>
 
-  <tr>
-    <td colspan="2" align="center">Copyright &copy; 2012 - $current_year_ Your organization name.</td>
-  </tr>
-</table>
-<!-- end_view_ //-->
+  <button class="guest-button" type="button" onclick="window.location.href='index.cgi?login=guest&password=guest';">Guest</button>
+
+  <form method="POST" action="index.cgi">
+    <div style="text-align: left; font-weight: bold; margin-bottom: 5px;">user ID</div>
+    <input type="text" name="login" id="login" required>
+
+    <div style="text-align: left; font-weight: bold; margin-top: 15px; margin-bottom: 5px;">Password</div>
+    <input type="password" name="password" id="password" required>
+
+    <input type="submit" name="button_submit" value="Login">
+  </form>
+</div>
+
 </body>
 </html>

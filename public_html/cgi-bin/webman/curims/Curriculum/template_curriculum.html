@@ -1,0 +1,110 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body>
+<!-- start_view_ //-->
+<table border="1" width="100%">
+  <tr>
+    <td>
+      <div align="center"><h2>Curriculum Management System</h2></div>
+      <div align="right"><b>You are login as:</b> $user_full_name_ </div>
+    </td>
+  </tr>
+
+  <tr height="30">
+    <td align="center">
+      <!-- dynamic_content_ name=link_main //-->
+    </td>
+  </tr>
+  <!-- Curriculum Content-->
+  <tr>
+    <td align="center" valign="top">
+      <br />
+  
+      <!-- Search Form -->
+      <div align="center">
+        <input type="text" id="searchInput" placeholder="Search Curriculum Name..." onkeyup="filterTable()" />
+      </div>
+      
+  
+      <br /><br />
+  
+      <!-- Table for Curriculum Data -->
+      <table border="1" width="80%" cellpadding="5" cellspacing="0" id="curriculumTable">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Curriculum Name</th>
+            <th>Session</th>
+            <th>PLO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Software Engineering Curriculum</td>
+            <td>2024/2025</td>
+            <td>PLO1, PLO2, PLO3</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Electrical Engineering Curriculum</td>
+            <td>2025/2026</td>
+            <td>PLO4, PLO5</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Mechanical Engineering Curriculum</td>
+            <td>2023/2024</td>
+            <td>PLO6, PLO7</td>
+          </tr>
+          <!-- Add more rows as needed -->
+        </tbody>
+      </table>
+  
+      <!-- JavaScript for Filtering -->
+      <script>
+        function filterTable() {
+          var input, filter, table, tr, td, i, txtValue;
+          input = document.getElementById("searchInput");
+          filter = input.value.toUpperCase();
+          table = document.getElementById("curriculumTable");
+          tr = table.getElementsByTagName("tr");
+  
+          for (i = 1; i < tr.length; i++) { // Start from i = 1 to skip header
+            td = tr[i].getElementsByTagName("td")[1]; // 2nd column = Curriculum Name
+            if (td) {
+              txtValue = td.textContent || td.innerText;
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+              } else {
+                tr[i].style.display = "none";
+              }
+            }
+          }
+        }
+      </script>
+  
+    </td>
+  </tr>
+  
+  
+  
+
+  <tr height="30">
+    <td align="center">
+      Copyright &copy; 2012 - $current_year_ Your organization name.
+    </td>
+  </tr>
+</table>
+
+<div id="popup_div_onmove" class="popup" onMouseOut="popup_hide(this);">
+</div>
+
+<div id="popup_div_onclick" class="popup_onclick">
+</div>
+<!-- end_view_ //-->
+</body>
+</html>
