@@ -275,7 +275,8 @@ if ($session_id == -1) {
 	}
        
     $content =~ s/\$login_name_/$login/;
-    $content =~ s/\$user_full_name_/$user_full_name/;
+    #$content =~ s/\$user_full_name_/$user_full_name/;
+    $content =~ s/\$user_full_name_/$user_full_name/g;
     $content =~ s/\$user_groups_/$user_groups/;
     
     $content = &process_Main_Template_Dynamic_Info($content);   
@@ -327,7 +328,11 @@ sub process_Main_Template_Dynamic_Info {
     my $date = $date_info[2];
     
     $content_display =~ s/\$app_name_/$app_name/;
-    $content_display =~ s/\$current_year_/$year/;
+    $content_display =~ s/\$current_year_/$year/g;
+
+    #15/4/2025
+    my $previous_year = $year - 1;
+    $content_display =~ s/\$previous_year_/$previous_year/g;
     
     return $content_display;
 }

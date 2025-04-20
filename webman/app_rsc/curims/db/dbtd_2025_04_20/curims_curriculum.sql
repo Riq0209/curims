@@ -1,0 +1,67 @@
+/*!999999\- enable the sandbox mode */ 
+-- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
+--
+-- Host: localhost    Database: db_webman
+-- ------------------------------------------------------
+-- Server version	11.4.2-MariaDB
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*M!100616 SET @OLD_NOTE_VERBOSITY=@@NOTE_VERBOSITY, NOTE_VERBOSITY=0 */;
+
+--
+-- Table structure for table `curims_curriculum`
+--
+
+DROP TABLE IF EXISTS `curims_curriculum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `curims_curriculum` (
+  `id_curriculum_62base` binary(6) NOT NULL,
+  `nama_kurikulum` varchar(255) DEFAULT NULL,
+  `kod_kurikulum` varchar(10) DEFAULT NULL,
+  `sesi_masuk` varchar(10) DEFAULT NULL,
+  `semester_masuk` int(11) DEFAULT NULL,
+  `tahun_masuk` int(11) DEFAULT NULL,
+  `PLO` int(11) DEFAULT NULL,
+  `wmf_date_created` date DEFAULT NULL,
+  `wmf_time_created` time DEFAULT NULL,
+  PRIMARY KEY (`id_curriculum_62base`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `curims_curriculum`
+--
+
+LOCK TABLES `curims_curriculum` WRITE;
+/*!40000 ALTER TABLE `curims_curriculum` DISABLE KEYS */;
+INSERT INTO `curims_curriculum` (`id_curriculum_62base`, `nama_kurikulum`, `kod_kurikulum`, `sesi_masuk`, `semester_masuk`, `tahun_masuk`, `PLO`, `wmf_date_created`, `wmf_time_created`) VALUES ('6Ecl5J','a','SECBH','1',2,3,1,'2025-04-17','16:03:58'),
+('9RZdmt',NULL,NULL,NULL,NULL,NULL,NULL,'2025-04-17','15:46:52'),
+('FDaFIk',NULL,NULL,NULL,NULL,NULL,NULL,'2025-04-17','15:46:54'),
+('PWchdr','Bachelor of Computer Science (Software Engineering)','SECJH','2024/2025',1,1,4,'2025-04-17','15:36:56'),
+('Za2OFe',NULL,NULL,NULL,NULL,NULL,NULL,'2025-04-17','15:46:52'),
+('gEElAV',NULL,NULL,NULL,NULL,NULL,NULL,'2025-04-17','16:03:55'),
+('hJWhZj','Bachelor of Computer Science (Bioinformatic)','SECBH','2024/2025',1,2,1,'2025-04-17','15:36:56'),
+('sPHwBl','Bachelor of Computer Science (Computer Network and Security)','SECRH','2024/2025',2,1,3,'2025-04-17','15:36:56'),
+('wPigVj',NULL,NULL,NULL,NULL,NULL,NULL,'2025-04-17','15:46:52');
+/*!40000 ALTER TABLE `curims_curriculum` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
+
+-- Dump completed on 2025-04-20 16:31:12

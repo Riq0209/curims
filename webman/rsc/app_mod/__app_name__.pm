@@ -77,7 +77,9 @@ sub init {
     
     ### 22/08/2014
     ### The default view template for login page.
-    $this->{login_page} = "./template_login.html"; 
+    #$this->{login_page} = "./template_login_modern.html"; 
+    $this->{login_page} = "./Presentation/Login/template_login_modern.html"; # latest 15/4/2025
+
     
     ### The possible way to change the default login page 
     ### on certain condition.
