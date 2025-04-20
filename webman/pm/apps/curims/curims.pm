@@ -8,6 +8,40 @@ use webman_main;
 
 #__cust_mod__
 
+use curims_curriculum_details;
+use curims_curriculum_details_multirows_delete;
+use curims_curriculum_details_multirows_insert;
+use curims_curriculum_details_multirows_update;
+use curims_curriculum_details_text2db_delete;
+use curims_curriculum_details_text2db_insert;
+use curims_curriculum_details_text2db_update;
+use curims_curriculum_list;
+use curims_curriculum_multirows_delete;
+use curims_curriculum_multirows_insert;
+use curims_curriculum_multirows_update;
+use curims_curriculum_subject_add;
+use curims_curriculum_subject_link;
+use curims_curriculum_subject_list;
+use curims_curriculum_subject_multirows_delete;
+use curims_curriculum_subject_multirows_insert;
+use curims_curriculum_subject_multirows_update;
+use curims_curriculum_subject_remove;
+use curims_curriculum_subject_text2db_delete;
+use curims_curriculum_subject_text2db_insert;
+use curims_curriculum_subject_text2db_update;
+use curims_curriculum_text2db_delete;
+use curims_curriculum_text2db_insert;
+use curims_curriculum_text2db_update;
+use curims_subject_curriculum_link;
+use curims_subject_list;
+use curims_subject_multirows_delete;
+use curims_subject_multirows_insert;
+use curims_subject_multirows_update;
+use curims_subject_text2db_delete;
+use curims_subject_text2db_insert;
+use curims_subject_text2db_update;
+use curiums_curriculum_details_multirows_insert;
+
 #__cust_mod__
 
 ### Don't remove the above "#__cust_mod__" comments since they are used 
@@ -77,7 +111,8 @@ sub init {
     
     ### 22/08/2014
     ### The default view template for login page.
-    $this->{login_page} = "./template_login.html"; 
+    #$this->{login_page} = "./template_login_modern.html"; #-- previously used
+    $this->{login_page} = "./Presentation/Login/template_login_modern.html";# -- latest 15/4/2025
     
     ### The possible way to change the default login page 
     ### on certain condition.

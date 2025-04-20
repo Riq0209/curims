@@ -325,7 +325,8 @@ sub process_DYNAMIC { ### so_type_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SE
     my $link_ref_id = undef;
     
     my $component = undef;
-    
+
+
     #$this->print_Link_Path_Info;
     
     #$cgi->add_Debug_Text("\$lci_num = $lci_num", __FILE__, __LINE__);

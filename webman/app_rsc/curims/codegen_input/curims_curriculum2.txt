@@ -1,0 +1,28 @@
+### Database item handling options:
+2
+
+### Multi row database operation(s) support:
+3
+
+### Provide text-based database input support? [y/n]:
+y
+
+### Define unique key-field entry? [y/n]: 
+n
+
+### curims_curriculum > curims_subject [y/n]: 
+n
+
+### Apply filter for item listing? [y/n]: 
+n
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+11
+
+### Warning!!! link_id '11' already has a reference to 'webman_component_selector' module!!!
+### Proceed? [y/n]:
+y
+

@@ -1,0 +1,67 @@
+### Database item handling options:
+2
+
+### Multi row database operation(s) support:
+3
+
+### Provide text-based database input support? [y/n]:
+y
+
+### Define unique key-field entry? [y/n]: 
+y
+
+### Text-based database input unique key-field entry.
+### Unique key-field(s) for text->db insert/update/delete operations:
+kod_kurikulum
+
+### curims_curriculum > curims_subject [y/n]: 
+y
+
+### Apply filter for item listing? [y/n]: 
+y
+
+### Unique key-field(s) for database item list operation:
+kod_kurikulum
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+11
+
+### Warning!!! link_id '11' already has a reference to 'webman_component_selector' module!!!
+### Proceed? [y/n]:
+y
+
+### Database item handling options:
+2
+
+### Multi row database operation(s) support:
+3
+
+### Provide text-based database input support? [y/n]:
+y
+
+### Define unique key-field entry? [y/n]: 
+y
+
+### Text-based database input unique key-field entry.
+### Unique key-field(s) for text->db insert/update/delete operations:
+kod_subjek
+
+### Apply filter for item listing? [y/n]: 
+y
+
+### Unique key-field(s) for database item list operation:
+kod_subjek nama_subjek
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+11
+
+### Warning!!! link_id '11' already has a reference to 'webman_component_selector' module!!!
+### Proceed? [y/n]:
+y
+

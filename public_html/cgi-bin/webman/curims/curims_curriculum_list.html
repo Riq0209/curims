@@ -1,0 +1,161 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+List
+<p />
+
+<!-- dynamic_content_ name=db_items_num_begin //--> -
+<!-- dynamic_content_ name=db_items_num_end //--> of
+<!-- dynamic_content_ name=db_items_num_total //--> Records.
+<p />
+
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- start_cgihtml_ //-->
+  <input name="task" type="hidden" value="$cgi_task_">
+  <!-- end_cgihtml_ //-->
+
+  <!-- dynamic_content_ name=form_hidden_field //-->
+
+<table border="1">
+  <!-- start_menu_ name=caption //-->
+  <tr>
+    <th>Num.</th>
+    <th>menu_item0_</th>
+    <th>menu_item1_</th>
+    <th>menu_item2_</th>
+    <th>menu_item3_</th>
+    <th>menu_item4_</th>
+    <th>menu_item5_</th>
+    <th>menu_item6_</th>
+    <th>menu_item7_</th>
+    <!-- start_cgihtml_ //-->
+    <th align="center">
+      Selections &amp; Operations
+      <br />
+      <a href="javascript:checkbox_select_all('id_entry_62base_', $cgi_inl_curims_curriculum_, $cgi_dbisn_curims_curriculum_);">All</a> |
+      <a href="javascript:checkbox_select_none('id_entry_62base_', $cgi_inl_curims_curriculum_, $cgi_dbisn_curims_curriculum_);">None</a> |
+      <a href="javascript:checkbox_select_invert('id_entry_62base_', $cgi_inl_curims_curriculum_, $cgi_dbisn_curims_curriculum_);">Invert</a>
+    </th>
+    <!-- end_cgihtml_ //-->
+  </tr>
+  <!-- end_menu_ //-->
+
+  <!-- start_list_ name=main //-->
+  <tr class="$tld_row_class_">
+    <td align="right">$tld_num_.</td>
+
+    <td><a href="index.cgi?link_name=Curriculum+Details&dmisn=1&link_id=11&">$tld_nama_kurikulum_</a></td>
+    <td>$tld_kod_kurikulum_</td>
+    <td>$tld_sesi_masuk_</td>
+    <td>$tld_semester_masuk_</td>
+    <td>$tld_tahun_masuk_</td>
+    <td>$tld_PLO_</td>
+    <td>$tld_wmf_date_created_</td>
+    <td>$tld_wmf_time_created_</td>
+
+    <td align="center">
+      <input type="checkbox" name="id_entry_62base_$tld_idx_" id="id_entry_62base_$tld_idx_" value="$tld_id_entry_62base_">
+    </td>
+  </tr>
+  <!-- end_list_ //-->
+
+  <tr bgcolor="#EEEEEE">
+    <td align="right">...</td>
+
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+
+    <td align="center">
+      <!-- start_cgihtml_ //-->
+      <a href="index.cgi?link_id=$cgi_link_id_&task=curims_curriculum_multirows_insert">Insert</a>
+      <!-- end_cgihtml_ //-->
+      |
+      <a href="javascript:document.tld_view_dynamic.task.value='curims_curriculum_multirows_update'; document.tld_view_dynamic.submit();">Update</a>
+      |
+      <a href="javascript:document.tld_view_dynamic.task.value='curims_curriculum_multirows_delete'; document.tld_view_dynamic.submit();">Delete</a>
+    </td>
+  </tr>
+</table>
+
+<p />
+
+  Items/List: <input name="inl_curims_curriculum" type="text" id="inl_curims_curriculum" value="$inl_curims_curriculum_" size="3">
+  &nbsp;
+
+  <!-- start_menu_ name=list //-->
+    dynamic_menu_items_
+  <!-- end_menu_ //-->
+  &nbsp;
+
+  List Set Num. :
+  <select name="lsn_curims_curriculum" onChange="document.tld_view_dynamic.submit()">
+    <!-- select_ name=lsn_curims_curriculum //-->
+  </select>
+
+  <p />
+
+  <!-- start_cgihtml_ //-->
+  <div>
+  <b><font color="#557755">Filter(s) [ </font></b>
+  &nbsp;
+  
+  <div style="display:inline; background:#CCDDCC; padding:6px 2px 6px 2px;">
+  <b>Nama Kurikulum:</b>
+  <input type="text" name="filter_nama_kurikulum" size="10" value="$cgi_filter_nama_kurikulum_">
+  </div>
+  &nbsp;
+  
+  <div style="display:inline; background:#CCDDCC; padding:6px 2px 6px 2px;">
+  <b>Kod Kurikulum:</b>
+  <input type="text" name="filter_kod_kurikulum" size="10" value="$cgi_filter_kod_kurikulum_">
+  </div>
+  &nbsp;
+  
+  <div style="display:inline; background:#CCDDCC; padding:6px 2px 6px 2px;">
+  <b>Sesi Masuk:</b>
+  <input type="text" name="filter_sesi_masuk" size="10" value="$cgi_filter_sesi_masuk_">
+  </div>
+  &nbsp;
+  
+  <div style="display:inline; background:#CCDDCC; padding:6px 2px 6px 2px;">
+  <b>Semester Masuk:</b>
+  <input type="text" name="filter_semester_masuk" size="10" value="$cgi_filter_semester_masuk_">
+  </div>
+  &nbsp;
+  
+  <div style="display:inline; background:#CCDDCC; padding:6px 2px 6px 2px;">
+  <b>Tahun Masuk:</b>
+  <input type="text" name="filter_tahun_masuk" size="10" value="$cgi_filter_tahun_masuk_">
+  </div>
+  &nbsp;
+  
+  <div style="display:inline; background:#CCDDCC; padding:6px 2px 6px 2px;">
+  <b>Wmf Date Created:</b>
+  <input type="text" name="filter_wmf_date_created" size="10" value="$cgi_filter_wmf_date_created_">
+  </div>
+  &nbsp;
+  
+  <div style="display:inline; background:#CCDDCC; padding:6px 2px 6px 2px;">
+  <b>Wmf Time Created:</b>
+  <input type="text" name="filter_wmf_time_created" size="10" value="$cgi_filter_wmf_time_created_">
+  </div>
+  &nbsp;
+  
+  <input type="submit" name="button_submit" value="Refresh List">
+  &nbsp;
+  <b><font color="#557755">]</font></b>
+  </div>
+  <!-- end_cgihtml_ //-->
+
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

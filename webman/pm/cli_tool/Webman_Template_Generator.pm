@@ -50,7 +50,7 @@ sub process_DBTS_Info {
     my $codegen_input_rec = $this->{arg}->{codegen_input_rec};
     
     my $primary_key = undef;
-    my $primary_key_extra = undef
+    my $primary_key_extra = undef;
     my @view_fields = ();
     
     print "\n### Process DBTS for table $this->{table_name} to generate view templates.\n\n";

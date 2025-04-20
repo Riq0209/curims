@@ -20,7 +20,7 @@ tr.row_even {background-color:#fbfbeb;}
   left: 0px;
   width: 2000px;
   height: 2000px;
-  //background-color: #2f3f4b;
+  background-color: #2f3f4b;
   background-image:url(page_dimmer.png); 
   background-repeat:repeat;
   visibility:hidden;
