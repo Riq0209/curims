@@ -1,0 +1,18 @@
+### Database item handling options:
+3
+
+### curims_course > curims_currcourse [y/n]: 
+n
+
+### curims_course > curims_currcourse > curims_curriculum [y/n]: 
+n
+
+### Apply filter for item listing? [y/n]: 
+n
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+19
+

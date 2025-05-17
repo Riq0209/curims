@@ -1,0 +1,69 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+<p />
+
+<!-- dynamic_content_ name=db_items_num_begin //--> -
+<!-- dynamic_content_ name=db_items_num_end //--> of
+<!-- dynamic_content_ name=db_items_num_total //--> Records.
+<p />
+
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- dynamic_content_ name=form_hidden_field //-->
+
+<table border="1">
+  <!-- start_menu_ name=caption //-->
+  <tr>
+    <th>Num.</th>
+    <th>menu_item0_</th>
+    <th>menu_item1_</th>
+  </tr>
+  <!-- end_menu_ //-->
+
+  <script language="JavaScript">
+    // javascript array to store popup info. data
+    // __js_popup_data_array__
+  </script>
+
+  <!-- start_list_ name=main //-->
+  <tr class="$tld_row_class_">
+    <td align="right">$tld_num_.</td>
+
+    <td>$tld_created_date_</td>
+    <td>$tld_created_time_</td>
+
+  </tr>
+  <!-- end_list_ //-->
+
+  <tr bgcolor="#EEEEEE">
+    <td align="right">...</td>
+
+    <td>...</td>
+    <td>...</td>
+
+  </tr>
+</table>
+
+<p />
+
+  Items/List: <input name="inl_curims_curriculum_details" type="text" id="inl_curims_curriculum_details" value="$inl_curims_curriculum_details_" size="3">
+  &nbsp;
+
+  <!-- start_menu_ name=list //-->
+    dynamic_menu_items_
+  <!-- end_menu_ //-->
+  &nbsp;
+
+  List Set Num. :
+  <select name="lsn_curims_curriculum_details" onChange="document.tld_view_dynamic.submit()">
+    <!-- select_ name=lsn_curims_curriculum_details //-->
+  </select>
+
+  <p />
+
+
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

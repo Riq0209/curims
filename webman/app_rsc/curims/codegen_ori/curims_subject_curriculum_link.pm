@@ -65,11 +65,25 @@ sub customize_SQL {
     my $sql_filter = undef;
     
     
-    if (!$cgi->param_Exist("filter_kod_subjek") || $cgi->param("filter_kod_subjek") eq "") {
-        $cgi->push_Param("filter_kod_subjek", "\%");
+    if (!$cgi->param_Exist("filter_subject_code") || $cgi->param("filter_subject_code") eq "") {
+        $cgi->push_Param("filter_subject_code", "\%");
     }
-    my $filter_kod_subjek = $cgi->param("filter_kod_subjek");
-    $sql_filter .= "kod_subjek like '$filter_kod_subjek' and ";
+    my $filter_subject_code = $cgi->param("filter_subject_code");
+    $sql_filter .= "subject_code like '$filter_subject_code' and ";
+    
+    
+    if (!$cgi->param_Exist("filter_subject_name") || $cgi->param("filter_subject_name") eq "") {
+        $cgi->push_Param("filter_subject_name", "\%");
+    }
+    my $filter_subject_name = $cgi->param("filter_subject_name");
+    $sql_filter .= "subject_name like '$filter_subject_name' and ";
+    
+    
+    if (!$cgi->param_Exist("filter_status") || $cgi->param("filter_status") eq "") {
+        $cgi->push_Param("filter_status", "\%");
+    }
+    my $filter_status = $cgi->param("filter_status");
+    $sql_filter .= "status like '$filter_status' and ";
     
     
     $sql_filter =~ s/ and $//;
@@ -127,8 +141,8 @@ sub customize_TLD {
             $row_class = "row_odd";
         }        
         
-        $dbu->set_Table("curims_curriculum");
-        my $count_item = $dbu->count_Item("id_entry_62base", $tld->get_Data($i, "id_entry_62base"));
+        $dbu->set_Table("curims_currsubject");
+        my $count_item = $dbu->count_Item("id_subject_62base", $tld->get_Data($i, "id_subject_62base"));
         $tld->set_Data($i, "curims_curriculum", $count_item);
 
     }

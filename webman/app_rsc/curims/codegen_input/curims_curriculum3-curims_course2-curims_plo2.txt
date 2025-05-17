@@ -1,0 +1,99 @@
+### Database item handling options:
+3
+
+### curims_curriculum > curims_currcourse [y/n]: 
+n
+
+### curims_curriculum > curims_currcourse > curims_course [y/n]: 
+y
+
+### curims_curriculum > curims_currplo [y/n]: 
+n
+
+### curims_curriculum > curims_currplo > curims_plo [y/n]: 
+y
+
+### Apply filter for item listing? [y/n]: 
+y
+
+### Unique key-field(s) for database item list operation:
+curriculum_code curriculum_name
+
+### Exclude more fields from being viewed [y/n]:
+y
+
+
+
+### Link ID for code deployment (-1 to skip):
+7
+
+### Warning!!! link_id '7' already has a reference to 'webman_component_selector' module!!!
+### Proceed? [y/n]:
+y
+
+### Database item handling options:
+2
+
+### Multi row database operation(s) support:
+3
+
+### Provide text-based database input support? [y/n]:
+n
+
+### curims_course > curims_currcourse [y/n]: 
+n
+
+### curims_course > curims_currcourse > curims_curriculum [y/n]: 
+n
+
+### Apply filter for item listing? [y/n]: 
+y
+
+### Unique key-field(s) for database item list operation:
+course_code course_name
+
+### Exclude more fields from being viewed [y/n]:
+y
+
+
+
+### Link ID for code deployment (-1 to skip):
+19
+
+### Warning!!! link_id '19' already has a reference to 'webman_component_selector' module!!!
+### Proceed? [y/n]:
+y
+
+### Database item handling options:
+2
+
+### Multi row database operation(s) support:
+3
+
+### Provide text-based database input support? [y/n]:
+n
+
+### curims_plo > curims_currplo [y/n]: 
+n
+
+### curims_plo > curims_currplo > curims_curriculum [y/n]: 
+n
+
+### Apply filter for item listing? [y/n]: 
+y
+
+### Unique key-field(s) for database item list operation:
+plo_code
+
+### Exclude more fields from being viewed [y/n]:
+y
+
+
+
+### Link ID for code deployment (-1 to skip):
+21
+
+### Warning!!! link_id '21' already has a reference to 'webman_component_selector' module!!!
+### Proceed? [y/n]:
+y
+

@@ -8,39 +8,25 @@ use webman_main;
 
 #__cust_mod__
 
-use curims_curriculum_details;
-use curims_curriculum_details_multirows_delete;
-use curims_curriculum_details_multirows_insert;
-use curims_curriculum_details_multirows_update;
-use curims_curriculum_details_text2db_delete;
-use curims_curriculum_details_text2db_insert;
-use curims_curriculum_details_text2db_update;
-use curims_curriculum_list;
+use curims_course_list;
+use curims_course_multirows_delete;
+use curims_course_multirows_insert;
+use curims_course_multirows_update;
+use curims_curriculum_course_add;
+use curims_curriculum_course_details_plo_link;
+use curims_curriculum_course_list;
+use curims_curriculum_course_remove;
+use curims_curriculum_details_list;
 use curims_curriculum_multirows_delete;
 use curims_curriculum_multirows_insert;
 use curims_curriculum_multirows_update;
-use curims_curriculum_subject_add;
-use curims_curriculum_subject_link;
-use curims_curriculum_subject_list;
-use curims_curriculum_subject_multirows_delete;
-use curims_curriculum_subject_multirows_insert;
-use curims_curriculum_subject_multirows_update;
-use curims_curriculum_subject_remove;
-use curims_curriculum_subject_text2db_delete;
-use curims_curriculum_subject_text2db_insert;
-use curims_curriculum_subject_text2db_update;
-use curims_curriculum_text2db_delete;
-use curims_curriculum_text2db_insert;
-use curims_curriculum_text2db_update;
-use curims_subject_curriculum_link;
-use curims_subject_list;
-use curims_subject_multirows_delete;
-use curims_subject_multirows_insert;
-use curims_subject_multirows_update;
-use curims_subject_text2db_delete;
-use curims_subject_text2db_insert;
-use curims_subject_text2db_update;
-use curiums_curriculum_details_multirows_insert;
+use curims_curriculum_plo_add;
+use curims_curriculum_plo_list;
+use curims_curriculum_plo_remove;
+use curims_plo_list;
+use curims_plo_multirows_delete;
+use curims_plo_multirows_insert;
+use curims_plo_multirows_update;
 
 #__cust_mod__
 

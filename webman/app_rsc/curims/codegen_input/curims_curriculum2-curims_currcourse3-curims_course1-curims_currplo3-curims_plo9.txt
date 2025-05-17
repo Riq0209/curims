@@ -1,0 +1,76 @@
+### Database item handling options:
+2
+
+### Multi row database operation(s) support:
+3
+
+### Provide text-based database input support? [y/n]:
+n
+
+### curims_curriculum > curims_currcourse [y/n]: 
+y
+
+### curims_curriculum > curims_currcourse > curims_course [y/n]: 
+y
+
+### curims_curriculum > curims_currplo [y/n]: 
+y
+
+### curims_curriculum > curims_currplo > curims_plo [y/n]: 
+y
+
+### Apply filter for item listing? [y/n]: 
+n
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+7
+
+### Database item handling options:
+3
+
+### Apply filter for item listing? [y/n]: 
+n
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+id_curriculum_62base
+
+### Link ID for code deployment (-1 to skip):
+23
+
+### Database item handling options:
+1
+
+### Apply filter for item listing? [y/n]: 
+n
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+24
+
+### Database item handling options:
+3
+
+### Apply filter for item listing? [y/n]: 
+n
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+25
+
+### Database item handling options:
+9
+
+### Current selected database handling option requires search's key-field(s) entry by users!
+### Unique key-field(s) for search/update/delete operations:
+plo_code
+

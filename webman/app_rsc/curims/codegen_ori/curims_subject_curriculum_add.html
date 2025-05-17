@@ -1,0 +1,111 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<b>???</b><!-- end_cgihtml_ //-->
+&gt;
+Curriculum
+&gt;
+Add from List
+<p />
+
+<!-- dynamic_content_ name=parent_item_info //-->
+<p />
+
+<!-- dynamic_content_ name=db_items_num_begin //--> -
+<!-- dynamic_content_ name=db_items_num_end //--> of
+<!-- dynamic_content_ name=db_items_num_total //--> Records to be added.
+<p />
+
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- dynamic_content_ name=form_hidden_field //-->
+  <input type="hidden" name="submission_type">
+
+<table border="1">
+  <!-- start_menu_ name=caption //-->
+  <tr>
+    <th>Num.</th>
+    <th>menu_item0_</th>
+    <th>menu_item1_</th>
+    <th>menu_item2_</th>
+    <th>menu_item3_</th>
+    <th>menu_item4_</th>
+    <th>menu_item5_</th>
+    <th>menu_item6_</th>
+    <th>menu_item7_</th>
+    <!-- start_cgihtml_ //-->
+    <th align="center">
+      Selection &amp; Operations
+      <br />
+      <a href="javascript:checkbox_select_all('id_curriculum_62base_', $cgi_inl_curims_curriculum_AFLS_, $cgi_dbisn_curims_curriculum_AFLS_);">All</a> |
+      <a href="javascript:checkbox_select_none('id_curriculum_62base_', $cgi_inl_curims_curriculum_AFLS_, $cgi_dbisn_curims_curriculum_AFLS_);">None</a> |
+      <a href="javascript:checkbox_select_invert('id_curriculum_62base_', $cgi_inl_curims_curriculum_AFLS_, $cgi_dbisn_curims_curriculum_AFLS_);">Invert</a>
+    </th>
+    <!-- end_cgihtml_ //-->
+  </tr>
+  <!-- end_menu_ //-->
+
+  <!-- start_list_ name=main //-->
+  <tr class="$tld_row_class_">
+    <td align="right">$tld_num_.</td>
+
+  <td>$tld_curriculum_name_</td>
+  <td>$tld_curriculum_code_</td>
+  <td>$tld_intake_session_</td>
+  <td>$tld_intake_semester_</td>
+  <td>$tld_intake_year_</td>
+  <td>$tld_plo_</td>
+  <td>$tld_created_date_</td>
+  <td>$tld_created_time_</td>
+
+    <td align="center">
+      <input type="checkbox" name="id_curriculum_62base_$tld_idx_" id="id_curriculum_62base_$tld_idx_" value="$tld_id_curriculum_62base_">
+    </td>
+
+  </tr>
+  <!-- end_list_ //-->
+
+  <tr bgcolor="#EEEEEE">
+    <td align="right">...</td>
+
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+
+    <td align="center">
+      <a href="javascript:document.tld_view_dynamic.submission_type.value='add_selected'; document.tld_view_dynamic.submit();">Add Selected</a>
+      |
+      <a href="javascript:document.tld_view_dynamic.submission_type.value='parent_list'; document.tld_view_dynamic.submit();">Back to Parent List</a>
+    </td>
+  </tr>
+</table>
+
+<p />
+
+  Items/List: <input name="inl_curims_curriculum_AFLS" type="text" id="inl_curims_curriculum_AFLS" value="$inl_curims_curriculum_AFLS_" size="3">
+  &nbsp;
+
+  <!-- start_menu_ name=list //-->
+    dynamic_menu_items_
+  <!-- end_menu_ //-->
+  &nbsp;
+
+  List Set Num. :
+  <select name="lsn_curims_curriculum_AFLS" onChange="document.tld_view_dynamic.submit()">
+    <!-- select_ name=lsn_curims_curriculum_AFLS //-->
+  </select>
+
+  <p />
+
+
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

@@ -172,18 +172,11 @@ sub customize_SQL {
     my $sql_filter = undef;
     
     
-    if (!$cgi->param_Exist("filter_kod_subjek_afls") || $cgi->param("filter_kod_subjek_afls") eq "") {
-        $cgi->push_Param("filter_kod_subjek_afls", "\%");
+    if (!$cgi->param_Exist("filter_subject_code_afls") || $cgi->param("filter_subject_code_afls") eq "") {
+        $cgi->push_Param("filter_subject_code_afls", "\%");
     }
-    my $filter_kod_subjek_afls = $cgi->param("filter_kod_subjek_afls");
-    $sql_filter .= "kod_subjek like '$filter_kod_subjek_afls' and ";
-    
-    
-    if (!$cgi->param_Exist("filter_nama_subjek_afls") || $cgi->param("filter_nama_subjek_afls") eq "") {
-        $cgi->push_Param("filter_nama_subjek_afls", "\%");
-    }
-    my $filter_nama_subjek_afls = $cgi->param("filter_nama_subjek_afls");
-    $sql_filter .= "nama_subjek like '$filter_nama_subjek_afls' and ";
+    my $filter_subject_code_afls = $cgi->param("filter_subject_code_afls");
+    $sql_filter .= "subject_code like '$filter_subject_code_afls' and ";
     
     
     $sql_filter =~ s/ and $//;
