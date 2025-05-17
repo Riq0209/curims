@@ -65,25 +65,18 @@ sub customize_SQL {
     my $sql_filter = undef;
     
     
-    if (!$cgi->param_Exist("filter_nama_kurikulum") || $cgi->param("filter_nama_kurikulum") eq "") {
-        $cgi->push_Param("filter_nama_kurikulum", "\%");
+    if (!$cgi->param_Exist("filter_curriculum_name") || $cgi->param("filter_curriculum_name") eq "") {
+        $cgi->push_Param("filter_curriculum_name", "\%");
     }
-    my $filter_nama_kurikulum = $cgi->param("filter_nama_kurikulum");
-    $sql_filter .= "nama_kurikulum like '$filter_nama_kurikulum' and ";
+    my $filter_curriculum_name = $cgi->param("filter_curriculum_name");
+    $sql_filter .= "curriculum_name like '$filter_curriculum_name' and ";
     
     
-    if (!$cgi->param_Exist("filter_kod_kurikulum") || $cgi->param("filter_kod_kurikulum") eq "") {
-        $cgi->push_Param("filter_kod_kurikulum", "\%");
+    if (!$cgi->param_Exist("filter_curriculum_code") || $cgi->param("filter_curriculum_code") eq "") {
+        $cgi->push_Param("filter_curriculum_code", "\%");
     }
-    my $filter_kod_kurikulum = $cgi->param("filter_kod_kurikulum");
-    $sql_filter .= "kod_kurikulum like '$filter_kod_kurikulum' and ";
-    
-    
-    if (!$cgi->param_Exist("filter_sesi_masuk") || $cgi->param("filter_sesi_masuk") eq "") {
-        $cgi->push_Param("filter_sesi_masuk", "\%");
-    }
-    my $filter_sesi_masuk = $cgi->param("filter_sesi_masuk");
-    $sql_filter .= "sesi_masuk like '$filter_sesi_masuk' and ";
+    my $filter_curriculum_code = $cgi->param("filter_curriculum_code");
+    $sql_filter .= "curriculum_code like '$filter_curriculum_code' and ";
     
     
     $sql_filter =~ s/ and $//;

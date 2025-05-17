@@ -12,29 +12,20 @@ y
 
 ### Text-based database input unique key-field entry.
 ### Unique key-field(s) for text->db insert/update/delete operations:
-kod_subjek
+subject_code
 
-### curims_subject > curims_curriculum [y/n]: 
+### curims_subject > curims_currsubject > curims_curriculum [y/n]: 
 n
 
 ### Apply filter for item listing? [y/n]: 
 y
 
 ### Unique key-field(s) for database item list operation:
-kod_subjek
+subject_code subject_name status
 
 ### Exclude more fields from being viewed [y/n]:
-y
-
-
+n
 
 ### Link ID for code deployment (-1 to skip):
-y
-
-### Link ID for code deployment (-1 to skip):
-8
-
-### Warning!!! link_id '8' already has a reference to 'webman_component_selector' module!!!
-### Proceed? [y/n]:
-y
+16
 

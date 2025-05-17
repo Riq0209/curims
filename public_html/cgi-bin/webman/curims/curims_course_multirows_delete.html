@@ -1,0 +1,63 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<a href="index.cgi?link_id=$cgi_link_id_&task=curims_course_multirows_delete&button_submit=Cancel">List</a>
+<!-- end_cgihtml_ //-->
+&gt;
+Delete
+<p />
+
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+
+<table border="1">
+  <tr>
+    <th align="right" valign="top">Num. </th>
+    <th valign="top">Course Code</th>
+
+    <th valign="top">Course Name</th>
+
+    <th valign="top">Credit Hour</th>
+
+    <th valign="top">Ci</th>
+
+    <th valign="top">Created Date</th>
+
+    <th valign="top">Created Time</th>
+
+  </tr>
+
+  <!-- start_datahtml_ name=form_db_field //-->
+  <tr>
+   <td align="right" valign="top"><b>$row_num_. </b></td>
+   <td>$db_course_code_$row_idx_</td>
+
+   <td>$db_course_name_$row_idx_</td>
+
+   <td>$db_credit_hour_$row_idx_</td>
+
+   <td>$db_ci_$row_idx_</td>
+
+   <td>$db_created_date_$row_idx_</td>
+
+   <td>$db_created_time_$row_idx_</td>
+
+  </tr>
+  <!-- end_datahtml_ //-->
+
+  <tr>
+    <td align="right" colspan="7">
+      <input name="button_submit" type="submit" id="button_submit" value="Proceed"/>
+      <input name="button_submit" type="submit" id="button_submit" value="Cancel"/>
+    </td>
+  </tr>
+</table>
+</form>
+
+
+<!-- end_view_ //-->
+</body>
+</html>

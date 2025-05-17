@@ -46,6 +46,8 @@ use webman_FTP_list;
 
 sub new {
     my $class = shift @_;
+
+    print STDERR "Trying to load component: $comp_name\n";
         
     my $this = $class->SUPER::new();
     

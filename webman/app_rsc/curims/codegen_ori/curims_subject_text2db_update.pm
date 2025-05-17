@@ -112,7 +112,6 @@ sub customize_TLD_DB_Operation {
         
         ### Next is to do the real implementation based on the above example.
         
-        $tld->add_Column("id_entry_62base");
         
         for (my $i = 0; $i < $tld->get_Row_Num; $i++) {
         }        

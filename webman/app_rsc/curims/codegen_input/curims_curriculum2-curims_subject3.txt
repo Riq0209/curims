@@ -5,7 +5,14 @@
 3
 
 ### Provide text-based database input support? [y/n]:
-n
+y
+
+### Define unique key-field entry? [y/n]: 
+y
+
+### Text-based database input unique key-field entry.
+### Unique key-field(s) for text->db insert/update/delete operations:
+curriculum_name
 
 ### curims_curriculum > curims_currsubject > curims_subject [y/n]: 
 y
@@ -14,7 +21,7 @@ y
 y
 
 ### Unique key-field(s) for database item list operation:
-nama_kurikulum kod_kurikulum sesi_masuk
+curriculum_name curriculum_code
 
 ### Exclude more fields from being viewed [y/n]:
 n
@@ -29,11 +36,11 @@ n
 y
 
 ### Unique key-field(s) for database item list operation:
-kod_subjek nama_subjek
+subject_code
 
 ### Exclude more fields from being viewed [y/n]:
 n
 
 ### Link ID for code deployment (-1 to skip):
-12
+17
 
