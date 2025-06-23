@@ -1,5 +1,5 @@
 # Use official Perl image with Apache
-FROM perl:5.36-apache
+FROM perl:5.38-apache-bookworm
 
 # Install system dependencies and required Perl modules
 RUN apt-get update && apt-get install -y \
