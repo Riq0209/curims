@@ -26,8 +26,9 @@ RUN find /var/www/cgi-bin/ -name "*.cgi" -exec chmod +x {} \;
 # Configure Apache for CGI
 RUN echo "ScriptAlias /cgi-bin/ /var/www/cgi-bin/" >> /etc/apache2/sites-enabled/000-default.conf && \
     echo "<Directory /var/www/cgi-bin>" >> /etc/apache2/sites-enabled/000-default.conf && \
-    echo "Options +ExecCGI" >> /etc/apache2/sites-enabled/000-default.conf && \
-    echo "AddHandler cgi-script .cgi" >> /etc/apache2/sites-enabled/000-default.conf
+    echo "    Options +ExecCGI" >> /etc/apache2/sites-enabled/000-default.conf && \
+    echo "    AddHandler cgi-script .cgi" >> /etc/apache2/sites-enabled/000-default.conf && \
+    echo "</Directory>" >> /etc/apache2/sites-enabled/000-default.conf
 
 # Expose port for Railway
 EXPOSE 8080
