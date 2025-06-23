@@ -2,44 +2,45 @@ FROM perl:5.34
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install Perl, Apache, CGI support
+# Install Perl, Apache, CGI, and MySQL drivers
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        libdbi-perl \
+        perl \
+        cpanminus \
         libdbd-mysql-perl \
-        libcgi-pm-perl \
         apache2 \
-        apache2-utils && \
+        apache2-utils \
+        make gcc build-essential && \
+    cpanm DBI CGI JSON LWP::Simple && \
     a2enmod cgi && \
     rm -rf /var/lib/apt/lists/*
 
-# Create required web folders
+# Set up Apache web root
 RUN mkdir -p /var/www/html
 
-# Copy your web files
+# ✅ Copy your web files (including index.cgi at correct path)
 COPY public_html/ /var/www/html/
 
-# Copy your backend Perl modules
+# ✅ Copy Perl modules used by Webman framework
 COPY webman/pm/ /usr/local/lib/webman/
 
-# Make CGI scripts executable
-RUN find /var/www/html/cgi-bin/ -name "*.cgi" -exec chmod +x {} \;
+# ✅ Make sure CGI scripts are executable
+RUN chmod +x /var/www/html/cgi-bin/webman/curims/*.cgi
 
-# Add your custom lib path for Perl to find .pm modules
-ENV PERL5LIB=/usr/local/lib/webman
+# ✅ Set custom Perl module search path (including core, comp, apps/curims)
+ENV PERL5LIB=/usr/local/lib/webman:/usr/local/lib/webman/core:/usr/local/lib/webman/comp:/usr/local/lib/webman/apps/curims
 
-# Copy custom Apache config and startup script
+# ✅ Copy Apache site config and startup script
 COPY docker/apache-curims.conf /etc/apache2/sites-available/apache-curims.conf
 COPY docker/start.sh /usr/local/bin/start.sh
 
-# Make startup script executable
+# ✅ Make startup script executable
 RUN chmod +x /usr/local/bin/start.sh
 
-# Enable required modules, our site, and disable the default
+# ✅ Enable required modules and your site config
 RUN a2enmod cgi rewrite && \
     a2ensite apache-curims.conf && \
     a2dissite 000-default.conf
 
-# Railway provides the PORT env var, so no need to EXPOSE
-
+# ✅ Start Apache in foreground
 CMD ["/usr/local/bin/start.sh"]
