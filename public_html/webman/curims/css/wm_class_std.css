@@ -1,33 +1,96 @@
 .header {}
-.link_std:link {text-decoration:none;}
-.footer {}
 
-tr.popup th {border:1px solid #AAAAFF; padding:3px; background-color:transparent;}
-tr.popup td {border:1px solid #AAAAFF; padding:3px; background-color:transparent;}
+/* Base styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-y: auto !important;
+}
 
-tr.row_odd {background-color:#ffffff;}
-tr.row_even {background-color:#fbfbeb;}
+body {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Links */
+.link_std:link {
+  text-decoration: none;
+}
+
+/* Table styles */
+tr.popup th, tr.popup td {
+  border: 1px solid #AAAAFF;
+  padding: 8px;
+  background-color: transparent;
+}
+
+tr.row_odd {
+  background-color: #ffffff;
+}
+
+tr.row_even {
+  background-color: #fbfbeb;
+}
+
+/* W3.CSS compatibility */
+.w3-container {
+  padding: 16px;
+  overflow-y: visible !important;
+}
+
+.w3-table {
+  overflow-x: auto;
+  display: block;
+}
+
+/* Popup and overlay styles */
+#div_page_dimmer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(47, 63, 75, 0.8);
+  visibility: hidden;
+  z-index: 1000;
+}
+
+div.note {
+  position: absolute;
+  top: 120px;
+  left: 15px;
+  width: 250px;
+  padding: 10px;
+  border: 1px solid #AAAAFF;
+  background: #EEEEFF;
+  font-size: 12px;
+  text-align: left;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+div.popup {
+  position: absolute;
+  padding: 15px;
+  border: 1px solid #AAAAFF;
+  background: #F0F0FF;
+  visibility: hidden;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+div.popup_onclick {
+  position: absolute;
+  padding: 17px 23px 10px 10px;
+  border: 2px solid #CCCCCC;
+  background: #FAFAFA;
+  visibility: hidden;
+}
 
 #div_main {
   position: relative;
   width: 1000px;
   border: 0px solid;
 }
-
-#div_page_dimmer {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 2000px;
-  height: 2000px;
-  background-color: #2f3f4b;
-  background-image:url(page_dimmer.png); 
-  background-repeat:repeat;
-  visibility:hidden;
-  border: 0px solid;
-  z-index: 1;
-}
-
-div.note {position:absolute; top:120; left:15; width:250px; padding:5px; border:1px solid #AAAAFF; background:#EEEEFF; font-size:8pt; text-align:left;}
-div.popup {position:absolute; padding:5px; border:2px solid #AAAAFF; background:#F0F0FF; visibility:hidden;}
-div.popup_onclick {position:absolute; padding:17px 23px 10px 10px; border:2px solid #CCCCCC; background:#FAFAFA; visibility:hidden;}

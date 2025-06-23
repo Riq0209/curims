@@ -12,9 +12,11 @@ Update
 
 <form method="POST" action="./index.cgi">
 <!-- dynamic_content_ name=form_hidden_field //-->
-<table border="1">
-  <tr>
-    <th align="right" valign="top">Num. </th>
+<div class="w3-container">
+<table class="w3-table">
+  <thead>
+    <tr class="w3-light-grey">
+    <th align="right" valign="top">No. </th>
     <th valign="top">Curriculum Code</th>
 
     <th valign="top">Curriculum Name</th>
@@ -25,11 +27,8 @@ Update
 
     <th valign="top">Intake Semester</th>
 
-    <th valign="top">Created Date</th>
-
-    <th valign="top">Created Time</th>
-
   </tr>
+  </thead>
 
   <!-- start_datahtml_ name=form_db_field //-->
   <tr>
@@ -38,57 +37,47 @@ Update
   	</td>
 
     <td valign="top">
-      <input name="$db_curriculum_code_$row_idx" type="text" id="$db_curriculum_code_$row_idx" value="$db_curriculum_code_$row_idx_" size="10">
+      <input class="w3-input w3-border" name="$db_curriculum_code_$row_idx" type="text" id="$db_curriculum_code_$row_idx" value="$db_curriculum_code_$row_idx_" size="10">
       </br>
-      
+      <font color="#FF0000">$fe_curriculum_code_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <textarea name="$db_curriculum_name_$row_idx" id="$db_curriculum_name_$row_idx" cols="50">$db_curriculum_name_$row_idx_</textarea>
+      <textarea class="w3-input w3-border" name="$db_curriculum_name_$row_idx" id="$db_curriculum_name_$row_idx" cols="50" rows="1">$db_curriculum_name_$row_idx_</textarea>
       </br>
-      
+      <font color="#FF0000">$fe_curriculum_name_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <input name="$db_intake_session_$row_idx" type="text" id="$db_intake_session_$row_idx" value="$db_intake_session_$row_idx_" size="10">
+      <input class="w3-input w3-border" name="$db_intake_session_$row_idx" type="text" id="$db_intake_session_$row_idx" value="$db_intake_session_$row_idx_" size="10">
       </br>
-      
+      <font color="#FF0000">$fe_intake_session_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <input name="$db_intake_year_$row_idx" type="text" id="$db_intake_year_$row_idx" value="$db_intake_year_$row_idx_" size="11">
+      <input class="w3-input w3-border" name="$db_intake_year_$row_idx" type="text" id="$db_intake_year_$row_idx" value="$db_intake_year_$row_idx_" size="11">
       </br>
-      
+      <font color="#FF0000">$fe_intake_year_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <input name="$db_intake_semester_$row_idx" type="text" id="$db_intake_semester_$row_idx" value="$db_intake_semester_$row_idx_" size="11">
+      <input class="w3-input w3-border" name="$db_intake_semester_$row_idx" type="text" id="$db_intake_semester_$row_idx" value="$db_intake_semester_$row_idx_" size="11">
       </br>
-      
-    </td>
-
-    <td valign="top">
-      <input name="$db_created_date_$row_idx" type="text" id="$db_created_date_$row_idx" value="$db_created_date_$row_idx_" size="">
-      </br>
-      
-    </td>
-
-    <td valign="top">
-      <input name="$db_created_time_$row_idx" type="text" id="$db_created_time_$row_idx" value="$db_created_time_$row_idx_" size="">
-      </br>
-      
+      <font color="#FF0000">$fe_intake_semester_$row_idx_</font>
     </td>
 
   </tr>
   <!-- end_datahtml_ //-->
 
   <tr>
-    <td align="right" colspan="8">
-      <input name="button_submit" type="submit" id="button_submit" value="Proceed"/>
-      <input name="button_submit" type="submit" id="button_submit" value="Cancel"/>
+    <td colspan="6" style="text-align: right;">
+      <button type="submit" name="button_submit" value="Cancel" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Cancel</button>
+      <button type="submit" name="button_submit" value="Proceed" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large">Proceed</button>
     </td>
+    
   </tr>
 </table>
+</div>
 </form>
 
 <!-- end_view_ //-->

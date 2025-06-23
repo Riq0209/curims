@@ -48,7 +48,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:30
+-- Dump completed on 2025-05-18 12:33:59
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -103,7 +103,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:30
+-- Dump completed on 2025-05-18 12:33:59
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -161,7 +161,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:30
+-- Dump completed on 2025-05-18 12:33:59
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -211,7 +211,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:30
+-- Dump completed on 2025-05-18 12:34:00
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -270,7 +270,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:31
+-- Dump completed on 2025-05-18 12:34:00
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -304,7 +304,7 @@ CREATE TABLE `webman_curims_cgi_var_cache` (
   `value` text DEFAULT NULL,
   `active_mode` smallint(6) DEFAULT 1,
   PRIMARY KEY (`id_cgi_var_cache`)
-) ENGINE=InnoDB AUTO_INCREMENT=40682 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=40810 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -316,7 +316,7 @@ CREATE TABLE `webman_curims_cgi_var_cache` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:31
+-- Dump completed on 2025-05-18 12:34:00
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -369,7 +369,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:31
+-- Dump completed on 2025-05-18 12:34:00
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -429,7 +429,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:31
+-- Dump completed on 2025-05-18 12:34:00
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -484,7 +484,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:31
+-- Dump completed on 2025-05-18 12:34:00
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -535,7 +535,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:31
+-- Dump completed on 2025-05-18 12:34:00
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -588,7 +588,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:31
+-- Dump completed on 2025-05-18 12:34:01
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -638,7 +638,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:31
+-- Dump completed on 2025-05-18 12:34:01
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -827,7 +827,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:31
+-- Dump completed on 2025-05-18 12:34:01
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -882,7 +882,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:32
+-- Dump completed on 2025-05-18 12:34:01
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -959,7 +959,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:32
+-- Dump completed on 2025-05-18 12:34:01
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -1014,7 +1014,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:32
+-- Dump completed on 2025-05-18 12:34:01
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -1047,7 +1047,7 @@ CREATE TABLE `webman_curims_hit_info` (
   `time` time DEFAULT NULL,
   `method` varchar(5) DEFAULT NULL,
   PRIMARY KEY (`hit_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2739 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2753 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -1059,7 +1059,7 @@ CREATE TABLE `webman_curims_hit_info` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:32
+-- Dump completed on 2025-05-18 12:34:01
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -1101,7 +1101,7 @@ CREATE TABLE `webman_curims_hit_info_content` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:32
+-- Dump completed on 2025-05-18 12:34:02
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -1143,7 +1143,7 @@ CREATE TABLE `webman_curims_hit_info_query_string` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:32
+-- Dump completed on 2025-05-18 12:34:02
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -1197,7 +1197,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:32
+-- Dump completed on 2025-05-18 12:34:02
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -1265,7 +1265,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:32
+-- Dump completed on 2025-05-18 12:34:02
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -1338,7 +1338,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:33
+-- Dump completed on 2025-05-18 12:34:02
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -1391,7 +1391,7 @@ CREATE TABLE `webman_curims_session` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:33
+-- Dump completed on 2025-05-18 12:34:02
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -1437,7 +1437,7 @@ CREATE TABLE `webman_curims_session_info_daily` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:33
+-- Dump completed on 2025-05-18 12:34:02
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -1490,7 +1490,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:33
+-- Dump completed on 2025-05-18 12:34:03
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -1543,7 +1543,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:33
+-- Dump completed on 2025-05-18 12:34:03
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -1602,7 +1602,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:33
+-- Dump completed on 2025-05-18 12:34:03
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
 --
@@ -1656,4 +1656,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:33
+-- Dump completed on 2025-05-18 12:34:03

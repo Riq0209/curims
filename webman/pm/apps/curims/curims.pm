@@ -8,27 +8,73 @@ use webman_main;
 
 #__cust_mod__
 
-use curims_course_list;
+use curims_course_assesment_clo_curriculum_topic_link;
+use curims_course_assesment_multirows_delete;
+use curims_course_assesment_multirows_insert;
+use curims_course_assesment_multirows_update;
+use curims_course_assesment_plo_add;
+use curims_course_assesment_plo_link;
+use curims_course_assesment_plo_list;
+use curims_course_assesment_plo_remove;
+use curims_course_clo_list;
+use curims_course_clo_multirows_delete;
+use curims_course_clo_multirows_insert;
+use curims_course_clo_multirows_update;
+use curims_course_curriculum_list;
+use curims_course_information;
 use curims_course_multirows_delete;
 use curims_course_multirows_insert;
 use curims_course_multirows_update;
+use curims_course_topic_multirows_delete;
+use curims_course_topic_multirows_insert;
+use curims_course_topic_multirows_update;
+use curims_course_topic_schedule_link;
+use curims_course_topic_schedule_list;
+use curims_course_topic_schedule_multirows_delete;
+use curims_course_topic_schedule_multirows_insert;
+use curims_course_topic_schedule_multirows_update;
 use curims_curriculum_course_add;
-use curims_curriculum_course_details_plo_link;
+use curims_curriculum_course_elective_add;
+use curims_curriculum_course_elective_list;
+use curims_curriculum_course_elective_list_view;
+use curims_curriculum_course_elective_remove;
+use curims_curriculum_course_link;
 use curims_curriculum_course_list;
+use curims_curriculum_course_list_bysem;
 use curims_curriculum_course_remove;
-use curims_curriculum_details_list;
 use curims_curriculum_multirows_delete;
 use curims_curriculum_multirows_insert;
 use curims_curriculum_multirows_update;
-use curims_curriculum_plo_add;
 use curims_curriculum_plo_list;
-use curims_curriculum_plo_remove;
-use curims_plo_list;
-use curims_plo_multirows_delete;
-use curims_plo_multirows_insert;
-use curims_plo_multirows_update;
+use curims_curriculum_plo_multirows_delete;
+use curims_curriculum_plo_multirows_insert;
+use curims_curriculum_plo_multirows_update;
+# use curims_elective_add;
+# use curims_elective_list;
+# use curims_elective_remove;
+use curims_lecturer_course_add;
+use curims_lecturer_course_link;
+use curims_lecturer_course_list;
+use curims_lecturer_course_remove;
+use curims_lecturer_multirows_delete;
+use curims_lecturer_multirows_insert;
+use curims_lecturer_multirows_update;
+use curims_lecturer_text2db_delete;
+use curims_lecturer_text2db_insert;
+use curims_lecturer_text2db_update;
+use curims_schedule_list;
+use curims_schedule_multirows_delete;
+use curims_schedule_multirows_insert;
+use curims_schedule_multirows_update;
+use curims_course_topic_schedule_link;
+use curims_course_topic_schedule_list;
 
 #__cust_mod__
+use curims_course_information;
+use curims_dashboard;
+#use curims_course_sidebar;
+#use curims_curriculum_course_elective_add;
+#use curims_curriculum_course_elective_list;
 
 ### Don't remove the above "#__cust_mod__" comments since they are used 
 ### by the framework code generator to automatically add/remove modules.
@@ -68,10 +114,18 @@ sub init {
     my @groups = $this->get_User_Groups;
     
     ### Add page's external resources (Javascript, CSS, etc.)
+    $this->{page_subheader} .= "<link href=\"../../../webman/curims/css/curims_sidebar.css\" rel=\"stylesheet\" type=\"text/css\">\n";
     $this->{page_subheader} .= "<script type=\"text/javascript\" src=\"../../../webman/curims/js/wm_functions_std.js\"></script>\n";
     $this->{page_subheader} .= "<script type=\"text/javascript\" src=\"../../../webman/curims/js/wm_functions_ajax.js\"></script>\n";
-    $this->{page_subheader} .= "<link href=\"../../../webman/curims/css/wm_tag_std.css\" rel=\"stylesheet\" type=\"text/css\">\n";
-    $this->{page_subheader} .= "<link href=\"../../../webman/curims/css/wm_class_std.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+    $this->{page_subheader} .= "<link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/5/w3.css\">\n";
+    $this->{page_subheader} .= "<link href=\"../../../webman/curims/css/curims_main.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+    $this->{page_subheader} .= "<link href=\"../../../webman/curims/css/curims_style.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+    $this->{page_subheader} .= '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">' . "\n";
+    $this->{page_subheader} .= '<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">' . "\n"; 
+    $this->{page_subheader} .= "<script type=\"text/javascript\" src=\"../../../webman/curims/js/table_style.js\"></script>\n";
+    #$this->{page_subheader} .= "<link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
+    #$this->{page_subheader} .= "<link href=\"../../../webman/curims/css/wm_tag_std.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+    #$this->{page_subheader} .= "<link href=\"../../../webman/curims/css/wm_class_std.css\" rel=\"stylesheet\" type=\"text/css\">\n";
     #$this->{page_subheader} .= "<link href=\"../../../webman/curims/css/cust_minimalistic.css\" rel=\"stylesheet\" type=\"text/css\">\n";
     
     ### Page properties (the BODY tag settings)

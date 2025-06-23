@@ -27,9 +27,6 @@ List
     <th>menu_item2_</th>
     <th>menu_item3_</th>
     <th>menu_item4_</th>
-    <th>menu_item5_</th>
-    <th>menu_item6_</th>
-    <th>menu_item7_</th>
     <!-- start_cgihtml_ //-->
     <th align="center">
       Selections &amp; Operations
@@ -46,14 +43,11 @@ List
   <tr class="$tld_row_class_">
     <td align="right">$tld_num_.</td>
 
-    <td>$tld_curriculum_name_</td>
     <td>$tld_curriculum_code_</td>
+    <td>$tld_curriculum_name_</td>
     <td>$tld_intake_session_</td>
-    <td>$tld_intake_semester_</td>
     <td>$tld_intake_year_</td>
-    <td>$tld_plo_</td>
-    <td>$tld_created_date_</td>
-    <td>$tld_created_time_</td>
+    <td>$tld_intake_semester_</td>
 
     <td align="center">
       <input type="checkbox" name="id_curriculum_62base_$tld_idx_" id="id_curriculum_62base_$tld_idx_" value="$tld_id_curriculum_62base_">
@@ -64,9 +58,6 @@ List
   <tr bgcolor="#EEEEEE">
     <td align="right">...</td>
 
-    <td>...</td>
-    <td>...</td>
-    <td>...</td>
     <td>...</td>
     <td>...</td>
     <td>...</td>
@@ -102,6 +93,22 @@ List
 
   <p />
 
+  <!-- start_cgihtml_ //-->
+  <div>
+  <b><font color="#557755">Filter(s) [ </font></b>
+  &nbsp;
+  
+  <div style="display:inline; background:#CCDDCC; padding:6px 2px 6px 2px;">
+  <b>Curriculum Code:</b>
+  <input type="text" name="filter_curriculum_code" size="10" value="$cgi_filter_curriculum_code_">
+  </div>
+  &nbsp;
+  
+  <input type="submit" name="button_submit" value="Refresh List">
+  &nbsp;
+  <b><font color="#557755">]</font></b>
+  </div>
+  <!-- end_cgihtml_ //-->
 
 </form>
 <!-- end_view_ //-->

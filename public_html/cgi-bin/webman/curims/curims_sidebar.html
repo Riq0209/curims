@@ -1,0 +1,57 @@
+<!--
+  CURIMS Sidebar
+  Save this content as 'sidebar.html' and include it in your main template.
+-->
+<style>
+    /* Sidebar Styles */
+    .sidebar-nav {
+      width: 220px;
+      background-color: #f8f9fa; /* A light grey background */
+      padding: 15px;
+      height: 100vh; /* Make it full-height */
+      border-right: 1px solid #dee2e6; /* A subtle border */
+      font-family: Arial, sans-serif;
+    }
+  
+    .sidebar-nav h3 {
+      font-size: 1.2em;
+      color: #343a40; /* Darker grey for the title */
+      margin-top: 0;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #dee2e6;
+    }
+  
+    .sidebar-nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+  
+    .sidebar-nav li a {
+      display: block;
+      padding: 10px 15px;
+      text-decoration: none;
+      font-size: 1em;
+      color: #495057; /* Standard text color */
+      border-radius: 4px; /* Slightly rounded corners for links */
+      margin-bottom: 5px;
+    }
+  
+    .sidebar-nav li a:hover {
+      background-color: #e9ecef; /* Highlight on hover */
+      color: #0056b3; /* A blue color for text on hover */
+    }
+  </style>
+  
+  <nav class="sidebar-nav">
+    <h3>Main Menu</h3>
+    <ul>
+      <li><a href="curims.cgi?action=dashboard">Dashboard</a></li>
+      <li><a href="curims.cgi?action=course_list">Course Information</a></li>
+      <li><a href="curims.cgi?action=curriculum_list">Curriculum</a></li>
+      <li><a href="curims.cgi?action=assessment_list">Course Assessment</a></li>
+      <li><a href="curims.cgi?action=reports">Reports</a></li>
+      <li><a href="curims.cgi?action=logout">Logout</a></li>
+    </ul>
+  </nav>                                                                        

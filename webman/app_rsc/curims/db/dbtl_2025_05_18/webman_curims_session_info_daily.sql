@@ -43,4 +43,4 @@ CREATE TABLE `webman_curims_session_info_daily` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:33
+-- Dump completed on 2025-05-18 12:34:02

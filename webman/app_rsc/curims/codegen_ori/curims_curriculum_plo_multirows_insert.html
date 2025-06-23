@@ -29,9 +29,9 @@ Insert
     <th align="right" valign="top">Num. </th>
     <th valign="top">Plo Code</th>
 
-    <th valign="top">Plo Description</th>
+    <th valign="top">Plo Tag</th>
 
-    <th valign="top">Created Date</th>
+    <th valign="top">Plo Description</th>
 
   </tr>
 
@@ -41,9 +41,15 @@ Insert
   	  <b>$row_num_. </b>
   	</td>
     <td valign="top">
-      <input name="$db_plo_code_$row_idx" type="text" id="$db_plo_code_$row_idx" value="$db_plo_code_$row_idx_" size="10">
+      <input name="$db_plo_code_$row_idx" type="text" id="$db_plo_code_$row_idx" value="$db_plo_code_$row_idx_" size="20">
       </br>
       <font color="#FF0000">$fe_plo_code_$row_idx_</font>
+    </td>
+
+    <td valign="top">
+      <input name="$db_plo_tag_$row_idx" type="text" id="$db_plo_tag_$row_idx" value="$db_plo_tag_$row_idx_" size="10">
+      </br>
+      
     </td>
 
     <td valign="top">
@@ -52,17 +58,11 @@ Insert
       
     </td>
 
-    <td valign="top">
-      <input name="$db_created_date_$row_idx" type="text" id="$db_created_date_$row_idx" value="$db_created_date_$row_idx_" size="">
-      </br>
-      
-    </td>
-
   </tr>
   <!-- end_datahtml_ //-->
 
   <tr>
-    <td align="right" colspan="5">
+    <td align="right" colspan="4">
       <input name="button_submit" type="submit" id="button_submit" value="Proceed" />
       <input name="button_submit" type="submit" id="button_submit" value="Cancel" />
     </td>

@@ -1,0 +1,85 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<b>$cgi_curriculum_name_label_</b> 
+&gt; 
+<a href="index.cgi?link_id=$cgi_link_id_&task=curims_curriculum_plo_multirows_insert&button_submit=Cancel">List</a>
+<!-- end_cgihtml_ //-->
+&gt;
+Insert
+<p />
+
+<form method="POST" action="./index.cgi">
+  <!-- start_cgihtml_ //-->
+  <input type="hidden" name="link_id" value="$cgi_link_id_">
+  <b>Row Number:</b>
+
+    <div class="w3-container w3-cell" style="padding-right: 0px;">
+      <input class="w3-input w3-border w3-round-large" type="text" name="irn_curims_plo" size="3" value="$cgi_irn_curims_plo_">
+    </div>
+    <div class="w3-container w3-cell">
+      <input class="w3-button w3-white w3-border w3-hover-white w3-round-large" name="button_submit" type="submit" id="button_submit" value="Change" />
+    </div>
+
+
+  <!-- end_cgihtml_ //-->
+</form>
+
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+<div class="w3-container">
+<table class="w3-table-all">
+  <thead>
+    <tr class="w3-light-grey">
+    <th align="right" valign="top">Num. </th>
+    <th valign="top">Plo Code</th>
+
+    <th valign="top">Plo Tag</th>
+
+    <th valign="top">Plo Description</th>
+
+  </tr>
+  </thead>
+
+  <!-- start_datahtml_ name=form_db_field //-->
+  <tr>
+  	<td align="right" valign="top">
+  	  <b>$row_num_. </b>
+  	</td>
+    <td valign="top">
+      <input class="w3-input w3-border" name="$db_plo_code_$row_idx" type="text" id="$db_plo_code_$row_idx" value="$db_plo_code_$row_idx_" size="20">
+      </br>
+      <font color="#FF0000">$fe_plo_code_$row_idx_</font>
+    </td>
+
+    <td valign="top">
+      <input class="w3-input w3-border" name="$db_plo_tag_$row_idx" type="text" id="$db_plo_tag_$row_idx" value="$db_plo_tag_$row_idx_" size="10">
+      </br>
+      
+    </td>
+
+    <td valign="top">
+      <textarea class="w3-input w3-border" name="$db_plo_description_$row_idx" id="$db_plo_description_$row_idx" cols="50" rows="1">$db_plo_description_$row_idx_</textarea>
+      </br>
+      
+    </td>
+
+  </tr>
+  <!-- end_datahtml_ //-->
+
+  <tr>
+    <td colspan="6" style="text-align: right;">
+      <button type="submit" name="button_submit" value="Cancel" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Cancel</button>
+      <button type="submit" name="button_submit" value="Proceed" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large">Proceed</button>
+    </td>
+  </tr>
+</table>
+</div>
+</form>
+
+<!-- end_view_ //-->
+</body>
+</html>

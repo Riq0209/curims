@@ -39,12 +39,28 @@ sub run_Task {
     my @groups = $this->get_User_Groups;
     
     my $match_group = $this->match_Group($group_name_, @groups);
-    
-    ### DB item list with multi row operations  
-    ### support need this to behave correctly 
-    #if (!$cgi->param_Exist("task")) {
-    #    $cgi->push_Param("task", "");
-    #}
+
+    my $curriculum_id = $cgi->param("id_curriculum_62base");
+
+
+    # Lookup curriculum_name and intake_session and push combined label to CGI
+    if ($curriculum_id) {
+        $dbu->set_Table("curims_curriculum");
+        my $curriculum_name   = $dbu->get_Item("curriculum_name",   "id_curriculum_62base", $curriculum_id);
+        my $intake_session    = $dbu->get_Item("intake_session",    "id_curriculum_62base", $curriculum_id);
+
+
+        my $label = "$curriculum_name - $intake_session";
+
+
+        # Set into CGI so that $cgi_cgi_curriculum_name_ works in template
+        $cgi->push_Param("curriculum_name_label", $label);
+    }
+    ### DB item dynamic list with multi row insert/update/delete  
+    ### operations support need this to behave correctly 
+    if (!$cgi->param_Exist("task")) {
+        $cgi->push_Param("task", "");
+    }
     
     
     $this->SUPER::run_Task();
@@ -83,8 +99,7 @@ sub customize_TLD {
     
     $tld->add_Column("row_class");
     
-    ### HTML CSS class
-    my $row_class = "row_odd";
+    my $row_class = "row_odd"; ### HTML CSS class
     
     for ($i = 0; $i < $tld->get_Row_Num; $i++) { 
         #$tld_data = $tld->get_Data($i, "col_name_");

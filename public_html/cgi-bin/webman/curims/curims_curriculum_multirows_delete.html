@@ -12,23 +12,27 @@ Delete
 
 <form method="POST" action="./index.cgi">
 <!-- dynamic_content_ name=form_hidden_field //-->
+<div class="w3-container" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+<table class="w3-table" style="width:50%">
+  <colgroup>
+    <col style="width:5%">
+    <col style="width:10%">
+    <col style="width:35%">
+    <col style="width:10%">
+    <col style="width:10%">
+    <col style="width:10%">
+  </colgroup>
+  <tr class="w3-light-grey">
+    <th align="right" valign="top">No. </th>
+    <th valign="top">Code</th>
 
-<table border="1">
-  <tr>
-    <th align="right" valign="top">Num. </th>
-    <th valign="top">Curriculum Code</th>
+    <th valign="top">Name</th>
 
-    <th valign="top">Curriculum Name</th>
+    <th valign="top">Session</th>
 
-    <th valign="top">Intake Session</th>
+    <th valign="top">Year</th>
 
-    <th valign="top">Intake Year</th>
-
-    <th valign="top">Intake Semester</th>
-
-    <th valign="top">Created Date</th>
-
-    <th valign="top">Created Time</th>
+    <th valign="top">Semester</th>
 
   </tr>
 
@@ -45,20 +49,17 @@ Delete
 
    <td>$db_intake_semester_$row_idx_</td>
 
-   <td>$db_created_date_$row_idx_</td>
-
-   <td>$db_created_time_$row_idx_</td>
-
   </tr>
   <!-- end_datahtml_ //-->
 
   <tr>
-    <td align="right" colspan="8">
-      <input name="button_submit" type="submit" id="button_submit" value="Proceed"/>
-      <input name="button_submit" type="submit" id="button_submit" value="Cancel"/>
+    <td style="text-align: right;" colspan="6">      
+      <button type="submit" name="button_submit" value="Cancel" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Cancel</button>
+      <button type="submit" name="button_submit" value="Proceed" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large">Proceed</button>
     </td>
   </tr>
 </table>
+</div>
 </form>
 
 

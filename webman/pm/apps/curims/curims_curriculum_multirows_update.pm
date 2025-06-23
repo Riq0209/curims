@@ -42,17 +42,17 @@ sub run_Task {
     
     ### Example on how to control row input data prior 
     ### the real database operation.
-    #my @CGI_var_list = $cgi->var_Name;
+    my @CGI_var_list = $cgi->var_Name;
     
-    #foreach my $var (@CGI_var_list) {
-    #    if ($var =~ /^\$db_notice_$row_idx/) {
-    #        #$cgi->add_Debug_Text("$var = " . $cgi->param("$var"), __FILE__, __LINE__, "TRACING");
+    foreach my $var (@CGI_var_list) {
+       if ($var =~ /^\$db_notice_$row_idx/) {
+           $cgi->add_Debug_Text("$var = " . $cgi->param("$var"), __FILE__, __LINE__, "TRACING");
             
-    #        if ($cgi->param("$var") eq "") {
-    #            $cgi->push_Param($var, "-");
-    #        }
-    #    }
-    #}     
+           if ($cgi->param("$var") eq "") {
+               $cgi->push_Param($var, "-");
+           }
+       }
+    }     
     
     $this->SUPER::run_Task();
 }

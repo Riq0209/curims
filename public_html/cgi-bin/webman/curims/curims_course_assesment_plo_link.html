@@ -1,0 +1,112 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<b>$cgi_course_curriculum_name_link_</b>
+<!-- end_cgihtml_ //-->
+&gt;
+Assesment Table
+<p />
+
+<!-- dynamic_content_ name=db_items_num_begin //--> -
+<!-- dynamic_content_ name=db_items_num_end //--> of
+<!-- dynamic_content_ name=db_items_num_total //--> Records.
+<p />
+<div class="w3-container w3-margin-bottom">
+  <div class="w3-right-align">
+      <!-- start_cgihtml_ //-->
+      <button class="w3-button w3-green w3-text-white w3-hover-green w3-round-large" onclick="document.tld_view_dynamic.task.value='curims_course_assesment_multirows_insert'; document.tld_view_dynamic.submit();">Add</button>
+      <!-- end_cgihtml_ //-->
+  </div>
+</div>
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- start_cgihtml_ //-->
+  <input name="task" type="hidden" value="$cgi_task_">
+  <!-- end_cgihtml_ //-->
+
+  <!-- dynamic_content_ name=form_hidden_field //-->
+  <div class="w3-container">
+  <table class="w3-table" style="width: 100%;">
+  <!-- start_menu_ name=caption //-->
+   <colgroup>
+    <col span="1" style="width: 5%;">
+    <col span="1" style="width: 15%;">
+    <col span="1" style="width: 5%;">
+    <col span="1" style="width: 25%;">
+    <col span="1" style="width: 10%;">
+    <col span="1" style="width: 15%;">
+   </colgroup>
+  <thead>
+  <tr class="w3-light-grey">
+    <th>No.</th>
+    <th>menu_item0_</th>
+    <th>menu_item1_</th>
+    <th>menu_item2_</th>
+    <th>Plo</th>
+    <!-- start_cgihtml_ //-->
+    <th class="w3-center">
+      Action
+      <br />
+      <a href="javascript:checkbox_select_all('id_assesment_62base_', $cgi_inl_curims_assesment_, $cgi_dbisn_curims_assesment_);">All</a> /
+      <a href="javascript:checkbox_select_none('id_assesment_62base_', $cgi_inl_curims_assesment_, $cgi_dbisn_curims_assesment_);">None</a> /
+      <a href="javascript:checkbox_select_invert('id_assesment_62base_', $cgi_inl_curims_assesment_, $cgi_dbisn_curims_assesment_);">Invert</a>
+    </th>
+    <!-- end_cgihtml_ //-->
+  </tr>
+  </thead>
+  <!-- end_menu_ //-->
+
+  <!-- start_list_ name=main //-->
+  <tr class="$tld_row_class_">
+    <td align="right">$tld_num_.</td>
+
+    <td>$tld_type_</td>
+    <td>$tld_sequence_</td>
+    <td>$tld_name_</td>
+    <td><a href="index.cgi?link_id=19&task=curims_course_assesment_plo_list&id_assesment_62base=$tld_id_assesment_62base_">$tld_curims_plo_</a></td>
+
+    <td class="w3-center">
+      <input type="checkbox" name="id_assesment_62base_$tld_idx_" id="id_assesment_62base_$tld_idx_" value="$tld_id_assesment_62base_">
+    </td>
+  </tr>
+  <!-- end_list_ //-->
+
+  <tr bgcolor="#EEEEEE">
+    <td align="right">...</td>
+
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+
+    <td class="w3-center">
+      <button class="w3-button w3-blue w3-text-white w3-hover-blue w3-round-large" onclick="document.tld_view_dynamic.task.value='curims_course_assesment_multirows_update'; document.tld_view_dynamic.submit();">Edit</button>
+      <button class="w3-button w3-red w3-text-white w3-hover-red w3-round-large" onclick="document.tld_view_dynamic.task.value='curims_course_assesment_multirows_delete'; document.tld_view_dynamic.submit();">Delete</button>
+    </td>
+  </tr>
+</table>
+</div>
+<p />
+
+  Items/List: <input name="inl_curims_assesment" type="text" id="inl_curims_assesment" value="$inl_curims_assesment_" size="3">
+  &nbsp;
+
+  <!-- start_menu_ name=list //-->
+    dynamic_menu_items_
+  <!-- end_menu_ //-->
+  &nbsp;
+
+  List Set Num. :
+  <select name="lsn_curims_assesment" onChange="document.tld_view_dynamic.submit()">
+    <!-- select_ name=lsn_curims_assesment //-->
+  </select>
+
+  <p />
+
+
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

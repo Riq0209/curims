@@ -1,0 +1,168 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<b>$cgi_curriculum_name_elective_page_</b><!-- end_cgihtml_ //-->
+&gt;
+Elective
+&gt;
+Add from List
+<p />
+
+<!-- dynamic_content_ name=parent_item_info //-->
+<p />
+
+<!-- dynamic_content_ name=db_items_num_begin //--> -
+<!-- dynamic_content_ name=db_items_num_end //--> of
+<!-- dynamic_content_ name=db_items_num_total //--> Records to be added.
+<p />
+
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- dynamic_content_ name=form_hidden_field //-->
+  <input type="hidden" name="submission_type">
+<div class="w3-container">
+<table class="w3-table-all">
+  <!-- start_menu_ name=caption //-->
+  <tr>
+    <th>No.</th>
+    <th>Code</th>
+    <th>Name</th>
+    <th>Credit</th>
+    <th>Prerequisite</th>
+    <th>Year</th>
+    <th>Semester</th>
+    <th>Semester No</th>
+    <th>Status</th>
+    <!-- start_cgihtml_ //-->
+    <th class="w3-center">
+      Action
+      <br />
+      <a href="javascript:checkbox_select_all('id_course_62base_', $cgi_inl_curims_course_AFLS_, $cgi_dbisn_curims_course_AFLS_);">All</a> |
+      <a href="javascript:checkbox_select_none('id_course_62base_', $cgi_inl_curims_course_AFLS_, $cgi_dbisn_curims_course_AFLS_);">None</a> |
+      <a href="javascript:checkbox_select_invert('id_course_62base_', $cgi_inl_curims_course_AFLS_, $cgi_dbisn_curims_course_AFLS_);">Invert</a>
+    </th>
+    <!-- end_cgihtml_ //-->
+  </tr>
+  <!-- end_menu_ //-->
+
+  <!-- start_list_ name=main //-->
+  <tr class="$tld_row_class_">
+    <td align="right">$tld_num_.</td>
+
+  <td>$tld_course_code_</td>
+  <td>$tld_course_name_</td>
+  <td>$tld_credit_hour_</td>
+  <td>$tld_prerequisite_code_</td>
+  <td>
+    <select name="year_taken_$tld_idx_" id="year_taken_$tld_idx_" class="w3-select w3-border" style="height:36px;" onchange="updateSemesterNoElective('$tld_idx_')">
+      <option value="" selected></option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select>
+  </td>
+  <td>
+    <select name="semester_taken_$tld_idx_" id="semester_taken_$tld_idx_" class="w3-select w3-border" style="height:36px;" onchange="updateSemesterNoElective('$tld_idx_')">
+      <option value="" selected></option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+    </select>
+  </td>
+  <td>
+    <input type="text" name="semester_no_$tld_idx_" id="semester_no_$tld_idx_" class="w3-select w3-border" style="height:36px; background-color:#f1f1f1; color:#555;" readonly>
+    
+  </td>
+  <td>
+    <select name="status_$tld_idx_" class="w3-select w3-border" style="height:36px;">
+      <option value="" selected></option>
+      <option value="Core">Core</option>
+      <option value="Elective">Elective</option>
+    </select>
+  </td>
+
+    <td class="w3-center">
+      <input class="w3-check" type="checkbox" name="id_course_62base_$tld_idx_" id="id_course_62base_$tld_idx_" value="$tld_id_course_62base_">
+    </td>
+
+  </tr>
+  <!-- end_list_ //-->
+  <script type="text/javascript">
+    function updateSemesterNoElective(idx) {
+      const yearSelect = document.getElementById('year_taken_' + idx);
+      const semesterSelect = document.getElementById('semester_taken_' + idx);
+      const semesterNoSelect = document.getElementById('semester_no_' + idx);
+    
+      if (!yearSelect || !semesterSelect || !semesterNoSelect) {
+        // console.error('One or more select elements not found for index: ' + idx);
+        return;
+      }
+    
+      const yearValue = yearSelect.value;
+      const semesterValue = semesterSelect.value;
+    
+      if (yearValue === "" || semesterValue === "") {
+        semesterNoSelect.value = "";
+        return;
+      }
+    
+      const year = parseInt(yearValue);
+      const semester = parseInt(semesterValue);
+    
+      if (!isNaN(year) && !isNaN(semester) && year >= 1 && year <= 4 && semester >= 1 && semester <= 2) {
+        const semesterNo = (year - 1) * 2 + semester;
+        if (semesterNo >= 1 && semesterNo <= 8) {
+          semesterNoSelect.value = semesterNo.toString(); // Directly set the value for the input field
+        } else {
+          semesterNoSelect.value = ""; 
+        }
+      } else {
+        semesterNoSelect.value = "";
+      }
+    }
+    </script>
+    
+  <tr bgcolor="#EEEEEE">
+    <td align="right">...</td>
+
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+
+    <td class="w3-center">
+      <button type="button" class="w3-button w3-white w3-border w3-border-green w3-round-large" onclick="document.tld_view_dynamic.submission_type.value='add_selected'; document.tld_view_dynamic.submit();">Add Selected</button>
+      |
+      <button type="button" class="w3-button w3-white w3-border w3-border-yellow w3-round-large" onclick="document.tld_view_dynamic.submission_type.value='parent_list'; document.tld_view_dynamic.submit();">Back to Parent List</button>
+    </td>
+  </tr>
+</table>
+</div>
+<p />
+
+  Items/List: <input name="inl_curims_course_AFLS" type="text" id="inl_curims_course_AFLS" value="$inl_curims_course_AFLS_" size="3">
+  &nbsp;
+
+  <!-- start_menu_ name=list //-->
+    dynamic_menu_items_
+  <!-- end_menu_ //-->
+  &nbsp;
+
+  List Set Num. :
+  <select name="lsn_curims_course_AFLS" onChange="document.tld_view_dynamic.submit()">
+    <!-- select_ name=lsn_curims_course_AFLS //-->
+  </select>
+
+  <p />
+
+
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

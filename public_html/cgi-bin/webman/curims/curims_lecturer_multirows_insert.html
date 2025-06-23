@@ -1,0 +1,100 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<a href="index.cgi?link_id=$cgi_link_id_&task=curims_lecturer_multirows_insert&button_submit=Cancel">List</a>
+<!-- end_cgihtml_ //-->
+&gt;
+Insert
+<p />
+
+<form method="POST" action="./index.cgi">
+  <!-- start_cgihtml_ //-->
+  <input type="hidden" name="link_id" value="$cgi_link_id_">
+  <b>Row Number:</b>
+
+  <div class="w3-container" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+    <div class="w3-cell">
+      <input class="w3-input w3-border w3-round-large" type="text" name="irn_curims_lecturer" size="3" value="$cgi_irn_curims_lecturer_">
+    </div>
+    <div class="w3-cell">
+      <input class="w3-button w3-white w3-border w3-hover-white w3-round-large" name="button_submit" type="submit" id="button_submit" value="Change" />
+    </div>
+  </div>
+  <!-- end_cgihtml_ //-->
+</form>
+
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+<div class="w3-container" id="flex-container">
+  <table class="w3-table" style="width:50%">
+    <colgroup>
+      <col style="width: 5%">
+      <col style="width: 35%">
+      <col style="width: 20%">
+      <col style="width: 15%">
+      <col style="width: 25%">
+    </colgroup>
+    <thead>
+      <tr class="w3-light-grey">
+        <th align="right" valign="top">No. </th>
+        <th valign="top">Name</th>
+
+        <th valign="top">Office</th>
+
+        <th valign="top">Contact</th>
+
+        <th valign="top">Email</th>
+      </tr>
+    </thead>
+
+  <!-- start_datahtml_ name=form_db_field //-->
+  <tr>
+  	<td align="right" valign="top">
+  	  <b>$row_num_. </b>
+  	</td>
+    <td valign="top">
+      <input class="w3-input w3-border" name="$db_name_$row_idx" type="text" id="$db_name_$row_idx" value="$db_name_$row_idx_" style="width: 100%; box-sizing: border-box;">
+      </br>
+      <font color="#FF0000">$fe_name_$row_idx_</font>
+    </td>
+
+    <td valign="top">
+      <input class="w3-input w3-border" name="$db_office_$row_idx" type="text" id="$db_office_$row_idx" value="$db_office_$row_idx_" style="width: 100%; box-sizing: border-box;">
+      </br>
+      
+    </td>
+
+    <td valign="top">
+      <input class="w3-input w3-border" name="$db_contact_$row_idx" type="text" id="$db_contact_$row_idx" value="$db_contact_$row_idx_" style="width: 100%; box-sizing: border-box;">
+      </br>
+      
+    </td>
+
+    <td valign="top">
+      <input class="w3-input w3-border" name="$db_email_$row_idx" type="text" id="$db_email_$row_idx" value="$db_email_$row_idx_" style="width: 100%; box-sizing: border-box;">
+      </br>
+      
+    </td>
+
+  </tr>
+  <!-- end_datahtml_ //-->
+
+  <tr>
+    <td colspan="5" style="text-align: right;">
+      <button type="submit" name="button_submit" value="Cancel" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Cancel</button>
+      <button type="submit" name="button_submit" value="Proceed" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large">Proceed</button>
+    </td>
+  </tr>
+</table>
+</div>
+</form>
+<!-- start_cgihtml_ //-->
+<a href="index.cgi?link_id=$cgi_link_id_&task=curims_lecturer_text2db_insert">Upload Text File</a>
+<!-- end_cgihtml_ //-->
+
+<!-- end_view_ //-->
+</body>
+</html>

@@ -62,6 +62,37 @@ sub customize_SQL {
     
     ### Next to customize the $sql string
     ### ???
+    my $sql_filter = undef;
+    
+    
+    if (!$cgi->param_Exist("filter_course_code") || $cgi->param("filter_course_code") eq "") {
+        $cgi->push_Param("filter_course_code", "\%");
+    }
+    my $filter_course_code = $cgi->param("filter_course_code");
+    $sql_filter .= "course_code like '$filter_course_code' and ";
+    
+    
+    if (!$cgi->param_Exist("filter_course_name") || $cgi->param("filter_course_name") eq "") {
+        $cgi->push_Param("filter_course_name", "\%");
+    }
+    my $filter_course_name = $cgi->param("filter_course_name");
+    $sql_filter .= "course_name like '$filter_course_name' and ";
+    
+    
+    $sql_filter =~ s/ and $//;
+    
+    my @sql_part = split(/ order by /, $sql);
+    
+    #$cgi->add_Debug_Text($sql, __FILE__, __LINE__, "DATABASE");
+    
+    if ($sql_part[0] =~ / where /) {
+        $sql = "$sql_part[0] and $sql_filter order by $sql_part[1]";
+         
+    } else {
+        $sql = "$sql_part[0] where $sql_filter order by $sql_part[1]";
+    }
+    
+    #$cgi->add_Debug_Text($sql, __FILE__, __LINE__, "DATABASE");
     
     return $sql;
 }

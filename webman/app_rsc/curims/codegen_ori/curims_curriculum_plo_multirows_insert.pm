@@ -40,8 +40,8 @@ sub run_Task {
     
     my $match_group = $this->match_Group($group_name_, @groups);
     
-    if ($cgi->param("\$db_") ne $cgi->param("")) {
-        $cgi->push_Param("\$db_", $cgi->param(""));
+    if ($cgi->param("\$db_id_curriculum_62base") ne $cgi->param("id_curriculum_62base")) {
+        $cgi->push_Param("\$db_id_curriculum_62base", $cgi->param("id_curriculum_62base"));
     }
     
    

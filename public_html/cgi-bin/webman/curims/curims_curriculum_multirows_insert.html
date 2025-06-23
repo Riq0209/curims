@@ -14,17 +14,27 @@ Insert
   <!-- start_cgihtml_ //-->
   <input type="hidden" name="link_id" value="$cgi_link_id_">
   <b>Row Number:</b>
-  <input type="text" name="irn_curims_curriculum" size="3" value="$cgi_irn_curims_curriculum_">
-  <!-- end_cgihtml_ //-->
 
-  <input name="button_submit" type="submit" id="button_submit" value="Change" />
+  <div class="w3-container" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+    <div class="w3-cell">
+      <input class="w3-input w3-border w3-round-large" type="text" name="irn_curims_curriculum" size="3" value="$cgi_irn_curims_curriculum_">
+    </div>
+    <div class="w3-cell">
+      <input class="w3-button w3-white w3-border w3-hover-white w3-round-large" name="button_submit" type="submit" id="button_submit" value="Change" />
+    </div>
+  </div>
+
+  <!-- end_cgihtml_ //-->
 </form>
+
 
 <form method="POST" action="./index.cgi">
 <!-- dynamic_content_ name=form_hidden_field //-->
-<table border="1">
-  <tr>
-    <th align="right" valign="top">Num. </th>
+<div class="w3-container">
+<table class="w3-table">
+  <thead>
+    <tr class="w3-light-grey">
+    <th align="right" valign="top">No. </th>
     <th valign="top">Curriculum Code</th>
 
     <th valign="top">Curriculum Name</th>
@@ -35,11 +45,8 @@ Insert
 
     <th valign="top">Intake Semester</th>
 
-    <th valign="top">Created Date</th>
-
-    <th valign="top">Created Time</th>
-
   </tr>
+  </thead>
 
   <!-- start_datahtml_ name=form_db_field //-->
   <tr>
@@ -47,58 +54,102 @@ Insert
   	  <b>$row_num_. </b>
   	</td>
     <td valign="top">
-      <input name="$db_curriculum_code_$row_idx" type="text" id="$db_curriculum_code_$row_idx" value="$db_curriculum_code_$row_idx_" size="10">
+      <input class="w3-input w3-border" name="$db_curriculum_code_$row_idx" type="text" id="$db_curriculum_code_$row_idx" value="$db_curriculum_code_$row_idx_" size="10">
       </br>
-      
+      <font color="#FF0000">$fe_curriculum_code_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <textarea name="$db_curriculum_name_$row_idx" id="$db_curriculum_name_$row_idx" cols="50">$db_curriculum_name_$row_idx_</textarea>
+      <textarea class="w3-input w3-border" name="$db_curriculum_name_$row_idx" id="$db_curriculum_name_$row_idx" cols="50" rows="1">$db_curriculum_name_$row_idx_</textarea>
       </br>
-      
+      <font color="#FF0000">$fe_curriculum_name_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <input name="$db_intake_session_$row_idx" type="text" id="$db_intake_session_$row_idx" value="$db_intake_session_$row_idx_" size="10">
-      </br>
-      
+      <select class="w3-input w3-border intake-session-select" name="$db_intake_session_$row_idx" id="$db_intake_session_$row_idx" data-value="$db_intake_session_$row_idx_">
+        <option value="">Choose Session</option>
+      </select>
+      <br/>
+      <font color="#FF0000">$fe_intake_session_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <input name="$db_intake_year_$row_idx" type="text" id="$db_intake_year_$row_idx" value="$db_intake_year_$row_idx_" size="11">
+      <select class="w3-input w3-border" name="$db_intake_year_$row_idx" id="$db_intake_year_$row_idx">
+        <option value="">Choose Year</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
       </br>
-      
+      <font color="#FF0000">$fe_intake_year_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <input name="$db_intake_semester_$row_idx" type="text" id="$db_intake_semester_$row_idx" value="$db_intake_semester_$row_idx_" size="11">
+      <select class="w3-input w3-border" name="$db_intake_semester_$row_idx" id="$db_intake_semester_$row_idx">
+        <option value="">Choose Semester</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+      </select>
       </br>
-      
-    </td>
-
-    <td valign="top">
-      <input name="$db_created_date_$row_idx" type="text" id="$db_created_date_$row_idx" value="$db_created_date_$row_idx_" size="">
-      </br>
-      
-    </td>
-
-    <td valign="top">
-      <input name="$db_created_time_$row_idx" type="text" id="$db_created_time_$row_idx" value="$db_created_time_$row_idx_" size="">
-      </br>
-      
+      <font color="#FF0000">$fe_intake_semester_$row_idx_</font>
     </td>
 
   </tr>
   <!-- end_datahtml_ //-->
 
+    
   <tr>
-    <td align="right" colspan="8">
-      <input name="button_submit" type="submit" id="button_submit" value="Proceed" />
-      <input name="button_submit" type="submit" id="button_submit" value="Cancel" />
+    <td colspan="6" style="text-align: right;">
+      <button type="submit" name="button_submit" value="Cancel" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Cancel</button>
+      <button type="submit" name="button_submit" value="Proceed" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large">Proceed</button>
     </td>
   </tr>
 </table>
+</div>
 </form>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      console.log("DOM fully loaded. Running script to populate session dropdowns.");
+  
+      const sessionSelects = document.querySelectorAll('.intake-session-select');
+      console.log(`Found ${sessionSelects.length} elements with class '.intake-session-select'.`);
+  
+      if (sessionSelects.length === 0) {
+          console.error("Script could not find any dropdowns to populate. Please check the HTML class name.");
+          return;
+      }
+  
+      const currentYear = new Date().getFullYear();
+  
+      sessionSelects.forEach((select, index) => {
+          console.log(`Processing dropdown #${index + 1}`);
+          // Populate the select with options for a 10-year range
+          for (let i = 0; i < 10; i++) {
+              const startYear = currentYear + 5 - i;
+              const endYear = startYear + 1;
+              const sessionValue = `${startYear}/${endYear}`;
+              const option = new Option(sessionValue, sessionValue);
+              select.add(option);
+          }
+          console.log(`Added 10 year options to dropdown #${index + 1}`);
+  
+          // Pre-select the value from the data-value attribute
+          const dbValue = select.getAttribute('data-value');
+          console.log(`Dropdown #${index + 1} has data-value: '${dbValue}'`);
+          if (dbValue && dbValue.trim() !== '' && dbValue.includes('/')) {
+              if (select.querySelector(`option[value="${dbValue}"`)) {
+                  select.value = dbValue;
+                  console.log(`Successfully set value for dropdown #${index + 1} to '${dbValue}'`);
+              } else {
+                  console.warn(`Value '${dbValue}' not found in options for dropdown #${index + 1}`);
+              }
+          } else {
+              console.log(`No pre-existing value or invalid format for dropdown #${index + 1}. Value was: '${dbValue}'`);
+          }
+      });
+  });
+  </script>
 
 <!-- end_view_ //-->
 </body>

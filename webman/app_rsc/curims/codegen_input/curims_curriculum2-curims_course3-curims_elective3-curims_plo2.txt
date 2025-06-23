@@ -1,0 +1,120 @@
+### Database item handling options:
+2
+
+### Multi row database operation(s) support:
+3
+
+### Provide text-based database input support? [y/n]:
+n
+
+### curims_curriculum > curims_currcourse [y/n]: 
+n
+
+### curims_curriculum > curims_currcourse > curims_course [y/n]: 
+y
+
+### curims_curriculum > curims_currcourse > curims_elective [y/n]: 
+y
+
+### curims_curriculum > curims_plo [y/n]: 
+y
+
+### curims_curriculum > curims_plo > curims_assesplo [y/n]: 
+n
+
+### Apply filter for item listing? [y/n]: 
+n
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+7
+
+### Database item handling options:
+3
+
+### curims_course > curims_assesment [y/n]: 
+n
+
+### curims_course > curims_assesment > curims_assesplo [y/n]: 
+n
+
+### curims_course > curims_clo [y/n]: 
+n
+
+### curims_course > curims_currcourse [y/n]: 
+n
+
+### curims_course > curims_currcourse > curims_elective [y/n]: 
+n
+
+### curims_course > curims_currcourse > curims_curriculum [y/n]: 
+n
+
+### curims_course > curims_topic [y/n]: 
+n
+
+### curims_course > curims_topic > curims_schedule [y/n]: 
+n
+
+### curims_course > curims_elective > curims_currcourse [y/n]: 
+n
+
+### Apply filter for item listing? [y/n]: 
+n
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+18
+
+### Database item handling options:
+3
+
+### Apply filter for item listing? [y/n]: 
+n
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+18
+
+### Warning!!! link_id '18' already has a reference to 'webman_component_selector' module!!!
+### Proceed? [y/n]:
+y
+
+### Database item handling options:
+2
+
+### Multi row database operation(s) support:
+3
+
+### Provide text-based database input support? [y/n]:
+n
+
+### Current selected database structure requires unique key-field entry.
+### Unique key-field(s) for insert operation:
+plo_description
+
+### curims_plo > curims_assesplo [y/n]: 
+n
+
+### curims_plo > curims_assesplo > curims_assesment [y/n]: 
+n
+
+### Apply filter for item listing? [y/n]: 
+n
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+7
+
+### Warning!!! link_id '7' already has a reference to 'webman_component_selector' module!!!
+### Proceed? [y/n]:
+y
+

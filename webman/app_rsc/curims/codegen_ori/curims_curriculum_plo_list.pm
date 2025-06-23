@@ -40,11 +40,11 @@ sub run_Task {
     
     my $match_group = $this->match_Group($group_name_, @groups);
     
-    ### DB item list with multi row operations  
-    ### support need this to behave correctly 
-    #if (!$cgi->param_Exist("task")) {
-    #    $cgi->push_Param("task", "");
-    #}
+    ### DB item dynamic list with multi row insert/update/delete  
+    ### operations support need this to behave correctly 
+    if (!$cgi->param_Exist("task")) {
+        $cgi->push_Param("task", "");
+    }
     
     
     $this->SUPER::run_Task();
@@ -83,8 +83,7 @@ sub customize_TLD {
     
     $tld->add_Column("row_class");
     
-    ### HTML CSS class
-    my $row_class = "row_odd";
+    my $row_class = "row_odd"; ### HTML CSS class
     
     for ($i = 0; $i < $tld->get_Row_Num; $i++) { 
         #$tld_data = $tld->get_Data($i, "col_name_");

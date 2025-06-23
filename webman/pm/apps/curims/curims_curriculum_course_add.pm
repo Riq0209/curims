@@ -88,14 +88,11 @@ sub run_Task {
                 my $semester_taken = $cgi->param_Shift("semester_taken_" . $num);
                 $cgi->push_Param("\$db_semester_taken", $semester_taken);                
 
+                my $semester_no = $cgi->param_Shift("semester_no_" . $num);
+                $cgi->push_Param("\$db_semester_no", $semester_no);                
+
                 my $status = $cgi->param_Shift("status_" . $num);
                 $cgi->push_Param("\$db_status", $status);                
-
-                my $created_date = $cgi->param_Shift("created_date_" . $num);
-                $cgi->push_Param("\$db_created_date", $created_date);                
-
-                my $created_time = $cgi->param_Shift("created_time_" . $num);
-                $cgi->push_Param("\$db_created_time", $created_time);                
 
                 
                 $htmldb->insert_Table;
@@ -111,9 +108,8 @@ sub run_Task {
                 $cgi->param_Shift("\$db_id_course_62base");
                 $cgi->param_Shift("\$db_year_taken");
                 $cgi->param_Shift("\$db_semester_taken");
+                $cgi->param_Shift("\$db_semester_no");
                 $cgi->param_Shift("\$db_status");
-                $cgi->param_Shift("\$db_created_date");
-                $cgi->param_Shift("\$db_created_time");
             }                
         }
         
@@ -124,7 +120,37 @@ sub run_Task {
     }    
     
     ###########################################################################
-    
+    # 🟢 Get curriculum ID from query param
+    my $curriculum_id = $cgi->param("id_curriculum_62base");
+
+    # Lookup curriculum_name and intake_session and push combined label to CGI
+    if ($curriculum_id) {
+        $dbu->set_Table("curims_curriculum");
+        my $curriculum_name   = $dbu->get_Item("curriculum_name",   "id_curriculum_62base", $curriculum_id);
+        my $intake_session    = $dbu->get_Item("intake_session",    "id_curriculum_62base", $curriculum_id);
+
+        my $label = "$curriculum_name - $intake_session";
+
+        # Set into CGI so that $cgi_cgi_curriculum_name_ works in template
+        $cgi->push_Param("curriculum_name_add_page", $label);
+    }
+
+    my $id_curriculum_62base = $cgi->param('id_curriculum_62base');
+    my $total_items = 0;
+
+    if ($id_curriculum_62base) {
+        # Count courses available to be added (i.e., not already in this curriculum)
+        my $sql = "SELECT COUNT(*) FROM curims_course 
+                   WHERE id_course_62base NOT IN 
+                       (SELECT id_course_62base FROM curims_currcourse 
+                        WHERE id_curriculum_62base = ?)";
+        my $sth = $db_conn->prepare($sql);
+        $sth->execute($id_curriculum_62base);
+        ($total_items) = $sth->fetchrow_array();
+        $sth->finish();
+    }
+
+    $this->set_DB_Items_View_Num($total_items || 0);
     $this->SUPER::run_Task();
 }
 
@@ -182,13 +208,26 @@ sub customize_SQL {
     my $te = shift @_;
 
     my $cgi = $this->get_CGI;
-    my $dbu = $this->get_DBU;
-    my $db_conn = $this->get_DB_Conn;
     
     my $sql = $this->{sql};
     
-    ### Next to customize the $sql string
-    ### ???
+    my $id_curriculum_62base = $cgi->param('id_curriculum_62base');
+    
+    if ($id_curriculum_62base) {
+        # Filter out courses that are already in the curriculum
+        my $sql_filter = "id_course_62base NOT IN (SELECT id_course_62base FROM curims_currcourse WHERE id_curriculum_62base = '$id_curriculum_62base')";
+        
+        my @sql_part = split(/ order by /i, $sql);
+        
+        my $base_query = $sql_part[0];
+        my $order_by_clause = $sql_part[1] ? "ORDER BY " . $sql_part[1] : "";
+
+        if ($base_query =~ / where /i) {
+            $sql = "$base_query AND ($sql_filter) $order_by_clause";
+        } else {
+            $sql = "$base_query WHERE $sql_filter $order_by_clause";
+        }
+    }
     
     return $sql;
 }

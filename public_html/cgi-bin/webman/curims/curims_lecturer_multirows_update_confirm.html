@@ -1,0 +1,65 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<a href="index.cgi?link_id=$cgi_link_id_&task=curims_lecturer_multirows_update&button_submit=Cancel">List</a>
+<!-- end_cgihtml_ //-->
+&gt;
+Update
+<p />
+
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+<div class="w3-container" id="flex-container">
+<table class="w3-table" style="width:70%">
+  <colgroup>
+    <col style="width: 5%">
+    <col style="width: 35%">
+    <col style="width: 25%">
+    <col style="width: 25%">
+    <col style="width: 25%">
+  </colgroup>
+  <thead>
+  <tr class="w3-light-grey">
+    <th align="right" valign="top">No. </th>
+    <th valign="top">Name</th>
+
+    <th valign="top">Office</th>
+
+    <th valign="top">Contact</th>
+
+    <th valign="top">Email</th>
+
+  </tr>
+
+  <!-- start_datahtml_ name=form_db_field //-->
+  <tr>
+   <td align="right" valign="top"><b>$row_num_. </b></td>
+   <td>$db_name_$row_idx_</td>
+
+   <td>$db_office_$row_idx_</td>
+
+   <td>$db_contact_$row_idx_</td>
+
+   <td>$db_email_$row_idx_</td>
+
+  </tr>
+  <!-- end_datahtml_ //-->
+
+  <tr>
+    <td colspan="2" style="text-align: left;">
+      <button type="submit" name="button_submit" value="Cancel" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Cancel</button>
+    </td>
+    <td colspan="3" style="text-align: right;">
+      <button type="submit" name="button_submit" value="Edit" class="w3-button w3-blue w3-text-white w3-hover-blue w3-round-large">Edit</button>
+      <button type="submit" name="button_submit" value="Confirm" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large">Confirm</button>
+    </td>
+  </tr>
+</table>
+</div>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

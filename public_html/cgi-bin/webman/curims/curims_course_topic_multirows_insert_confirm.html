@@ -1,0 +1,60 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<b>???</b> 
+&gt; 
+<a href="index.cgi?link_id=$cgi_link_id_&task=curims_course_topic_multirows_insert&button_submit=Cancel">List</a>
+<!-- end_cgihtml_ //-->
+&gt;
+Insert
+<p />
+
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+
+<table border="1">
+  <tr>
+    <th align="right" valign="top">Num. </th>
+    <th valign="top">Session</th>
+
+    <th valign="top">Semester</th>
+
+    <th valign="top">Topic No</th>
+
+    <th valign="top">Title</th>
+
+    <th valign="top">Subtopic</th>
+
+  </tr>
+
+  <!-- start_datahtml_ name=form_db_field //-->
+  <tr>
+   <td align="right" valign="top"><b>$row_num_. </b></td>
+   <td>$db_session_$row_idx_</td>
+
+   <td>$db_semester_$row_idx_</td>
+
+   <td>$db_topic_no_$row_idx_</td>
+
+   <td>$db_title_$row_idx_</td>
+
+   <td>$db_subtopic_$row_idx_</td>
+
+  </tr>
+  <!-- end_datahtml_ //-->
+
+  <tr>
+    <td align="right" colspan="6">
+      <input name="button_submit" type="submit" id="button_submit" value="Confirm"/>
+      <input name="button_submit" type="submit" id="button_submit" value="Edit"/>
+      <input name="button_submit" type="submit" id="button_submit" value="Cancel"/>
+    </td>
+  </tr>
+</table>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

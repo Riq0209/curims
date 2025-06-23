@@ -1,0 +1,39 @@
+  <html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<b> $cgi_cgi_curriculum_name_</b><!-- end_cgihtml_ //-->
+&gt;
+Curriculum Details
+&gt;
+List
+
+
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- start_cgihtml_ //-->
+  <input name="task" type="hidden" value="$cgi_task_">
+  <!-- end_cgihtml_ //-->
+
+  <!-- dynamic_content_ name=form_hidden_field //-->
+
+
+  <!-- start_list_ name=main //-->
+  <tr class="$tld_row_class_">
+    <td>$tld_course_code_</td>
+    <td>$tld_course_name_</td>
+    <td>$tld_credit_hour_</td>
+    <td>$tld_prerequisite_code_</td>
+    <td align="center"><a href="index.cgi?link_id=7&task=curims_curriculum_course_elective_list_view&id_currcourse_62base=$tld_id_currcourse_62base_">$tld_curims_course_</a></td>
+    <td>$tld_status_</td>
+
+    
+  </tr>
+<!-- end_list_ //-->
+</table>
+</div>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

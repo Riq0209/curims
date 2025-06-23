@@ -1,0 +1,47 @@
+button.w3-button {
+    transition: background-color 0.3s ease, opacity 0.3s ease; /* Smooth transition */
+}
+
+button.w3-button:hover {
+    opacity: 0.8; /* Reduce opacity on hover */
+}
+
+a.w3-button {
+    transition: background-color 0.3s ease, opacity 0.3s ease; /* Smooth transition */
+}
+
+a.w3-button:hover {
+    opacity: 0.8; /* Reduce opacity on hover */
+}
+
+a:link {color:#0000FF; text-decoration:none;}
+a:visited {color:#0000FF; text-decoration:none;}
+a:hover {color:#0000FF; text-decoration:underline;}
+
+.w3-check {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 10px;
+}
+
+table {
+    border-collapse: separate;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Override for a specific table to not be affected by the global styles */
+#no-rounded-table {
+    border-collapse: collapse; /* Remove separate border collapse */
+    border-radius: 0; /* No rounded corners */
+    box-shadow: none; /* No shadow */
+    overflow: visible; /* Allow overflow */
+}
+
+#flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;  /* Add space between items */
+  }

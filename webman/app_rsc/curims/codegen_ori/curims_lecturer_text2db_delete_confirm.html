@@ -1,0 +1,24 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<a href="index.cgi?link_id=$cgi_link_id_&task=curims_lecturer_multirows_delete&button_submit=Cancel">List</a>
+<!-- end_cgihtml_ //-->
+&gt;
+Delete via Text File
+<p />
+
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+<div align="center">
+  <!-- dynamic_content_ name=txt2db_item //-->
+  <br />
+  <input name="button_submit" type="submit" id="button_submit" value="Confirm">
+  <input name="button_submit" type="submit" id="button_submit" value="Cancel">
+</div>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>
