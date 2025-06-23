@@ -16,25 +16,30 @@ RUN apt-get update && \
 # Create required web folders
 RUN mkdir -p /var/www/html /var/www/cgi-bin
 
-# ✅ Copy your CGI + HTML frontend (as-is)
-COPY public_html/cgi-bin/ /var/www/cgi-bin/
+# Copy your web files
+COPY public_html/ /var/www/html/
 
-# ✅ Copy your backend Perl modules
+# Copy your backend Perl modules
 COPY webman/pm/ /usr/local/lib/webman/
 
-# ✅ Make CGI scripts executable
-RUN find /var/www/cgi-bin/ -name "*.cgi" -exec chmod +x {} \;
+# Make CGI scripts executable
+RUN find /var/www/html/cgi-bin/ -name "*.cgi" -exec chmod +x {} \;
 
-# ✅ Apache config to enable CGI
-RUN echo "ScriptAlias /cgi-bin/ /var/www/cgi-bin/" >> /etc/apache2/sites-enabled/000-default.conf && \
-    echo "<Directory /var/www/cgi-bin>" >> /etc/apache2/sites-enabled/000-default.conf && \
-    echo "    Options +ExecCGI" >> /etc/apache2/sites-enabled/000-default.conf && \
-    echo "    AddHandler cgi-script .cgi" >> /etc/apache2/sites-enabled/000-default.conf && \
-    echo "</Directory>" >> /etc/apache2/sites-enabled/000-default.conf
-
-# ✅ Add your custom lib path for Perl to find .pm modules
+# Add your custom lib path for Perl to find .pm modules
 ENV PERL5LIB=/usr/local/lib/webman
 
-EXPOSE 8080
+# Copy custom Apache config and startup script
+COPY docker/apache-curims.conf /etc/apache2/sites-available/apache-curims.conf
+COPY docker/start.sh /usr/local/bin/start.sh
 
-CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+# Make startup script executable
+RUN chmod +x /usr/local/bin/start.sh
+
+# Enable cgi module, our site, and disable the default
+RUN a2enmod cgi && \
+    a2ensite apache-curims.conf && \
+    a2dissite 000-default.conf
+
+# Railway provides the PORT env var, so no need to EXPOSE
+
+CMD ["/usr/local/bin/start.sh"]
