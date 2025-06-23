@@ -5,32 +5,31 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         libdbi-perl \
         libdbd-mysql-perl \
-        libcgi-pm-perl
-
-# Install Apache with CGI support
-RUN apt-get update && apt-get install -y apache2 && \
+        libcgi-pm-perl \
+        apache2 && \
     a2enmod cgi
 
 # Create required directories
 RUN mkdir -p /var/www/html /var/www/cgi-bin
 
-# Copy frontend (HTML/CSS/JS)
+# Copy frontend (optional)
 COPY public_html/ /var/www/html/
 
-# Copy backend Perl scripts
-COPY webman/ /var/www/cgi-bin/
+# Copy nested CGI scripts (preserve your structure)
+COPY public_html/cgi-bin/ /var/www/cgi-bin/
 
-# Make scripts executable
+# Make all .cgi scripts executable, even in subfolders
 RUN find /var/www/cgi-bin/ -name "*.cgi" -exec chmod +x {} \;
 
-# Configure Apache for CGI
+# Configure Apache for CGI execution in all subdirectories
 RUN echo "ScriptAlias /cgi-bin/ /var/www/cgi-bin/" >> /etc/apache2/sites-enabled/000-default.conf && \
     echo "<Directory /var/www/cgi-bin>" >> /etc/apache2/sites-enabled/000-default.conf && \
     echo "    Options +ExecCGI" >> /etc/apache2/sites-enabled/000-default.conf && \
     echo "    AddHandler cgi-script .cgi" >> /etc/apache2/sites-enabled/000-default.conf && \
     echo "</Directory>" >> /etc/apache2/sites-enabled/000-default.conf
 
-# Expose port for Railway
+# Expose Railway-compatible port
 EXPOSE 8080
 
+# Start Apache in foreground
 CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
