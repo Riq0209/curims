@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#!/usr/bin/env perl
 
 my @scripts = ("deploy_cgi.pl web.fsksm.utm.my webapps webApps2008 fsksmELearning y",
                "deploy_mod_app.pl web.fsksm.utm.my webapps webApps2008 fsksmELearning y", 

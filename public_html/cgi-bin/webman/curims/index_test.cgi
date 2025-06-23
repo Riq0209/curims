@@ -1,4 +1,4 @@
-#! __path_perl_bin__ 
+#! C:/xampp/perl/bin/perl
 
 unshift (@INC, "../../../../webman/pm/core");
 unshift (@INC, "../../../../webman/pm/comp");

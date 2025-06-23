@@ -1,4 +1,4 @@
-#! __path_perl_bin__ 
+#!/usr/bin/env perl 
 
 unshift (@INC, "../../../../webman/pm/core");
 unshift (@INC, "../../../../webman/pm/comp");
