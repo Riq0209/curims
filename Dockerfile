@@ -1,55 +1,45 @@
-# Use official Perl image with Apache
-FROM perl:5.38-apache-bookworm
+FROM perl:5.34
 
-# Install system dependencies and required Perl modules
-RUN apt-get update && apt-get install -y \
-    libcgi-pm-perl \
-    libdbi-perl \
-    libdbd-mysql-perl \
-    libnet-ftp-perl \
-    libfile-listing-perl \
-    libnet-domain-perl \
-    libcgi-session-perl \
-    && rm -rf /var/lib/apt/lists/*
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Install additional CPAN modules if needed
-RUN cpanm CGI::Session \
-    DBI \
-    DBD::mysql \
-    Net::FTP \
-    File::Listing \
-    Net::Domain
+# Install Perl, Apache, CGI support
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        libdbi-perl \
+        libdbd-mysql-perl \
+        libcgi-pm-perl \
+        apache2 \
+        apache2-utils && \
+    a2enmod cgi && \
+    rm -rf /var/lib/apt/lists/*
 
-# Configure Apache for CGI
-RUN a2enmod cgi \
-    && a2enmod rewrite \
-    && echo "ServerName localhost" >> /etc/apache2/apache2.conf
+# Create required web folders
+RUN mkdir -p /var/www/html
 
-# Set up the document root
-ENV APACHE_DOCUMENT_ROOT /var/www/html
-ENV APACHE_CGI_BIN /usr/lib/cgi-bin
+# Copy your web files
+COPY public_html/ /var/www/html/
 
-# Create necessary directories and set permissions
-RUN mkdir -p ${APACHE_DOCUMENT_ROOT} \
-    && mkdir -p ${APACHE_CGI_BIN} \
-    && chown -R www-data:www-data ${APACHE_DOCUMENT_ROOT} \
-    && chmod -R 755 /usr/lib/cgi-bin
+# Copy your backend Perl modules
+COPY webman/pm/ /usr/local/lib/webman/
 
-# Copy application files
-COPY public_html/ ${APACHE_DOCUMENT_ROOT}/
-COPY webman/ /var/www/webman/
+# Make CGI scripts executable
+RUN find /var/www/html/cgi-bin/ -name "*.cgi" -exec chmod +x {} \;
 
-# Set up CGI scripts
-RUN find ${APACHE_DOCUMENT_ROOT}/cgi-bin/ -type f -name '*.cgi' -exec chmod +x {} \;
+# Add your custom lib path for Perl to find .pm modules
+ENV PERL5LIB=/usr/local/lib/webman
 
-# Configure Apache to allow .htaccess overrides and enable CGI execution
-RUN echo "<Directory ${APACHE_DOCUMENT_ROOT}>\n    Options Indexes FollowSymLinks\n    AllowOverride All\n    Require all granted\n</Directory>" > /etc/apache2/conf-available/custom.conf \
-    && echo "<Directory ${APACHE_DOCUMENT_ROOT}/cgi-bin>\n    Options +ExecCGI\n    AddHandler cgi-script .cgi\n    Require all granted\n</Directory>" >> /etc/apache2/conf-available/custom.conf \
-    && echo "ScriptAlias /cgi-bin/ ${APACHE_DOCUMENT_ROOT}/cgi-bin/" >> /etc/apache2/conf-available/custom.conf \
-    && a2enconf custom
+# Copy custom Apache config and startup script
+COPY docker/apache-curims.conf /etc/apache2/sites-available/apache-curims.conf
+COPY docker/start.sh /usr/local/bin/start.sh
 
-# Expose port 80
-EXPOSE 80
+# Make startup script executable
+RUN chmod +x /usr/local/bin/start.sh
 
-# Start Apache in the foreground
-CMD ["apache2-foreground"]
+# Enable required modules, our site, and disable the default
+RUN a2enmod cgi rewrite && \
+    a2ensite apache-curims.conf && \
+    a2dissite 000-default.conf
+
+# Railway provides the PORT env var, so no need to EXPOSE
+
+CMD ["/usr/local/bin/start.sh"]
