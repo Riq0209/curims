@@ -108,7 +108,7 @@ sub customize_TLD {
         my $count_item = $dbu->count_Item("id_curriculum_62base", $tld->get_Data($i, "id_curriculum_62base"));
         $tld->set_Data($i, "curims_course", $count_item);
 
-        $dbu->set_Table("curims_currplo");
+        $dbu->set_Table("curims_plo");
         my $count_item = $dbu->count_Item("id_curriculum_62base", $tld->get_Data($i, "id_curriculum_62base"));
         $tld->set_Data($i, "curims_plo", $count_item);
 

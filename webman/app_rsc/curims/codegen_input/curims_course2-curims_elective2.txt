@@ -1,0 +1,68 @@
+### Database item handling options:
+2
+
+### Multi row database operation(s) support:
+3
+
+### Provide text-based database input support? [y/n]:
+n
+
+### curims_course > curims_assesment [y/n]: 
+n
+
+### curims_course > curims_assesment > curims_assesplo [y/n]: 
+n
+
+### curims_course > curims_clo [y/n]: 
+n
+
+### curims_course > curims_currcourse [y/n]: 
+n
+
+### curims_course > curims_currcourse > curims_curriculum [y/n]: 
+n
+
+### curims_course > curims_elective [y/n]: 
+y
+
+### curims_course > curims_topic [y/n]: 
+n
+
+### curims_course > curims_topic > curims_schedule [y/n]: 
+n
+
+### Apply filter for item listing? [y/n]: 
+n
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+19
+
+### Database item handling options:
+2
+
+### Multi row database operation(s) support:
+3
+
+### Provide text-based database input support? [y/n]:
+n
+
+### Current selected database structure requires unique key-field entry.
+### Unique key-field(s) for insert operation:
+course_code_elective
+
+### Apply filter for item listing? [y/n]: 
+n
+
+### Exclude more fields from being viewed [y/n]:
+n
+
+### Link ID for code deployment (-1 to skip):
+19
+
+### Warning!!! link_id '19' already has a reference to 'webman_component_selector' module!!!
+### Proceed? [y/n]:
+y
+

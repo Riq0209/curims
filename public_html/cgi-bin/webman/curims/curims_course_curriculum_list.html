@@ -1,0 +1,89 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<p />
+
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+Curriculum
+&gt;
+List
+<p />
+
+<!-- dynamic_content_ name=db_items_num_begin //--> -
+<!-- dynamic_content_ name=db_items_num_end //--> of
+<!-- dynamic_content_ name=db_items_num_total //--> Records.
+<p />
+
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- dynamic_content_ name=form_hidden_field //-->
+
+<div class="w3-container" id="flex-container">
+<table class="w3-table" style="width:50%">
+  <!-- start_menu_ name=caption //-->
+
+  <colgroup>
+    <col style="width:5%">
+    <col style="width:10%">
+    <col style="width:40%">
+    <col style="width:10%">
+    <col style="width:10%">
+    <col style="width:10%">
+  </colgroup>
+
+  <thead>
+  <tr class="w3-light-grey">
+    <th>No.</th>
+    <th>Code</th>
+    <th>Name</th>
+    <th>Session</th>
+    <th>Year</th>
+    <th>Semester</th>
+
+  </tr>
+  </thead>
+  <!-- end_menu_ //-->
+
+  <script language="JavaScript">
+    // javascript array to store popup info. data
+    // __js_popup_data_array__
+  </script>
+
+  <!-- start_list_ name=main //-->
+  <tr class="$tld_row_class_">
+    <td align="right">$tld_num_.</td>
+
+    <td>$tld_curriculum_code_</td>
+    <td>$tld_curriculum_name_</td>
+    <td>$tld_intake_session_</td>
+    <td>$tld_intake_year_</td>
+    <td>$tld_intake_semester_</td>
+
+
+  </tr>
+  <!-- end_list_ //-->
+
+</table>
+</div>
+<!-- <p />
+
+  Items/List: <input name="inl_curims_curriculum" type="text" id="inl_curims_curriculum" value="$inl_curims_curriculum_" size="3">
+  &nbsp;
+
+  <!-s- start_menu_ name=list //-s->
+    dynamic_menu_items_
+  <!-s- end_menu_ //--s>
+  &nbsp;
+
+  List Set Num. :
+  <select name="lsn_curims_curriculum" onChange="document.tld_view_dynamic.submit()">
+    <!-s- select_ name=lsn_curims_curriculum //-s->
+  </select>
+
+  <p /> -->
+
+
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

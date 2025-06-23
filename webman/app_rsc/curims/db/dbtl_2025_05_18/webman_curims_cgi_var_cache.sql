@@ -31,7 +31,7 @@ CREATE TABLE `webman_curims_cgi_var_cache` (
   `value` text DEFAULT NULL,
   `active_mode` smallint(6) DEFAULT 1,
   PRIMARY KEY (`id_cgi_var_cache`)
-) ENGINE=InnoDB AUTO_INCREMENT=40682 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=40810 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -43,4 +43,4 @@ CREATE TABLE `webman_curims_cgi_var_cache` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-05-18  2:56:31
+-- Dump completed on 2025-05-18 12:34:00

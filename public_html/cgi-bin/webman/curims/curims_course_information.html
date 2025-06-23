@@ -1,0 +1,111 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<b>$cgi_course_name_link_</b><!-- end_cgihtml_ //-->
+&gt;
+Course Information
+&gt;  
+Details
+
+<div class="w3-container w3-center" style="width:792px; margin: 0 auto; padding: 12px;">
+  <button onclick="generateCoursePDF(event)" class="w3-button w3-round w3-green w3-hover-green" style="float: right;">Download</button>
+</div>
+
+<style>
+@media print {
+  #printable-content {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+}
+</style>
+<div class="w3-container w3-border" style="width:792px; margin: 0 auto;">
+<form name="tld_view_dynamic" id="printable-content" method="post" action="index.cgi">
+  <div style="width:792px;">
+  <!-- start_cgihtml_ //-->
+  <input name="task" type="hidden" value="$cgi_task_">
+  <!-- end_cgihtml_ //-->
+
+  <!-- dynamic_content_ name=form_hidden_field //-->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+  function generateCoursePDF(event) {
+      // This selector should target the main container of the course information page.
+      // It might need adjustment based on the final HTML structure of your application's template.
+      // We are targeting the element with class 'w3-main', which is a common wrapper in W3.CSS layouts.
+      // If that doesn't work, 'document.body' is a fallback.
+      const element = document.querySelector('#printable-content') || document.body;
+
+      // Get course code and name from the page content to create a dynamic filename.
+      const courseCode = document.getElementById('course-code-val')?.innerText || 'Course';
+      const courseName = document.getElementById('course-name-val')?.innerText || 'Information';
+      const filename = `${courseCode}_${courseName}`.replace(/[^a-z0-9_\-]+/gi, '_') + '.pdf';
+
+      const options = {
+          margin: [0.5, 0.5, 0.5, 0.5], // top, left, bottom, right
+          filename: filename,
+          image: { type: 'jpeg', quality: 0.95 },
+          html2canvas: {
+              scale: 2,
+              logging: false,
+              useCORS: true
+          },
+          jsPDF: {
+              unit: 'in',
+              format: 'a4',
+              orientation: 'portrait'
+          },
+          // Avoid breaking elements across pages
+          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+      };
+
+      // Disable the button to prevent multiple clicks
+      const downloadButton = event.target;
+      downloadButton.disabled = true;
+      downloadButton.innerText = 'Generating PDF...';
+
+      html2pdf().from(element).set(options).save().then(function() {
+          // Re-enable the button after the save dialog is shown
+          downloadButton.disabled = false;
+          downloadButton.innerText = 'Download';
+      });
+  }
+  </script>
+</div>
+<div class="w3-container">
+<table class="w3-table w3-bordered w3-border w3-margin-bottom" style="width:90%">
+    <!-- <tr>
+        <th>menu_item0_</th>
+        <th>menu_item1_</th>
+        <th>menu_item2_</th>
+        <th>menu_item3_</th>
+        <th>Elective</th>
+        <th>Status</th>
+        
+      </tr> -->
+
+
+  <!-- start_list_ name=main //-->
+  <!-- <tr class="$tld_row_class_">
+    <td>$tld_course_code_</td>
+    <td>$tld_course_name_</td>
+    <td>$tld_credit_hour_</td>
+    <td>$tld_prerequisite_code_</td>
+    <td align="center"><a href="index.cgi?link_id=7&task=curims_curriculum_course_elective_list_view&id_currcourse_62base=$tld_id_currcourse_62base_">$tld_curims_course_</a></td>
+    <td>$tld_status_</td>
+
+    
+  </tr> -->
+<!-- end_list_ //-->
+</table>
+</div>
+</div>
+</form>
+</div>
+<!-- end_view_ //-->
+</body>
+</html>

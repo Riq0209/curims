@@ -1,41 +1,38 @@
+<!DOCTYPE html>
 <html>
 <head>
-<title>Untitled Document</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <title>CURIMS</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <!-- start_view_ //-->
-<table border="1" width="100%">
-  <tr>
-    <td colspan="2">
-      <div align="center"><h2>$app_name_  Application Header</h2></div>
-      <div align="right"><b>You are login as:</b> $user_full_name_ </div>
-    </td>
-  </tr>
 
-  <tr>
-    <td colspan="2" align="center" valign="top">
-      <!-- dynamic_content_ name=link_main //-->
-    </td>
-  </tr>
+  <div class="w3-row" style="display: flex; flex-direction: column; height: 100%;">
+    <!-- Left Sidebar -->
+     
+    <!-- <div class="w3-col m3 l2" style="background-color: #5c1b1b; height: 100%"> -->
+      <div class=" w3-sidebar w3-bar-block" style="background-color: #5c1b1b; width:15%;">
+        <!-- dynamic_content_ name=link_main //-->
+      </div>
+    <!-- </div> -->
+    
+    <!-- Right Side: Content + Footer stacked -->
+    <div class="w3-center" style="margin-left: 15%;flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+      <table width="90%" style="border-width:0px;" align="center">
+        <tr>
+          <td align="center" valign="top" style="border-width:0px;">
+            <br />
+            <!-- dynamic_content_ name=content_main //-->
+          </td>
+        </tr>
+      </table>
+      <div class="w3-container w3-center">
+        Copyright &copy; 2002 - $current_year_ curims.
+      </div>
+    </div>
+  </div>
 
-  <tr>
-    <td align="center" valign="top" width="15%">
-      <!-- dynamic_content_ name=link_sub //-->
-    </td>
-    <td align="center" valign="top">
-    <br />
-      <!-- dynamic_content_ name=content_main //-->
-      &nbsp;
-    </td>
-  </tr>
-
-  <tr>
-    <td colspan="2" align="center">
-      Copyright &copy; 2002 - $current_year_ Your organization name.
-    </td>
-  </tr>
-</table>
 <!-- end_view_ //-->
 </body>
 </html>

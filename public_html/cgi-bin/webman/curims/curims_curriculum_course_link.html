@@ -1,0 +1,287 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+List
+<p />
+<!-- dynamic_content_ name=db_items_num_begin //--> -
+<!-- dynamic_content_ name=db_items_num_end //--> of
+<!-- dynamic_content_ name=db_items_num_total //--> Records.
+<p />
+<div class="w3-container w3-margin-bottom">
+  <div class="w3-row">
+    <div class="w3-half w3-left-align">
+      <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Search for curriculum.." class="w3-input w3-border w3-round-large" style="width:50%;">
+    </div>
+    <div class="w3-half w3-right-align" id="admin-add-curriculum">
+      <!-- start_cgihtml_ //-->
+      <button class="w3-button w3-green w3-text-white w3-hover-green w3-round-large" onclick="document.tld_view_dynamic.task.value='curims_curriculum_multirows_insert'; document.tld_view_dynamic.submit();">Add</button>
+      <!-- end_cgihtml_ //-->
+    </div>
+  </div>
+</div>
+
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- start_cgihtml_ //-->
+  <input name="task" type="hidden" value="$cgi_task_">
+  <!-- end_cgihtml_ //-->
+
+  <!-- dynamic_content_ name=form_hidden_field //-->
+  <div class="w3-container w3-margin-bottom">
+  <table class="w3-table" id="courseLinkTable">
+    <thead>
+      <tr class="w3-light-grey">
+        <th>No</th>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Session</th>
+        <th>Year</th>
+        <th>Semester</th>
+        <th>Course</th>
+        <th>PLO</th>
+        <!-- start_cgihtml_ //-->
+        <th class="w3-center" id="action-header-curriculum">
+          Action<br />
+          <a href="javascript:checkbox_select_all('id_curriculum_62base_', $cgi_inl_curims_curriculum_, $cgi_dbisn_curims_curriculum_);">All</a> / 
+          <a href="javascript:checkbox_select_none('id_curriculum_62base_', $cgi_inl_curims_curriculum_, $cgi_dbisn_curims_curriculum_);">None</a> / 
+          <a href="javascript:checkbox_select_invert('id_curriculum_62base_', $cgi_inl_curims_curriculum_, $cgi_dbisn_curims_curriculum_);">Invert</a>
+        </th>
+        <!-- end_cgihtml_ //-->
+      </tr>
+    </thead>
+
+    <tbody>
+  <!-- start_list_ name=main //-->
+  <tr class="$tld_row_class_">
+    <td align="right">$tld_num_.</td>
+
+    <td>$tld_curriculum_code_</td>
+    <td>$tld_curriculum_name_</td>
+    <td>$tld_intake_session_</td>
+    <td>$tld_intake_year_</td>
+    <td>$tld_intake_semester_</td>
+    <td><a href="index.cgi?link_id=7&task=curims_curriculum_course_list&id_curriculum_62base=$tld_id_curriculum_62base_">$tld_curims_course_</a></td>
+    <td><a href="index.cgi?link_id=7&task=curims_curriculum_plo_list&id_curriculum_62base=$tld_id_curriculum_62base_">$tld_curims_plo_</a></td>
+    <td class="w3-center action-cell-curriculum" >
+      <input class="w3-check" type="checkbox" style="width: 20px; height: 20px; margin-bottom: 10px;" name="id_curriculum_62base_$tld_idx_" id="id_curriculum_62base_$tld_idx_" value="$tld_id_curriculum_62base_" />
+    </td>
+  </tr>
+  <!-- end_list_ //-->
+  </tbody>
+  <!-- start_cgihtml_ //-->
+  $cgi_admin_buttons_edit_delete_
+  <!-- end_cgihtml_ //-->
+</table>
+</div>
+<div class="w3-center">
+  <div class="w3-bar" id="pagination-bar">
+    <!-- Pagination links will be inserted here -->
+  </div>
+</div>
+<p />
+<script>
+  let currentPage = 1;
+  const ROWS_PER_PAGE = 10;
+  let rowsPerPage = ROWS_PER_PAGE; // Can be changed to Infinity
+
+  // Get the admin flag once and store it globally for the script.
+  var admin_flag = <!-- start_cgihtml_ //-->$cgi_is_admin_flag_<!-- end_cgihtml_ //-->
+  const IS_ADMIN = parseInt(admin_flag || '0');
+  
+  function updateTable() {
+      const searchInput = document.getElementById("searchInput");
+      const filter = searchInput.value.toUpperCase();
+      const table = document.getElementById("courseLinkTable");
+      const tbody = table.getElementsByTagName("tbody")[0];
+      const rows = tbody.getElementsByTagName("tr");
+      const paginationBar = document.getElementById("pagination-bar");
+  
+      const filteredRows = [];
+      for (let i = 0; i < rows.length; i++) {
+          if (rows[i].classList.contains('no-data-row')) continue;
+          let match = false;
+          const cells = rows[i].getElementsByTagName("td");
+          for (let j = 0; j < cells.length; j++) {
+              if (cells[j] && cells[j].textContent.toUpperCase().indexOf(filter) > -1) {
+                  match = true;
+                  break;
+              }
+          }
+          if (match) {
+              filteredRows.push(rows[i]);
+          }
+      }
+  
+      // Hide all actual data rows first
+      for (let i = 0; i < rows.length; i++) {
+          rows[i].style.display = 'none';
+      }
+  
+      // Remove any existing "no data" row
+      const existingNoDataRow = tbody.querySelector('.no-data-row');
+      if (existingNoDataRow) {
+          tbody.removeChild(existingNoDataRow);
+      }
+  
+      // If no results, show the "no data" message
+      if (filteredRows.length === 0) {
+          const noDataRow = tbody.insertRow();
+          noDataRow.className = 'no-data-row';
+          const cell = noDataRow.insertCell(0);
+          cell.colSpan = 9; // The table has 9 columns
+          cell.innerHTML = "No data found";
+          cell.style.textAlign = "start";
+          
+          // Show the "no data" row
+          noDataRow.style.display = '';
+  
+          // Clear pagination
+          paginationBar.innerHTML = "";
+      } else {
+          // If there are results, proceed with pagination and display
+          const isViewingAll = rowsPerPage === Infinity;
+          const pageCount = Math.ceil(filteredRows.length / ROWS_PER_PAGE);
+          
+          if (!isViewingAll && currentPage > pageCount && pageCount > 0) {
+              currentPage = 1;
+          } else if (pageCount === 0) {
+              currentPage = 1;
+          }
+  
+          // Display rows for the current page or all rows
+          const start = isViewingAll ? 0 : (currentPage - 1) * ROWS_PER_PAGE;
+          const end = isViewingAll ? filteredRows.length : start + ROWS_PER_PAGE;
+          for (let i = start; i < end && i < filteredRows.length; i++) {
+              filteredRows[i].style.display = '';
+
+              if (IS_ADMIN === 0) {
+                  const actionCell = filteredRows[i].querySelector('.action-cell-curriculum');
+                  if (actionCell) {
+                      actionCell.style.display = 'none';
+                  }
+              }
+          }
+  
+          // Update pagination controls
+          paginationBar.innerHTML = "";
+          if (filteredRows.length > ROWS_PER_PAGE) {
+              if (!isViewingAll) {
+                  for (let i = 1; i <= pageCount; i++) {
+                      const btn = document.createElement('a');
+                      btn.href = "#";
+                      btn.innerText = i;
+                      btn.className = "w3-button";
+                      if (i === currentPage) {
+                          btn.classList.add("w3-green");
+                      }
+                      btn.onclick = (function(page) {
+                          return function(event) {
+                              event.preventDefault();
+                              changePage(page);
+                          }
+                      })(i);
+                      paginationBar.appendChild(btn);
+                  }
+              }
+      
+              const toggleBtn = document.createElement('a');
+              toggleBtn.href = "#";
+              toggleBtn.className = "w3-button";
+              if (isViewingAll) {
+                  toggleBtn.innerText = "Show Paged";
+                  toggleBtn.classList.add("w3-green");
+                  toggleBtn.onclick = function(event) {
+                      event.preventDefault();
+                      changePage(1);
+                  };
+              } else {
+                  toggleBtn.innerText = "View All";
+                  toggleBtn.onclick = function(event) {
+                      event.preventDefault();
+                      viewAll();
+                  };
+              }
+              paginationBar.appendChild(toggleBtn);
+          }
+      }
+  }
+  
+  function handleSearch() {
+      currentPage = 1;
+      updateTable();
+  }
+  
+  function viewAll() {
+      rowsPerPage = Infinity;
+      updateTable();
+  }
+  
+  function changePage(page) {
+      currentPage = page;
+      rowsPerPage = ROWS_PER_PAGE;
+      updateTable();
+  }
+  
+  window.onload = function() {
+
+
+      if (document.getElementById("courseLinkTable")) {
+          rowsPerPage = ROWS_PER_PAGE;
+          updateTable();
+      }
+
+      if (IS_ADMIN === 0) {
+          const actionHeader = document.getElementById('action-header-curriculum');
+          if (actionHeader) {
+              actionHeader.style.display = 'none';
+          }
+          
+          const tfoot = document.querySelector('tfoot');
+          if (tfoot) {
+              tfoot.style.display = 'none';
+          }
+          const admin_add = document.getElementById('admin-add-curriculum');
+          if (admin_add) {
+              admin_add.style.display = 'none';
+          }
+        }
+  };
+  </script>
+  <!-- Items/List: <input name="inl_curims_curriculum" type="text" id="inl_curims_curriculum" value="$inl_curims_curriculum_" size="3">
+  &nbsp;
+
+  <-- start_menu_ name=list //-d->
+    dynamic_menu_items_
+  <-- end_menu_ //-d->
+  &nbsp;
+
+  List Set Num. :
+  <select name="lsn_curims_curriculum" onChange="document.tld_view_dynamic.submit()">
+    <-- select_ name=lsn_curims_curriculum //-d->
+  </select> -->
+
+  <p />
+
+<!-- start_cgihtml_ //-->
+<!-- <div>
+  <b><font color="#557755">Filter(s) [ </font></b>
+  &nbsp;
+  
+  <div style="display:inline; background:#CCDDCC; padding:6px 2px 6px 2px;">
+  <b>Curriculum Code:</b>
+  <input type="text" name="filter_curriculum_code" size="10" value="$cgi_filter_curriculum_code_">
+  </div>
+  &nbsp;
+  
+  <input type="submit" name="button_submit" value="Refresh List">
+  &nbsp;
+  <b><font color="#557755">]</font></b>
+  </div> -->
+  <!-- end_cgihtml_ //-->
+
+
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

@@ -31,11 +31,7 @@ Insert
 
     <th valign="top">Credit Hour</th>
 
-    <th valign="top">Ci</th>
-
-    <th valign="top">Created Date</th>
-
-    <th valign="top">Created Time</th>
+    <th valign="top">Prerequisite Code</th>
 
   </tr>
 
@@ -57,25 +53,13 @@ Insert
     </td>
 
     <td valign="top">
-      <input name="$db_credit_hour_$row_idx" type="text" id="$db_credit_hour_$row_idx" value="$db_credit_hour_$row_idx_" size="10">
+      <input name="$db_credit_hour_$row_idx" type="text" id="$db_credit_hour_$row_idx" value="$db_credit_hour_$row_idx_" size="1">
       </br>
       <font color="#FF0000">$fe_credit_hour_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <textarea name="$db_ci_$row_idx" id="$db_ci_$row_idx" cols="50">$db_ci_$row_idx_</textarea>
-      </br>
-      
-    </td>
-
-    <td valign="top">
-      <input name="$db_created_date_$row_idx" type="text" id="$db_created_date_$row_idx" value="$db_created_date_$row_idx_" size="">
-      </br>
-      
-    </td>
-
-    <td valign="top">
-      <input name="$db_created_time_$row_idx" type="text" id="$db_created_time_$row_idx" value="$db_created_time_$row_idx_" size="">
+      <input name="$db_prerequisite_code_$row_idx" type="text" id="$db_prerequisite_code_$row_idx" value="$db_prerequisite_code_$row_idx_" size="50">
       </br>
       
     </td>
@@ -84,7 +68,7 @@ Insert
   <!-- end_datahtml_ //-->
 
   <tr>
-    <td align="right" colspan="7">
+    <td align="right" colspan="5">
       <input name="button_submit" type="submit" id="button_submit" value="Proceed" />
       <input name="button_submit" type="submit" id="button_submit" value="Cancel" />
     </td>

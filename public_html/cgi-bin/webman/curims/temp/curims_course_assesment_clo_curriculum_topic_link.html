@@ -1,0 +1,272 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+List
+<p />
+
+<!-- dynamic_content_ name=db_items_num_begin //--> -
+<!-- dynamic_content_ name=db_items_num_end //--> of
+<!-- dynamic_content_ name=db_items_num_total //--> Records.
+<p />
+<div class = "w3-container">
+  <div class = "w3-row">
+    <div class = "w3-half w3-left-align">
+      <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Search for courses.." class="w3-input w3-border w3-round-large" style="width:50%;">
+    </div>
+    <div class = "w3-half w3-right-align">
+    <!-- start_cgihtml_ //-->
+    <button type="button" 
+        class="w3-button w3-green w3-round-large w3-hover-green" 
+        onclick="document.tld_view_dynamic.task.value='curims_course_multirows_insert'; document.tld_view_dynamic.link_id.value='$cgi_link_id_'; document.tld_view_dynamic.submit();">
+  Add
+</button>
+    <!-- end_cgihtml_ //-->
+    </div>
+  </div>
+</div>
+
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- start_cgihtml_ //-->
+  <input name="task" type="hidden" value="$cgi_task_">
+  <!-- end_cgihtml_ //-->
+
+  <!-- dynamic_content_ name=form_hidden_field //-->
+<script>
+let currentPage = 1;
+const ROWS_PER_PAGE = 10;
+let rowsPerPage = ROWS_PER_PAGE;
+
+function updateTable() {
+    const searchInput = document.getElementById("searchInput");
+    const filter = searchInput.value.toUpperCase();
+    const table = document.getElementById("courseLinkTable");
+    const tbody = table.getElementsByTagName("tbody")[0];
+    const rows = tbody.getElementsByTagName("tr");
+    const paginationBar = document.getElementById("pagination-bar");
+
+    const filteredRows = [];
+    for (let i = 0; i < rows.length; i++) {
+        let match = false;
+        const cells = rows[i].getElementsByTagName("td");
+        for (let j = 0; j < cells.length; j++) {
+            if (cells[j] && cells[j].textContent.toUpperCase().indexOf(filter) > -1) {
+                match = true;
+                break;
+            }
+        }
+        if (match) {
+            filteredRows.push(rows[i]);
+        }
+    }
+
+    const isViewingAll = rowsPerPage === Infinity;
+    const pageCount = Math.ceil(filteredRows.length / ROWS_PER_PAGE);
+    
+    if (!isViewingAll && currentPage > pageCount) {
+        currentPage = 1;
+    }
+
+    for (let i = 0; i < rows.length; i++) {
+        rows[i].style.display = 'none';
+    }
+
+    const start = isViewingAll ? 0 : (currentPage - 1) * ROWS_PER_PAGE;
+    const end = isViewingAll ? filteredRows.length : start + ROWS_PER_PAGE;
+    for (let i = start; i < end && i < filteredRows.length; i++) {
+        filteredRows[i].style.display = '';
+    }
+
+    paginationBar.innerHTML = "";
+    if (filteredRows.length > ROWS_PER_PAGE) {
+        if (!isViewingAll) {
+            for (let i = 1; i <= pageCount; i++) {
+                const btn = document.createElement('a');
+                btn.href = "#";
+                btn.innerText = i;
+                btn.className = "w3-button";
+                if (i === currentPage) {
+                    btn.classList.add("w3-green");
+                }
+                btn.onclick = (function(page) {
+                    return function(event) {
+                        event.preventDefault();
+                        changePage(page);
+                    }
+                })(i);
+                paginationBar.appendChild(btn);
+            }
+        }
+
+        const toggleBtn = document.createElement('a');
+        toggleBtn.href = "#";
+        toggleBtn.className = "w3-button";
+        if (isViewingAll) {
+            toggleBtn.innerText = "Show Paged";
+            toggleBtn.classList.add("w3-green");
+            toggleBtn.onclick = function(event) {
+                event.preventDefault();
+                changePage(1);
+            };
+        } else {
+            toggleBtn.innerText = "View All";
+            toggleBtn.onclick = function(event) {
+                event.preventDefault();
+                viewAll();
+            };
+        }
+        paginationBar.appendChild(toggleBtn);
+    }
+}
+
+function handleSearch() {
+    currentPage = 1;
+    updateTable();
+}
+
+function viewAll() {
+    rowsPerPage = Infinity;
+    updateTable();
+}
+
+function changePage(page) {
+    currentPage = page;
+    rowsPerPage = ROWS_PER_PAGE;
+    updateTable();
+}
+
+window.onload = function() {
+    if (document.getElementById("courseLinkTable")) {
+        rowsPerPage = ROWS_PER_PAGE;
+        updateTable();
+    }
+};
+</script>
+  <div class="w3-container">
+    <table class="w3-table-all" id="courseLinkTable">
+      <!-- start_menu_ name=caption //-->
+       <colgroup>
+        <col style="width: 5%">
+        <col style="width: 10%">
+        <col style="width: 20%">
+        <col style="width: 5%">
+        <col style="width: 10%">
+        <col style="width: 10%">
+        <col style="width: 10%">
+        <col style="width: 5%">
+        <col style="width: 5%">
+        <col style="width: 5%">
+        <col style="width: 15%">
+       </colgroup>
+      <thead>
+        <tr class="w3-light-grey">
+          <th>No.</th>
+          <th>Code</th>
+          <th>Name</th>
+          <th>Credit</th>
+          <th>Prerequisite</th>
+          <th>CI</th>
+          <th>Assesment</th>
+          <th>Clo</th>
+          <th>Curriculum</th>
+          <th>Topic</th>
+          <!-- start_cgihtml_ //-->
+          <th class="w3-center">
+            Action
+            <br />
+            <a href="javascript:checkbox_select_all('id_course_62base_', $cgi_inl_curims_course_, $cgi_dbisn_curims_course_);">All</a> |
+            <a href="javascript:checkbox_select_none('id_course_62base_', $cgi_inl_curims_course_, $cgi_dbisn_curims_course_);">None</a> |
+            <a href="javascript:checkbox_select_invert('id_course_62base_', $cgi_inl_curims_course_, $cgi_dbisn_curims_course_);">Invert</a>
+          </th>
+          <!-- end_cgihtml_ //-->
+        </tr>
+      </thead>
+      <!-- end_menu_ //-->
+      <tbody>
+        <!-- start_list_ name=main //-->
+        <tr class="$tld_row_class_">
+          <td align="right">$tld_num_.</td>
+          <td>$tld_course_code_</td>
+          <td>$tld_course_name_</td>
+          <td>$tld_credit_hour_</td>
+          <td>$tld_prerequisite_code_</td>
+          <td><a href="index.cgi?link_id=19&task=curims_course_information&id_course_62base=$tld_id_course_62base_" class="w3-button w3-grey w3-text-white w3-hover-grey w3-round-large">View</a></td>
+          <td><a href="index.cgi?link_id=19&task=curims_course_assesment_plo_link&id_course_62base=$tld_id_course_62base_">$tld_curims_assesment_</a></td>
+          <td><a href="index.cgi?link_id=19&task=curims_course_clo_list&id_course_62base=$tld_id_course_62base_">$tld_curims_clo_</a></td>
+          <td><a href="index.cgi?link_id=19&task=curims_course_curriculum_list&id_course_62base=$tld_id_course_62base_">$tld_curims_curriculum_</a></td>
+          <td><a href="index.cgi?link_id=27&task=&id_course_62base=$tld_id_course_62base_">$tld_curims_topic_</a></td>
+          <td class="w3-center">
+            <input class="w3-check" type="checkbox" name="id_course_62base_$tld_idx_" id="id_course_62base_$tld_idx_" value="$tld_id_course_62base_">
+          </td>
+        </tr>
+        <!-- end_list_ //-->
+      </tbody>
+      <tfoot>
+        <tr bgcolor="#EEEEEE">
+          <td align="right">...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td class="w3-center">
+            <button class="w3-button w3-blue w3-text-white w3-hover-blue w3-round-large" onclick="document.tld_view_dynamic.task.value='curims_course_multirows_update'; document.tld_view_dynamic.submit();">Edit</button>
+            <button class="w3-button w3-red w3-text-white w3-hover-red w3-round-large" onclick="document.tld_view_dynamic.task.value='curims_course_multirows_delete'; document.tld_view_dynamic.submit();">Delete</button>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+<div class="w3-center">
+  <div class="w3-bar" id="pagination-bar">
+  </div>
+</div>
+<p />
+
+  <!-- Items/List: <input name="inl_curims_course" type="text" id="inl_curims_course" value="100" size="3">
+  &nbsp;
+
+  <-- start_menu_ name=list //-b->
+    dynamic_menu_items_
+  <-- end_menu_ //-b->
+  &nbsp;
+
+  List Set Num. :
+  <select name="lsn_curims_course" onChange="document.tld_view_dynamic.submit()">
+    <-- select_ name=lsn_curims_course //-b->
+  </select> -->
+
+  <p />
+
+  <!-- start_cgihtml_ //-->
+  <!-- <div>
+  <b><font color="#557755">Filter(s) [ </font></b>
+  &nbsp;
+  
+  <div style="display:inline; background:#CCDDCC; padding:6px 2px 6px 2px;">
+  <b>Course Code:</b>
+  <input type="text" name="filter_course_code" size="10" value="$cgi_filter_course_code_">
+  </div>
+  &nbsp;
+  
+  <div style="display:inline; background:#CCDDCC; padding:6px 2px 6px 2px;">
+  <b>Course Name:</b>
+  <input type="text" name="filter_course_name" size="10" value="$cgi_filter_course_name_">
+  </div>
+  &nbsp;
+  
+  <input type="submit" name="button_submit" value="Refresh List">
+  &nbsp;
+  <b><font color="#557755">]</font></b>
+  </div> -->
+  <!-- end_cgihtml_ //-->
+
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

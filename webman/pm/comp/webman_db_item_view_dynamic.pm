@@ -512,7 +512,7 @@ sub run_Task {
     }
 
     if ($this->{db_items_view_num} < 1) { ### 12/12/2010
-        $this->{db_items_view_num} = 10
+        $this->{db_items_view_num} = 10   ### 10/06/2025
     }
     
     $this->{sql} = $this->customize_SQL;

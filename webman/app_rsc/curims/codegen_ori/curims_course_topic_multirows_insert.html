@@ -1,0 +1,91 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<b>???</b> 
+&gt; 
+<a href="index.cgi?link_id=$cgi_link_id_&task=curims_course_topic_multirows_insert&button_submit=Cancel">List</a>
+<!-- end_cgihtml_ //-->
+&gt;
+Insert
+<p />
+
+<form method="POST" action="./index.cgi">
+  <!-- start_cgihtml_ //-->
+  <input type="hidden" name="link_id" value="$cgi_link_id_">
+  <b>Row Number:</b>
+  <input type="text" name="irn_curims_topic" size="3" value="$cgi_irn_curims_topic_">
+  <!-- end_cgihtml_ //-->
+
+  <input name="button_submit" type="submit" id="button_submit" value="Change" />
+</form>
+
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+<table border="1">
+  <tr>
+    <th align="right" valign="top">Num. </th>
+    <th valign="top">Session</th>
+
+    <th valign="top">Semester</th>
+
+    <th valign="top">Topic No</th>
+
+    <th valign="top">Title</th>
+
+    <th valign="top">Subtopic</th>
+
+  </tr>
+
+  <!-- start_datahtml_ name=form_db_field //-->
+  <tr>
+  	<td align="right" valign="top">
+  	  <b>$row_num_. </b>
+  	</td>
+    <td valign="top">
+      <input name="$db_session_$row_idx" type="text" id="$db_session_$row_idx" value="$db_session_$row_idx_" size="10">
+      </br>
+      <font color="#FF0000">$fe_session_$row_idx_</font>
+    </td>
+
+    <td valign="top">
+      <input name="$db_semester_$row_idx" type="text" id="$db_semester_$row_idx" value="$db_semester_$row_idx_" size="11">
+      </br>
+      <font color="#FF0000">$fe_semester_$row_idx_</font>
+    </td>
+
+    <td valign="top">
+      <input name="$db_topic_no_$row_idx" type="text" id="$db_topic_no_$row_idx" value="$db_topic_no_$row_idx_" size="11">
+      </br>
+      <font color="#FF0000">$fe_topic_no_$row_idx_</font>
+    </td>
+
+    <td valign="top">
+      <textarea name="$db_title_$row_idx" id="$db_title_$row_idx" cols="50">$db_title_$row_idx_</textarea>
+      </br>
+      <font color="#FF0000">$fe_title_$row_idx_</font>
+    </td>
+
+    <td valign="top">
+      <input name="$db_subtopic_$row_idx" type="text" id="$db_subtopic_$row_idx" value="$db_subtopic_$row_idx_" size="">
+      </br>
+      
+    </td>
+
+  </tr>
+  <!-- end_datahtml_ //-->
+
+  <tr>
+    <td align="right" colspan="6">
+      <input name="button_submit" type="submit" id="button_submit" value="Proceed" />
+      <input name="button_submit" type="submit" id="button_submit" value="Cancel" />
+    </td>
+  </tr>
+</table>
+</form>
+
+<!-- end_view_ //-->
+</body>
+</html>

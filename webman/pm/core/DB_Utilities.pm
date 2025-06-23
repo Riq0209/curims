@@ -2013,4 +2013,23 @@ sub valid_DB_Item_Access_Mode { ### 15/05/2006
     }
 }
 
+sub get_Count {
+    my $this = shift @_;
+    my ($column, $where_clause) = @_;
+
+    my $db_conn = $this->{db_conn};       # Assumes DBI connection is stored in this attribute
+    my $table   = $this->{table_name};    # Assumes table name is set using set_Table
+
+    my $sql = "SELECT COUNT($column) FROM $table";
+    $sql .= " WHERE $where_clause" if $where_clause;
+
+    my $sth = $db_conn->prepare($sql);
+    $sth->execute();
+
+    my ($count) = $sth->fetchrow_array();
+    $sth->finish();
+
+    return $count || 0;
+}
+
 1;

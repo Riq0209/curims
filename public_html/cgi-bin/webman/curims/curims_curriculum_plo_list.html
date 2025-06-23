@@ -4,45 +4,62 @@
 <!-- dynamic_content_ name=link_path //-->
 &gt;
 <!-- start_cgihtml_ //-->
-<b>???</b><!-- end_cgihtml_ //-->
+<b>$cgi_curriculum_name_label_</b>
+<!-- end_cgihtml_ //-->
 &gt;
-Plo
+PLO
 &gt;
- List
+List
 <p />
 
 <!-- dynamic_content_ name=db_items_num_begin //--> -
 <!-- dynamic_content_ name=db_items_num_end //--> of
 <!-- dynamic_content_ name=db_items_num_total //--> Records.
 <p />
-
+<div class = "w3-container">
+    <div class = "w3-right-align">
+      <!-- start_cgihtml_ //-->
+      <button type="button" 
+        class="w3-button w3-green w3-round-large w3-hover-green" 
+        onclick="document.tld_view_dynamic.task.value='curims_curriculum_plo_multirows_insert'; document.tld_view_dynamic.link_id.value='$cgi_link_id_'; document.tld_view_dynamic.submit();">
+    Add
+</button>
+      <!-- end_cgihtml_ //-->
+    </div>
+</div>
 <form name="tld_view_dynamic" method="post" action="index.cgi">
   <!-- start_cgihtml_ //-->
   <input name="task" type="hidden" value="$cgi_task_">
   <!-- end_cgihtml_ //-->
 
   <!-- dynamic_content_ name=form_hidden_field //-->
-
-<table border="1">
+<div class="w3-container">
+<table class="w3-table-all" >
   <!-- start_menu_ name=caption //-->
-  <tr>
-    <th>Num.</th>
-    <th>menu_item0_</th>
-    <th>menu_item1_</th>
-    <th>menu_item2_</th>
-    <th>menu_item3_</th>
-    <th>Created Date</th>
-    <th>Created Time</th>
+   <colgroup>
+    <col style="width:3%">
+    <col style="width:5%">
+    <col style="width:3%">
+    <col style="width:40%">
+    <col style="width:10%">
+  </colgroup>
+   <thead>
+  <tr class="w3-light-grey">
+    <th>No.</th>
+    <th>Code</th>
+    <th>Tag</th>
+    <th>Description</th>
     <!-- start_cgihtml_ //-->
-    <th align="center">
-      Selection &amp; Operations
+    <th class="w3-center">
+      Action
       <br />
-      <a href="javascript:checkbox_select_all('id_currplo_62base_', $cgi_inl_curims_plo_, $cgi_dbisn_curims_plo_);">All</a> |
-      <a href="javascript:checkbox_select_none('id_currplo_62base_', $cgi_inl_curims_plo_, $cgi_dbisn_curims_plo_);">None</a> |
-      <a href="javascript:checkbox_select_invert('id_currplo_62base_', $cgi_inl_curims_plo_, $cgi_dbisn_curims_plo_);">Invert</a>
+      <a href="javascript:checkbox_select_all('id_plo_62base_', $cgi_inl_curims_plo_, $cgi_dbisn_curims_plo_);">All</a> |
+      <a href="javascript:checkbox_select_none('id_plo_62base_', $cgi_inl_curims_plo_, $cgi_dbisn_curims_plo_);">None</a> |
+      <a href="javascript:checkbox_select_invert('id_plo_62base_', $cgi_inl_curims_plo_, $cgi_dbisn_curims_plo_);">Invert</a>
     </th>
     <!-- end_cgihtml_ //-->
   </tr>
+  </thead>
   <!-- end_menu_ //-->
 
   <!-- start_list_ name=main //-->
@@ -50,20 +67,12 @@ Plo
     <td align="right">$tld_num_.</td>
 
     <td>$tld_plo_code_</td>
+    <td>$tld_plo_tag_</td>
     <td>$tld_plo_description_</td>
-    <td>$tld_created_date_</td>
-    <td>$tld_created_time_</td>
-    <td>$tld_created_date_</td>
-    <td>$tld_created_time_</td>
 
-    <td align="center">
-      <!-- start_cgihtml_ //-->
-      <a href="index.cgi?link_id=$cgi_link_id_&id_currplo_62base=$tld_id_currplo_62base_&task=curims_curriculum_plo_remove">Remove</a>
-      |
-      <input type="checkbox" name="id_currplo_62base_$tld_idx_" id="id_currplo_62base_$tld_idx_" value="$tld_id_currplo_62base_">
-      <!-- end_cgihtml_ //-->
+    <td class="w3-center">
+      <input class="w3-check" type="checkbox" name="id_plo_62base_$tld_idx_" id="id_plo_62base_$tld_idx_" value="$tld_id_plo_62base_">
     </td>
-
   </tr>
   <!-- end_list_ //-->
 
@@ -73,19 +82,22 @@ Plo
     <td>...</td>
     <td>...</td>
     <td>...</td>
-    <td>...</td>
-    <td>...</td>
-    <td>...</td>
 
-    <td align="center">
-      <!-- start_cgihtml_ //-->
-      <a href="index.cgi?link_id=$cgi_link_id_&task=curims_curriculum_plo_add">Add List</a>
-      |
-      <a href="javascript:document.tld_view_dynamic.task.value='curims_curriculum_plo_remove'; document.tld_view_dynamic.submit();">Remove Selected</a>
-      <!-- end_cgihtml_ //-->
+    <td class="w3-center">
+      <button type="button" 
+        class="w3-button w3-blue w3-text-white w3-hover-blue w3-round-large" 
+        onclick="document.tld_view_dynamic.task.value='curims_curriculum_plo_multirows_update'; document.tld_view_dynamic.submit();">
+    Edit
+</button>
+      <button type="button" 
+        class="w3-button w3-red w3-text-white w3-hover-red w3-round-large" 
+        onclick="document.tld_view_dynamic.task.value='curims_curriculum_plo_multirows_delete'; document.tld_view_dynamic.submit();">
+    Delete
+</button>
     </td>
   </tr>
 </table>
+</div>
 
 <p />
 

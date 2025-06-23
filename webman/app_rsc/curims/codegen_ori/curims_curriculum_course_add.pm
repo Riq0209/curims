@@ -88,14 +88,11 @@ sub run_Task {
                 my $semester_taken = $cgi->param_Shift("semester_taken_" . $num);
                 $cgi->push_Param("\$db_semester_taken", $semester_taken);                
 
+                my $semester_no = $cgi->param_Shift("semester_no_" . $num);
+                $cgi->push_Param("\$db_semester_no", $semester_no);                
+
                 my $status = $cgi->param_Shift("status_" . $num);
                 $cgi->push_Param("\$db_status", $status);                
-
-                my $created_date = $cgi->param_Shift("created_date_" . $num);
-                $cgi->push_Param("\$db_created_date", $created_date);                
-
-                my $created_time = $cgi->param_Shift("created_time_" . $num);
-                $cgi->push_Param("\$db_created_time", $created_time);                
 
                 
                 $htmldb->insert_Table;
@@ -111,9 +108,8 @@ sub run_Task {
                 $cgi->param_Shift("\$db_id_course_62base");
                 $cgi->param_Shift("\$db_year_taken");
                 $cgi->param_Shift("\$db_semester_taken");
+                $cgi->param_Shift("\$db_semester_no");
                 $cgi->param_Shift("\$db_status");
-                $cgi->param_Shift("\$db_created_date");
-                $cgi->param_Shift("\$db_created_time");
             }                
         }
         

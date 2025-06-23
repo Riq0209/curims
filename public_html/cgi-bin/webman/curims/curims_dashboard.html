@@ -1,0 +1,269 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- start_cgihtml_ //-->
+  <input name="task" type="hidden" value="$cgi_task_">
+  <!-- end_cgihtml_ //-->
+
+  <!-- dynamic_content_ name=form_hidden_field //-->
+  <div class="w3-container">
+
+    <!-- Dashboard Cards -->
+    <div class="w3-row-padding w3-margin-bottom" style="padding: 0;">
+      <div class="w3-third" style="padding-left: 0;">
+        <div class="w3-card w3-container w3-padding-16 w3-white " style="border-radius: 10px;">
+          <div class="w3-right"><i class="material-icons">school</i></div>
+          <div class="w3-left">
+            <!-- start_cgihtml_ //-->
+            <h3 style="font-size: 24px;
+            line-height: 1.4;
+            color: #1a1a1a; 
+            font-weight: 600; 
+            margin: 0; ">$cgi_total_curriculum_</h3>
+            <!-- end_cgihtml_ //-->
+          </div>
+          <div class="w3-clear"></div>
+          <h4 align="left" style="color:#374151;">Total Curriculum</h4>
+        </div>
+      </div>
+
+      <div class="w3-third">
+        <div class="w3-card w3-container w3-padding-16 w3-white" style="border-radius: 10px;">
+          <div class="w3-right"><i class="material-icons">book</i></div>
+          <div class="w3-left">
+            <!-- start_cgihtml_ //-->
+            <h3 style="font-size: 24px;
+            line-height: 1.4;
+            color: #1a1a1a; 
+            font-weight: 600; 
+            margin: 0; ">$cgi_total_course_</h3>
+            <!-- end_cgihtml_ //-->
+          </div>
+          <div class="w3-clear"></div>
+          <h4 align="left" style="color:#374151;">Total Courses</h4>
+        </div>
+      </div>
+
+      <div class="w3-third"  style="padding-right: 0;">
+        <div class="w3-card w3-container w3-padding-16 w3-white" style="border-radius: 10px;">
+          <div class="w3-right"><i class="material-icons">calendar_today</i></div>
+          <div class="w3-left">
+            <!-- start_cgihtml_ //-->
+            <h3 style="font-size: 24px;
+            line-height: 1.4;
+            color: #1a1a1a; 
+            font-weight: 600; 
+            margin: 0; ">$cgi_current_academic_session_</h3>
+            <!-- end_cgihtml_ //-->
+          </div>
+          <div class="w3-clear"></div>
+          <h4 align="left" style="color:#374151;">Current Session</h4>
+        </div>
+      </div>
+    </div>
+    <!-- End Dashboard Cards -->
+
+  <!-- start_cgihtml_ -->
+
+  <!-- end_cgihtml_ -->
+
+  <div class="w3-row w3-margin-bottom">
+    <div class="w3-half w3-left-align">
+      <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Search for curriculum.." class="w3-input w3-border w3-round-large" style="width:50%;">
+    </div>
+  </div>
+  <table id="curriculumTable" class="w3-table">
+    <thead>
+      <tr class="w3-light-grey">
+        <th>No</th>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Session</th>
+        <!-- <th>Year</th>
+        <th>Semester</th> -->
+        <th>Core</th>
+        <th>Elective</th>
+        <th>Total</th>
+        <!-- <th>PLO</th> -->
+        <!-- start_cgihtml_ //-->
+        
+        <!-- end_cgihtml_ //-->
+      </tr>
+    </thead>
+
+  <tbody>
+  <!-- start_list_ name=main //-->
+  <tr class="$tld_row_class_">
+    <td align="right">$tld_num_.</td>
+
+    <td>$tld_curriculum_code_</td>
+    <td>$tld_curriculum_name_</td>
+    <td>$tld_intake_session_</td>
+    <!-- <td>$tld_intake_year_</td>
+    <td>$tld_intake_semester_</td> -->
+    <td>$tld_curims_core_</td>
+    <td>$tld_curims_elective_</td>
+    <td>$tld_curims_course_</td>
+    <!-- <td><a href="index.cgi?link_id=7&task=curims_curriculum_plo_list&id_curriculum_62base=$tld_id_curriculum_62base_">$tld_curims_plo_</a></td> -->
+
+   
+  </tr>
+  <!-- end_list_ //-->
+  </tbody>
+
+</table>
+<div class="w3-center">
+  <div class="w3-bar" id="pagination-bar">
+    <!-- Pagination links will be inserted here -->
+  </div>
+</div>
+</div>
+
+<!-- The filter functionality has been moved to the top of the table -->
+
+<script>
+  let currentPage = 1;
+  const ROWS_PER_PAGE = 10;
+  let rowsPerPage = ROWS_PER_PAGE; // Can be changed to Infinity
+  
+  function updateTable() {
+      const searchInput = document.getElementById("searchInput");
+      const filter = searchInput.value.toUpperCase();
+      const table = document.getElementById("curriculumTable");
+      const tbody = table.getElementsByTagName("tbody")[0];
+      const rows = tbody.getElementsByTagName("tr");
+      const paginationBar = document.getElementById("pagination-bar");
+  
+      const filteredRows = [];
+      for (let i = 0; i < rows.length; i++) {
+          // Skip any potential "no data" row from the filtering logic
+          if (rows[i].classList.contains('no-data-row')) continue;
+          
+          let match = false;
+          const cells = rows[i].getElementsByTagName("td");
+          for (let j = 0; j < cells.length; j++) {
+              if (cells[j] && cells[j].textContent.toUpperCase().indexOf(filter) > -1) {
+                  match = true;
+                  break;
+              }
+          }
+          if (match) {
+              filteredRows.push(rows[i]);
+          }
+      }
+  
+      // Hide all actual data rows first
+      for (let i = 0; i < rows.length; i++) {
+          rows[i].style.display = 'none';
+      }
+  
+      // Remove any existing "no data" row
+      const existingNoDataRow = tbody.querySelector('.no-data-row');
+      if (existingNoDataRow) {
+          tbody.removeChild(existingNoDataRow);
+      }
+  
+      // If no results, show the "no data" message
+      if (filteredRows.length === 0) {
+          const noDataRow = tbody.insertRow();
+          noDataRow.className = 'no-data-row';
+          const cell = noDataRow.insertCell(0);
+          cell.colSpan = 7;
+          cell.innerHTML = "No data found";
+          cell.style.textAlign = "start";
+          
+          // Show the "no data" row
+          noDataRow.style.display = '';
+  
+          // Clear pagination
+          paginationBar.innerHTML = "";
+      } else {
+          // If there are results, proceed with pagination and display
+          const isViewingAll = rowsPerPage === Infinity;
+          const pageCount = Math.ceil(filteredRows.length / ROWS_PER_PAGE);
+          
+          if (!isViewingAll && currentPage > pageCount && pageCount > 0) {
+              currentPage = 1;
+          } else if (pageCount === 0) {
+              currentPage = 1;
+          }
+  
+          // Display rows for the current page or all rows
+          const start = isViewingAll ? 0 : (currentPage - 1) * ROWS_PER_PAGE;
+          const end = isViewingAll ? filteredRows.length : start + ROWS_PER_PAGE;
+          for (let i = start; i < end && i < filteredRows.length; i++) {
+              filteredRows[i].style.display = '';
+          }
+  
+          // Update pagination controls
+          paginationBar.innerHTML = "";
+          if (filteredRows.length > ROWS_PER_PAGE) {
+              if (!isViewingAll) {
+                  for (let i = 1; i <= pageCount; i++) {
+                      const btn = document.createElement('a');
+                      btn.href = "#";
+                      btn.innerText = i;
+                      btn.className = "w3-button";
+                      if (i === currentPage) {
+                          btn.classList.add("w3-green");
+                      }
+                      btn.onclick = (function(page) {
+                          return function(event) {
+                              event.preventDefault();
+                              changePage(page);
+                          }
+                      })(i);
+                      paginationBar.appendChild(btn);
+                  }
+              }
+      
+              const toggleBtn = document.createElement('a');
+              toggleBtn.href = "#";
+              toggleBtn.className = "w3-button";
+              if (isViewingAll) {
+                  toggleBtn.innerText = "Show Paged";
+                  toggleBtn.classList.add("w3-green");
+                  toggleBtn.onclick = function(event) {
+                      event.preventDefault();
+                      changePage(1);
+                  };
+              } else {
+                  toggleBtn.innerText = "View All";
+                  toggleBtn.onclick = function(event) {
+                      event.preventDefault();
+                      viewAll();
+                  };
+              }
+              paginationBar.appendChild(toggleBtn);
+          }
+      }
+  }
+  
+  function handleSearch() {
+      currentPage = 1;
+      updateTable();
+  }
+  
+  function viewAll() {
+      rowsPerPage = Infinity;
+      updateTable();
+  }
+  
+  function changePage(page) {
+      currentPage = page;
+      rowsPerPage = ROWS_PER_PAGE;
+      updateTable();
+  }
+  
+  window.onload = function() {
+      if (document.getElementById("curriculumTable")) {
+          rowsPerPage = ROWS_PER_PAGE;
+          updateTable();
+      }
+  };
+  </script>
+</form>
+<!-- end_view_ //-->
+</body>
+</html>
