@@ -42,6 +42,41 @@ sub run_Task {
     
     ### DB item dynamic list with multi row insert/update/delete  
     ### operations support need this to behave correctly 
+
+        my $course_id = $cgi->param("id_course_62base");
+
+    # Lookup curriculum_name and intake_session and push combined label to CGI
+    if ($course_id) {
+        $dbu->set_Table("curims_course");
+        my $course_name   = $dbu->get_Item("course_name",   "id_course_62base", $course_id);
+        my $course_code    = $dbu->get_Item("course_code",    "id_course_62base", $course_id);
+
+        my $label = "$course_code - $course_name";
+
+        # Set into CGI so that $cgi_cgi_curriculum_name_ works in template
+        $cgi->push_Param("course_topic", $label);
+    }
+
+    # Fetch Total Topic for the current session
+    my $total_topic_count = 0;
+    if ($db_conn) {
+        my $sql_total_topic = "SELECT COUNT(*) FROM curims_topic"; # Count all curricula
+        my $sth_total_topic = $db_conn->prepare($sql_total_topic);
+        if ($sth_total_topic) {
+            eval {
+                $sth_total_topic->execute(); 
+                ($total_topic_count) = $sth_total_topic->fetchrow_array();
+                $sth_total_topic->finish();
+            };
+            if ($@) {
+                $cgi->add_Debug_Text("DBI error fetching total topic count: $@", __FILE__, __LINE__, "ERROR");
+            }
+        } else {
+            $cgi->add_Debug_Text("DBI prepare error for total topic count: " . ($db_conn->errstr || 'Unknown error'), __FILE__, __LINE__, "ERROR");
+        }
+    }
+    $cgi->push_Param("total_topic", $total_topic_count || 0);
+
     if (!$cgi->param_Exist("task")) {
         $cgi->push_Param("task", "");
     }
@@ -62,6 +97,13 @@ sub customize_SQL {
     
     ### Next to customize the $sql string
     ### ???
+
+    ### fetch total topic count after insertion
+    my $total_items = "Select count(*) from curims_topic";
+    my $sth_topic = $db_conn->prepare($total_items);
+    $sth_topic->execute();
+    my ($total_topic) = $sth_topic->fetchrow_array();
+    $this->set_DB_Items_View_Num($total_topic);
     
     return $sql;
 }

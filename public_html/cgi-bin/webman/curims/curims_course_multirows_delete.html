@@ -20,10 +20,11 @@ Delete
     <col style="width:35%">
     <col style="width:10%">
     <col style="width:10%">
+    <col style="width:25%">
   </colgroup>
   <thead>
   <tr class="w3-light-grey">
-    <th align="right" valign="top">Num. </th>
+    <th align="right" valign="top">No. </th>
     <th valign="top">Code</th>
 
     <th valign="top">Name</th>
@@ -31,6 +32,8 @@ Delete
     <th valign="top">Credit</th>
 
     <th valign="top">Prerequisite Code</th>
+
+    <th valign="top">Course Synopsys</th>
 
   </tr>
   </thead>
@@ -46,11 +49,13 @@ Delete
 
    <td>$db_prerequisite_code_$row_idx_</td>
 
+   <td>$db_course_synopsis_$row_idx_</td>
+
   </tr>
   <!-- end_datahtml_ //-->
 
   <tr>
-    <td style="text-align: right;" colspan="5">
+    <td style="text-align: right;" colspan="6">
       <button type="submit" name="button_submit" value="Cancel" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Cancel</button>
       <button type="submit" name="button_submit" value="Proceed" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large">Proceed</button>
     </td>

@@ -8,6 +8,13 @@ use webman_main;
 
 #__cust_mod__
 
+use curims_clo_multirows_delete;
+use curims_clo_multirows_insert;
+use curims_clo_multirows_update;
+use curims_clo_plo_add;
+use curims_clo_plo_link;
+use curims_clo_plo_list;
+use curims_clo_plo_remove;
 use curims_course_assesment_clo_curriculum_topic_link;
 use curims_course_assesment_multirows_delete;
 use curims_course_assesment_multirows_insert;
@@ -49,9 +56,6 @@ use curims_curriculum_plo_list;
 use curims_curriculum_plo_multirows_delete;
 use curims_curriculum_plo_multirows_insert;
 use curims_curriculum_plo_multirows_update;
-# use curims_elective_add;
-# use curims_elective_list;
-# use curims_elective_remove;
 use curims_lecturer_course_add;
 use curims_lecturer_course_link;
 use curims_lecturer_course_list;
@@ -66,8 +70,6 @@ use curims_schedule_list;
 use curims_schedule_multirows_delete;
 use curims_schedule_multirows_insert;
 use curims_schedule_multirows_update;
-use curims_course_topic_schedule_link;
-use curims_course_topic_schedule_list;
 
 #__cust_mod__
 use curims_course_information;
@@ -123,6 +125,8 @@ sub init {
     $this->{page_subheader} .= '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">' . "\n";
     $this->{page_subheader} .= '<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">' . "\n"; 
     $this->{page_subheader} .= "<script type=\"text/javascript\" src=\"../../../webman/curims/js/table_style.js\"></script>\n";
+    $this->{page_subheader} .= "<link href=\"../../../webman/curims/css/curims_multiselect_dropdown.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+    $this->{page_subheader} .= "<script type=\"text/javascript\" src=\"../../../webman/curims/js/multiselect.js\"></script>\n";
     #$this->{page_subheader} .= "<link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
     #$this->{page_subheader} .= "<link href=\"../../../webman/curims/css/wm_tag_std.css\" rel=\"stylesheet\" type=\"text/css\">\n";
     #$this->{page_subheader} .= "<link href=\"../../../webman/curims/css/wm_class_std.css\" rel=\"stylesheet\" type=\"text/css\">\n";

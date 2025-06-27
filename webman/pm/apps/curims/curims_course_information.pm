@@ -222,57 +222,6 @@ sub customize_TLD {
     return $tld;
 }
 
-sub process_MENU {
-    my $this = shift @_;
-    my $te = shift @_;
-
-    my $cgi = $this->get_CGI;
-    my $te_type_name = $te->get_Name;
-
-    if ($te_type_name eq 'course_info_sidebar') {
-        my $id_course_62base = $cgi->param('id_course_62base');
-        my $current_task = $cgi->param('task');
-
-        # The menu content from the template (containing the placeholders)
-        my $menu_html = $te->get_Content;
-
-        my @menu_items = (
-            { caption => "Preview CI",         task => "curims_course_information" },
-            { caption => "Assessment Table",   task => "curims_course_assesment_plo_link" },
-            { caption => "CLO List",           task => "curims_course_clo_list" },
-            { caption => "Curriculum List",    task => "curims_course_curriculum_list" }
-        );
-
-        my $i = 0;
-        foreach my $item (@menu_items) {
-            my $task = $item->{task};
-            my $caption = $item->{caption};
-
-            my $link_html;
-            if ($task eq $current_task) {
-                # Current page: Render as a non-clickable span with active styling
-                my $class = "w3-bar-item w3-button w3-green";
-                $link_html = qq{<span class="$class">$caption</span>};
-            } else {
-                # Other pages: Render as a standard clickable link
-                my $link = "index.cgi?link_id=19&task=$task&id_course_62base=$id_course_62base";
-                my $class = "w3-bar-item w3-button";
-                $link_html = qq{<a href="$link" class="$class">$caption</a>};
-            }
-
-            my $placeholder = "menu_item" . $i++ . "_";
-
-            # Substitute the placeholder with the generated link HTML
-            $menu_html =~ s/$placeholder/$link_html/;
-        }
-        
-        # Remove any remaining, unused placeholders from the template
-        $menu_html =~ s/menu_item\d+_//g;
-
-        # Add the processed HTML back to the page content.
-        $this->add_Content($menu_html);
-    }
-}
 sub process_LIST { ### TE_TYPE_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
     my $this = shift @_;    
     my $te = shift @_; 
@@ -290,39 +239,64 @@ sub process_LIST { ### TE_TYPE_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELEC
     # Fetch header information in steps for robustness
     my $header_data;
     eval {
-        # Step 1: Get base course info
-        my $sql_course = "SELECT course_code, course_name, credit_hour, prerequisite_code FROM curims_course WHERE id_course_62base = ?";
+        # Step 1: Get base course info and extract first 4 characters of course code
+        my $sql_course = "SELECT course_code, 
+                                 UPPER(SUBSTRING(TRIM(LEADING FROM course_code), 1, 4)) as course_prefix,
+                                 course_name, 
+                                 credit_hour, 
+                                 prerequisite_code 
+                          FROM curims_course 
+                          WHERE id_course_62base = ?";
+        
         my $sth_course = $db_conn->prepare($sql_course);
         $sth_course->execute($id_course_62base);
         $header_data = $sth_course->fetchrow_hashref();
         $sth_course->finish();
+        
+     # Get the first 4 characters of the course code
+     my $course_prefix = uc(substr($header_data->{course_code}, 0, 4));
+     
+     # Debug: Show what we're searching for
+     warn "DEBUG - Looking up curriculum with prefix: '$course_prefix' from course code: $header_data->{course_code}";
+     
+     # Find curriculum where first 4 characters of code match the course prefix
+     my $sql_curriculum = "SELECT curriculum_name, curriculum_code 
+                           FROM curims_curriculum 
+                           WHERE UPPER(SUBSTRING(TRIM(curriculum_code), 1, 4)) = ?";
+     
+     warn "DEBUG - Executing query: $sql_curriculum with param: $course_prefix";
+     
+     my $sth_curriculum = $db_conn->prepare($sql_curriculum);
+     $sth_curriculum->execute($course_prefix);
+     my $curriculum_data = $sth_curriculum->fetchrow_hashref();
+     $sth_curriculum->finish();
+     
+     if ($curriculum_data) {
+         $header_data->{curriculum_name} = $curriculum_data->{curriculum_name};
+         $header_data->{curriculum_code} = $curriculum_data->{curriculum_code};
+         warn "DEBUG - Found curriculum: $curriculum_data->{curriculum_name} (Code: $curriculum_data->{curriculum_code})";
+     } else {
+         warn "DEBUG - No curriculum found for prefix: $course_prefix";
+         $header_data->{curriculum_name} = 'N/A';
+     }
+
 
         if ($header_data) {
             # Step 2: Get curriculum link info
-            my $sql_currcourse = "SELECT id_curriculum_62base, academic_session, semester_no FROM curims_currcourse WHERE id_course_62base = ?";
+            my $sql_currcourse = "SELECT id_curriculum_62base, semester_no FROM curims_currcourse WHERE id_course_62base = ?";
             my $sth_currcourse = $db_conn->prepare($sql_currcourse);
             $sth_currcourse->execute($id_course_62base);
             my $currcourse_data = $sth_currcourse->fetchrow_hashref();
             $sth_currcourse->finish();
 
             if ($currcourse_data) {
-                $header_data->{academic_session} = $currcourse_data->{academic_session};
-                $header_data->{semester_no} = $currcourse_data->{semester_no};
+    $header_data->{semester_no} = $currcourse_data->{semester_no};
 
-                # Step 3: Get curriculum name
-                my $id_curriculum_62base = $currcourse_data->{id_curriculum_62base};
-                if ($id_curriculum_62base) {
-                    my $sql_curriculum = "SELECT curriculum_name FROM curims_curriculum WHERE id_curriculum_62base = ?";
-                    my $sth_curriculum = $db_conn->prepare($sql_curriculum);
-                    $sth_curriculum->execute($id_curriculum_62base);
-                    my $curriculum_data = $sth_curriculum->fetchrow_hashref();
-                    $sth_curriculum->finish();
-                    
-                    if ($curriculum_data) {
-                        $header_data->{curriculum_name} = $curriculum_data->{curriculum_name};
-                    }
-                }
-            }
+    # Step 3: Get curriculum name by matching first 4 characters of course code with curriculum code
+    my $id_curriculum_62base = $currcourse_data->{id_curriculum_62base};
+    
+}
+
         }
     };
     if ($@) {
@@ -332,6 +306,7 @@ sub process_LIST { ### TE_TYPE_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELEC
 
     # Dynamically generate the header table HTML
     if ($header_data) {
+        # Use the curriculum_name we already fetched from the database
         my $program_name = $header_data->{curriculum_name} || 'N/A';
         my $course_code = $header_data->{course_code} || 'N/A';
         my $course_name = $header_data->{course_name} || 'N/A';
@@ -381,7 +356,21 @@ sub process_LIST { ### TE_TYPE_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELEC
         $this->add_Content($header_html);
         # $cgi->add_Debug_Text($header_html, __FILE__, __LINE__, "DATABASE");
     }
-    # Fetch lecturer information
+    # Fetch course synopsis
+    my $course_synopsis = '';
+    eval {
+        my $sql_synopsis = "SELECT course_synopsis FROM curims_course WHERE id_course_62base = ?";
+        my $sth_synopsis = $db_conn->prepare($sql_synopsis);
+        $sth_synopsis->execute($id_course_62base);
+        my $row = $sth_synopsis->fetchrow_hashref;
+        $course_synopsis = $row->{course_synopsis} || '-';
+        $sth_synopsis->finish();
+    };
+    if ($@) {
+        $course_synopsis = '<span style="color:red">Error fetching course synopsis</span>';
+    }
+
+# Fetch lecturer information
     my $lecturers;
     eval {
         my $sql_lecturer = "SELECT l.name, l.office, l.contact, l.email FROM curims_lecturer l JOIN curims_course_lecturer cl ON l.id_lecturer_62base = cl.id_lecturer_62base WHERE cl.id_course_62base = ?";
@@ -402,11 +391,11 @@ sub process_LIST { ### TE_TYPE_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELEC
     <tbody>
         <tr>
             <td class=" w3-container w3-border" style="font-weight:bold;">Course Synopsis</td>
-            <td class=" w3-container w3-border" colspan="4">lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
+            <td class=" w3-container w3-border" style="text-align: left;" colspan="4">$course_synopsis</td>
         </tr>
         <tr>
             <td class=" w3-container w3-border" style="font-weight:bold;">Course Coordinator</td>
-            <td class=" w3-container w3-border" colspan="4">lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
+            <td class=" w3-container w3-border"style="text-align: left;" colspan="4">N/A</td>
         </tr>
         <tr>
             <td rowspan="$rowspan" class="w3-border w3-container w3-center" style="font-weight:bold;">Course lecturer(s)</td>
@@ -469,15 +458,37 @@ Learning (T&L) methods and Assessment methods:</b>
     my $clos;
     eval {
         my $sql_clo = q{
-            SELECT clo_code, clo_description
-            FROM curims_clo
-            WHERE id_course_62base = ?
-            ORDER BY clo_code
+            SELECT clo.id_clo_62base, clo.clo_code, clo.clo_description, clo.clo_tl_methods
+            FROM curims_clo clo
+            WHERE clo.id_course_62base = ?
+            ORDER BY clo.clo_code
         };
         my $sth_clo = $db_conn->prepare($sql_clo);
         $sth_clo->execute($id_course_62base);
         $clos = $sth_clo->fetchall_arrayref({});
         $sth_clo->finish();
+
+        # For each CLO, fetch linked PLO codes and tags
+        foreach my $clo (@$clos) {
+            my $id_clo_62base = $clo->{id_clo_62base};
+            my $sql_plo = q{
+                SELECT p.plo_code, p.plo_tag
+                FROM curims_cloplo cp
+                JOIN curims_plo p ON cp.id_plo_62base = p.id_plo_62base
+                WHERE cp.id_clo_62base = ?
+                ORDER BY p.plo_code
+            };
+            my $sth_plo = $db_conn->prepare($sql_plo);
+            $sth_plo->execute($id_clo_62base);
+            my @plos;
+            while (my $row = $sth_plo->fetchrow_hashref) {
+                push @plos, $row;
+            }
+            $sth_plo->finish();
+            $clo->{plo_list} = \@plos;
+            $clo->{plo_code_list} = join(", ", map { $_->{plo_code} } @plos);
+            $clo->{plo_tag_list} = join(", ", map { $_->{plo_tag} } @plos);
+        }
     };
 
     if ($@) {
@@ -492,6 +503,8 @@ Learning (T&L) methods and Assessment methods:</b>
     <tr>
       <th style="width:20%;" class="w3-container w3-border">No.</th>
       <th class="w3-container w3-border">CLO</th>
+      <th class="w3-container w3-border">PLO (Code)</th>
+      <th class="w3-container w3-border">T&L Methods</th>
     </tr>
   </thead>
   <tbody>
@@ -499,10 +512,15 @@ Learning (T&L) methods and Assessment methods:</b>
         foreach my $clo (@$clos) {
             my $clo_code = $clo->{clo_code} || 'N/A';
             my $clo_desc = $clo->{clo_description} || 'N/A';
+            my $plo_code_list = $clo->{plo_code_list} || 'N/A';
+            my $plo_tag_list = $clo->{plo_tag_list} || 'N/A';
+            my $clo_tl_methods = $clo->{clo_tl_methods} || 'N/A';
             $clo_html .= qq{
     <tr>
       <td class="w3-container w3-border">$clo_code</td>
       <td class="w3-container w3-border">$clo_desc</td>
+      <td class="w3-container w3-border">$plo_code_list ($plo_tag_list)</td>
+      <td class="w3-container w3-border">$clo_tl_methods</td>
     </tr>
 };
         }
@@ -737,7 +755,5 @@ Learning (T&L) methods and Assessment methods:</b>
 
 
 }
-
-
 
 1;

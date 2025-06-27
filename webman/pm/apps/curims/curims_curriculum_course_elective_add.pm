@@ -137,6 +137,24 @@ sub run_Task {
         # Set into CGI so that $cgi_cgi_curriculum_name_ works in template
         $cgi->push_Param("curriculum_name_elective_page", $label);
     }
+
+    my $id_curriculum_62base = $cgi->param('id_curriculum_62base');
+    my $total_items = 0;
+
+    if ($id_curriculum_62base) {
+        # Count courses available to be added (i.e., not already in this curriculum)
+        my $sql = "SELECT COUNT(*) FROM curims_course 
+                   WHERE id_course_62base NOT IN 
+                       (SELECT id_course_62base FROM curims_currcourse 
+                        WHERE id_curriculum_62base = ?)";
+        my $sth = $db_conn->prepare($sql);
+        $sth->execute($id_curriculum_62base);
+        ($total_items) = $sth->fetchrow_array();
+        $sth->finish();
+    }
+
+    $this->set_DB_Items_View_Num($total_items || 0);
+
     $this->SUPER::run_Task();
 }
 
@@ -201,6 +219,24 @@ sub customize_SQL {
     
     ### Next to customize the $sql string
     ### ???
+
+    my $id_curriculum_62base = $cgi->param('id_curriculum_62base');
+    
+    if ($id_curriculum_62base) {
+        # Filter out courses that are already in the curriculum
+        my $sql_filter = "id_course_62base NOT IN (SELECT id_course_62base FROM curims_currcourse WHERE id_curriculum_62base = '$id_curriculum_62base')";
+        
+        my @sql_part = split(/ order by /i, $sql);
+        
+        my $base_query = $sql_part[0];
+        my $order_by_clause = $sql_part[1] ? "ORDER BY " . $sql_part[1] : "";
+
+        if ($base_query =~ / where /i) {
+            $sql = "$base_query AND ($sql_filter) $order_by_clause";
+        } else {
+            $sql = "$base_query WHERE $sql_filter $order_by_clause";
+        }
+    }
     
     return $sql;
 }

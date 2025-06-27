@@ -45,12 +45,9 @@ List
         <col style="width: 10%">
         <col style="width: 10%">
         <col style="width: 10%">
-        <col style="width: 5%">
-        <col style="width: 5%">
-        <col style="width: 5%">
-        <!-- start_cgihtml_ //-->
-        $cgi_admin_col_action_
-        <!-- end_cgihtml_ //-->
+<!-- start_cgihtml_ //-->
+ $cgi_admin_col_style_
+ <!-- end_cgihtml_ //-->
        </colgroup>
       <thead>
         <tr class="w3-light-grey">
@@ -61,9 +58,9 @@ List
           <th>Prerequisite</th>
           <th>Curriculum</th>
           <th>CI</th>
-          <th>Assesment</th>
-          <th>Clo</th>
-          <th>Topic</th>
+          <th class="clo-link-header">CLO</th>
+          <th class="topic-link-header">Topic</th>
+          <th class="assesment-link-header">Assesment</th>
           <!-- start_cgihtml_ //-->
           
           <th class="w3-center" id="action-header-course">
@@ -88,11 +85,11 @@ List
           <td><a href="index.cgi?link_id=19&task=curims_course_curriculum_list&id_course_62base=$tld_id_course_62base_">$tld_curims_curriculum_</a></td>
           <td><a href="index.cgi?link_id=19&task=curims_course_information&id_course_62base=$tld_id_course_62base_" class="w3-button w3-grey w3-text-white w3-hover-grey w3-round-large">View</a></td>
           <!-- <td><a href="index.cgi?link_id=41&task=curims_course_information&id_course_62base=$tld_id_course_62base_" class="w3-button w3-grey w3-text-white w3-hover-grey w3-round-large">View</a></td> -->
-          <td><a href="index.cgi?link_id=19&task=curims_course_assesment_plo_link&id_course_62base=$tld_id_course_62base_">$tld_curims_assesment_</a></td>
-          <td><a href="index.cgi?link_id=19&task=curims_course_clo_list&id_course_62base=$tld_id_course_62base_">$tld_curims_clo_</a></td>
-          <td><a href="index.cgi?link_id=27&task=&id_course_62base=$tld_id_course_62base_">$tld_curims_topic_</a></td>
+          <td class="clo-link-col"><a href="index.cgi?link_id=42&task=curims_clo_plo_link&id_course_62base=$tld_id_course_62base_">$tld_curims_clo_</a></td>
+          <td class="topic-link-col"><a href="index.cgi?link_id=27&task=&id_course_62base=$tld_id_course_62base_">$tld_curims_topic_</a></td>
+          <td class="assesment-link-col"><a href="index.cgi?link_id=19&task=curims_course_assesment_plo_link&id_course_62base=$tld_id_course_62base_">$tld_curims_assesment_</a></td>
           <td class="w3-center action-cell-course" >
-            <input class="w3-check" type="checkbox" style="width: 20px; height: 20px; margin-bottom: 10px;" name="id_course_62base_$tld_idx_" id="id_course_62base_$tld_idx_" value="$tld_id_course_62base_" />
+            <input class="w3-check" type="checkbox" name="id_course_62base_$tld_idx_" id="id_course_62base_$tld_idx_" value="$tld_id_course_62base_" />
           </td>
         </tr>
         <!-- end_list_ //-->
@@ -279,6 +276,15 @@ List
           if (admin_add) {
               admin_add.style.display = 'none';
           }
+      }
+
+      if (IS_ADMIN === 0) {
+          document.querySelectorAll('.clo-link-header').forEach(function(el) { el.style.display = 'none'; });
+          document.querySelectorAll('.topic-link-header').forEach(function(el) { el.style.display = 'none'; });
+          document.querySelectorAll('.assesment-link-header').forEach(function(el) { el.style.display = 'none'; });
+          document.querySelectorAll('.clo-link-col').forEach(function(el) { el.style.display = 'none'; });
+          document.querySelectorAll('.topic-link-col').forEach(function(el) { el.style.display = 'none'; });
+          document.querySelectorAll('.assesment-link-col').forEach(function(el) { el.style.display = 'none'; });
       }
   
         

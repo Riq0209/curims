@@ -4,8 +4,9 @@
 <!-- dynamic_content_ name=link_path //-->
 &gt;
 <!-- start_cgihtml_ //-->
-<b>???</b> 
+<b>$cgi_course_clo_</b> 
 &gt; 
+
 <a href="index.cgi?link_id=$cgi_link_id_&task=curims_course_clo_multirows_update&button_submit=Cancel">List</a>
 <!-- end_cgihtml_ //-->
 &gt;
@@ -14,12 +15,21 @@ Update
 
 <form method="POST" action="./index.cgi">
 <!-- dynamic_content_ name=form_hidden_field //-->
-<table border="1">
-  <tr>
-    <th align="right" valign="top">Num. </th>
+<div class="w3-container" id="flex-container">
+<table class="w3-table" style="width:100%">
+  <colgroup>
+    <col style="width:5%">
+    <col style="width:10%">
+    <col style="width:35%">
+    <col style="width:15%">
+  </colgroup>
+  <tr class="w3-light-grey">
+    <th align="right" valign="top">No. </th>
     <th valign="top">Clo Code</th>
 
     <th valign="top">Clo Description</th>
+
+    <th valign="top">T&L Methods</th>
 
   </tr>
 
@@ -30,27 +40,51 @@ Update
   	</td>
 
     <td valign="top">
-      <input name="$db_clo_code_$row_idx" type="text" id="$db_clo_code_$row_idx" value="$db_clo_code_$row_idx_" size="10">
+      <input class="w3-input w3-border" name="$db_clo_code_$row_idx" type="text" id="$db_clo_code_$row_idx" value="$db_clo_code_$row_idx_" size="10">
       </br>
       <font color="#FF0000">$fe_clo_code_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <textarea name="$db_clo_description_$row_idx" id="$db_clo_description_$row_idx" cols="50">$db_clo_description_$row_idx_</textarea>
+      <textarea class="w3-input w3-border" name="$db_clo_description_$row_idx" id="$db_clo_description_$row_idx" cols="50" rows="1">$db_clo_description_$row_idx_</textarea>
       </br>
       
+    </td>
+
+    <td valign="top">
+      <select class="w3-input w3-border" name="$db_clo_tl_methods_$row_idx" id="$db_clo_tl_methods_$row_idx" cols="50" rows="1">
+        <option value="">Select T&L Methods</option>
+        <option value="Active learning">Active learning</option>
+        <option value="Collaborative Learning">Collaborative Learning</option>
+        <option value="Lab works & Tutorial">Lab works & Tutorial</option>
+        <option value="Project-based learning">Project-based learning</option>
+        <option value="Research-led teaching">Research-led teaching</option>
+        <option value="Online learning">Online learning</option>
+      </select>
+      </br>
+      <script>
+        // Set the selected semester value from database
+        document.addEventListener('DOMContentLoaded', function() {
+          var semesterValue = "$db_clo_tl_methods_$row_idx_";
+          var semesterSelect = document.getElementById('$db_clo_tl_methods_$row_idx');
+          if (semesterValue && semesterSelect) {
+            semesterSelect.value = semesterValue;
+          }
+        });
+        </script>
     </td>
 
   </tr>
   <!-- end_datahtml_ //-->
 
   <tr>
-    <td align="right" colspan="3">
-      <input name="button_submit" type="submit" id="button_submit" value="Proceed"/>
-      <input name="button_submit" type="submit" id="button_submit" value="Cancel"/>
+    <td style="text-align: right;" colspan="4">
+      <button type="submit" name="button_submit" value="Cancel" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Cancel</button>
+      <button type="submit" name="button_submit" value="Proceed" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large">Proceed</button>
     </td>
   </tr>
 </table>
+</div>
 </form>
 
 <!-- end_view_ //-->

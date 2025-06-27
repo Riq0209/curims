@@ -14,10 +14,9 @@ Insert
   <!-- start_cgihtml_ //-->
   <input type="hidden" name="link_id" value="$cgi_link_id_">
   <b>Row Number:</b>
-
-  <div class="w3-container" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+  <div class="w3-container w3-margin-top" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
     <div class="w3-cell">
-      <input class="w3-input w3-border w3-round-large" type="text" name="irn_curims_curriculum" size="3" value="$cgi_irn_curims_curriculum_">
+      <input class="w3-input w3-border w3-round-large" type="text" name="irn_curims_curriculum" size="1" value="$cgi_irn_curims_curriculum_" style="text-align: center;">
     </div>
     <div class="w3-cell">
       <input class="w3-button w3-white w3-border w3-hover-white w3-round-large" name="button_submit" type="submit" id="button_submit" value="Change" />
@@ -66,9 +65,7 @@ Insert
     </td>
 
     <td valign="top">
-      <select class="w3-input w3-border intake-session-select" name="$db_intake_session_$row_idx" id="$db_intake_session_$row_idx" data-value="$db_intake_session_$row_idx_">
-        <option value="">Choose Session</option>
-      </select>
+      <input class="w3-input w3-border" name="$db_intake_session_$row_idx" id="$db_intake_session_$row_idx" data-value="$db_intake_session_$row_idx_" placeholder="2024/2025">
       <br/>
       <font color="#FF0000">$fe_intake_session_$row_idx_</font>
     </td>

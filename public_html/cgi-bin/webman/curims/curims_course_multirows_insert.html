@@ -14,9 +14,9 @@ Insert
   <!-- start_cgihtml_ //-->
   <input type="hidden" name="link_id" value="$cgi_link_id_">
   <b>Row Number:</b>
-  <div class = "w3-container" id="flex-container">
+  <div class = "w3-container w3-margin-top" id="flex-container">
       <div class="w3-cell">
-      <input class="w3-input w3-border w3-round-large" type="text" name="irn_curims_course" size="3" value="$cgi_irn_curims_course_">
+      <input class="w3-input w3-border w3-round-large" type="text" name="irn_curims_course" size="1" value="$cgi_irn_curims_course_" style= "text-align: center;" />
     </div>
     <div class="w3-cell">
       <input class="w3-button w3-white w3-border w3-hover-white w3-round-large" name="button_submit" type="submit" id="button_submit" value="Change" />
@@ -31,8 +31,20 @@ Insert
 <div class="w3-container">
 <table class="w3-table">
   <thead>
+  <colgroup>
+    <col span="1" style="width: 2%;">
+    <col span="1" style="width: 5%;">
+    <col span="1" style="width: 7%;">
+    <col span="1" style="width: 21%;">
+    <col span="1" style="width: 5%;">
+    <col span="1" style="width: 7%;">
+    <col span="1" style="width: 25%;">
+  </colgroup> 
   <tr class="w3-light-grey">
     <th align="right" valign="top">No. </th>
+
+    <th valign="top">Type</th>
+
     <th valign="top">Course Code</th>
 
     <th valign="top">Course Name</th>
@@ -40,6 +52,8 @@ Insert
     <th valign="top">Credit</th>
 
     <th valign="top">Prerequisite Code</th>
+
+    <th valign="top">Course Synopsys</th>
 
   </tr>
   </thead>
@@ -49,6 +63,14 @@ Insert
   	<td align="right" valign="top">
   	  <b>$row_num_. </b>
   	</td>
+
+    <td valign="top">
+          <select class="w3-select w3-border" name="course_type_$row_idx" id="course_type_$row_idx" onchange="toggleCourseInput($row_idx)" style="width: 150px;">
+        <option value="normal">Normal Course</option>
+        <option value="elective">Elective Course</option>
+      </select>
+    </td>
+
     <td valign="top">
       <input class="w3-input w3-border" name="$db_course_code_$row_idx" type="text" id="$db_course_code_$row_idx" value="$db_course_code_$row_idx_" size="50">
       </br>
@@ -56,36 +78,115 @@ Insert
     </td>
 
     <td valign="top">
-      <textarea class="w3-input w3-border" name="$db_course_name_$row_idx" id="$db_course_name_$row_idx" cols="50" rows="1">$db_course_name_$row_idx_</textarea>
-      </br>
+      
+      <div id="normal_input_$row_idx">
+        <textarea class="w3-input w3-border" name="$db_course_name_$row_idx" id="$db_course_name_$row_idx" cols="50" rows="1">$db_course_name_$row_idx_</textarea>
+      </div>
+      
+      <div id="elective_input_$row_idx" style="display:none;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <label style="min-width: 200px;">Elective Courses - Choose</label>
+          <input class="w3-input w3-border" type="number" id="elective_count_$row_idx" min="1" 
+                 onchange="updateElectiveValue($row_idx)" style="flex: 1;" placeholder="elective courses to choose">
+        </div>
+      </div>
+      
+      <br>
       <font color="#FF0000">$fe_course_name_$row_idx_</font>
+      
+      <script>
+      // Initialize on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        var currentValue = "$db_course_name_$row_idx_";
+        if (currentValue.includes("Elective Courses - Choose")) {
+          document.getElementById('course_type_$row_idx').value = 'elective';
+          var count = currentValue.split("Choose ")[1];
+          document.getElementById('elective_count_$row_idx').value = count;
+          toggleCourseInput('$row_idx');
+        }
+      });
+      
+      function toggleCourseInput(rowIdx) {
+        var courseType = document.getElementById('course_type_' + rowIdx).value;
+        if (courseType === 'normal') {
+          document.getElementById('normal_input_' + rowIdx).style.display = 'block';
+          document.getElementById('elective_input_' + rowIdx).style.display = 'none';
+        } else {
+          document.getElementById('normal_input_' + rowIdx).style.display = 'none';
+          document.getElementById('elective_input_' + rowIdx).style.display = 'block';
+          updateElectiveValue(rowIdx);
+        }
+      }
+      
+      function updateElectiveValue(rowIdx) {
+        var count = document.getElementById('elective_count_' + rowIdx).value;
+        if (count) {
+          document.getElementById('$db_course_name_' + rowIdx).value = 'Elective Courses - Choose ' + count;
+        }
+      }
+      </script>
     </td>
 
     <td valign="top">
-      <input class="w3-input w3-border" name="$db_credit_hour_$row_idx" type="text" id="$db_credit_hour_$row_idx" value="$db_credit_hour_$row_idx_" size="1">
+      <input class="w3-input w3-border" name="$db_credit_hour_$row_idx" type="number" id="$db_credit_hour_$row_idx" value="$db_credit_hour_$row_idx_" size="1">
       </br>
       <font color="#FF0000">$fe_credit_hour_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <input class="w3-input w3-border" name="$db_prerequisite_code_$row_idx" type="text" id="$db_prerequisite_code_$row_idx" value="$db_prerequisite_code_$row_idx_" size="50">
+      <div id="prereq_normal_input_$row_idx">
+        <input class="w3-input w3-border" name="$db_prerequisite_code_$row_idx" type="text" id="$db_prerequisite_code_$row_idx" value="$db_prerequisite_code_$row_idx_" size="50">
+      </div>
+      
+      <div id="prereq_elective_input_$row_idx" style="display:none;">
+        <input class="w3-input w3-border w3-light-grey" name="elective_prereq_$row_idx" type="text" value="N/A" disabled size="50">
+        <small class="w3-text-grey">Not applicable for elective courses</small>
+      </div>
       </br>
       
+      <script>
+      function toggleCourseInput(rowIdx) {
+        var courseType = document.getElementById('course_type_' + rowIdx).value;
+        
+        // Toggle course name inputs
+        if (courseType === 'normal') {
+          document.getElementById('normal_input_' + rowIdx).style.display = 'block';
+          document.getElementById('elective_input_' + rowIdx).style.display = 'none';
+          // Toggle prerequisite inputs
+          document.getElementById('prereq_normal_input_' + rowIdx).style.display = 'block';
+          document.getElementById('prereq_elective_input_' + rowIdx).style.display = 'none';
+        } else {
+          document.getElementById('normal_input_' + rowIdx).style.display = 'none';
+          document.getElementById('elective_input_' + rowIdx).style.display = 'block';
+          // Toggle prerequisite inputs
+          document.getElementById('prereq_normal_input_' + rowIdx).style.display = 'none';
+          document.getElementById('prereq_elective_input_' + rowIdx).style.display = 'block';
+          updateElectiveValue(rowIdx);
+        }
+      }
+      </script>
+    </td>
+
+    <td valign="top">
+      <textarea class="w3-input w3-border" name="$db_course_synopsis_$row_idx" type="text" id="$db_course_synopsis_$row_idx" value="$db_course_synopsis_$row_idx_" size="50" rows="1"></textarea>
     </td>
 
   </tr>
   <!-- end_datahtml_ //-->
 
   <tr>
-    <td colspan="6" style="text-align: right;">
+    <td colspan="7" style="text-align: right;">
       <button type="submit" name="button_submit" value="Cancel" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Cancel</button>
       <button type="submit" name="button_submit" value="Proceed" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large">Proceed</button>
     </td>
   </tr>
 </table>
+<small class="w3-text-grey" style="text-align: left; display: block; margin-top: 10px;">
+  <strong>P/S:</strong> Please select the elective course type for further input of the elective courses. <br>
+  Insert elective course code format example: SECJ3XXX for SECJ3104, SECJ3303, SECJ3323.
+</small>
 </div>
 </form>
-
 <!-- end_view_ //-->
 </body>
 </html>

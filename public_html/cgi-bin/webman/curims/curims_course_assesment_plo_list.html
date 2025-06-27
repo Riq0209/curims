@@ -4,9 +4,9 @@
 <!-- dynamic_content_ name=link_path //-->
 &gt;
 <!-- start_cgihtml_ //-->
-<b>???</b><!-- end_cgihtml_ //-->
+<b>$cgi_course_curriculum_name_link_</b><!-- end_cgihtml_ //-->
 &gt;
-Plo
+PLO
 &gt;
  List
 <p />
@@ -15,7 +15,11 @@ Plo
 <!-- dynamic_content_ name=db_items_num_end //--> of
 <!-- dynamic_content_ name=db_items_num_total //--> Records.
 <p />
-
+<div class="w3-container w3-right-align w3-margin-bottom">
+  <!-- start_cgihtml_ //-->
+  <button type="button" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large" onclick="document.tld_view_dynamic.task.value='curims_course_assesment_plo_add'; document.tld_view_dynamic.link_id.value='$cgi_link_id_'; document.tld_view_dynamic.submit();">Add List</button>
+  <!-- end_cgihtml_ //-->
+</div>
 <form name="tld_view_dynamic" method="post" action="index.cgi">
   <!-- start_cgihtml_ //-->
   <input name="task" type="hidden" value="$cgi_task_">
@@ -23,17 +27,18 @@ Plo
 
   <!-- dynamic_content_ name=form_hidden_field //-->
 
-<table border="1">
+  <div class="w3-container">
+  <table class="w3-table">
   <!-- start_menu_ name=caption //-->
-  <tr>
-    <th>Num.</th>
-    <th>menu_item0_</th>
-    <th>menu_item1_</th>
-    <th>menu_item2_</th>
+  <tr class="w3-light-grey">
+    <th>No.</th>
+    <th>Code</th>
+    <th>Tag</th>
+    <th>Description</th>
     <th>Percentage</th>
     <!-- start_cgihtml_ //-->
-    <th align="center">
-      Selection &amp; Operations
+    <th class="w3-center">
+      Action
       <br />
       <a href="javascript:checkbox_select_all('id_assesplo_62base_', $cgi_inl_curims_plo_, $cgi_dbisn_curims_plo_);">All</a> |
       <a href="javascript:checkbox_select_none('id_assesplo_62base_', $cgi_inl_curims_plo_, $cgi_dbisn_curims_plo_);">None</a> |
@@ -52,11 +57,11 @@ Plo
     <td>$tld_plo_description_</td>
     <td>$tld_percentage_</td>
 
-    <td align="center">
+    <td class="w3-center">
       <!-- start_cgihtml_ //-->
-      <a href="index.cgi?link_id=$cgi_link_id_&id_assesplo_62base=$tld_id_assesplo_62base_&task=curims_course_assesment_plo_remove">Remove</a>
+      <a href="index.cgi?link_id=$cgi_link_id_&id_assesplo_62base=$tld_id_assesplo_62base_&task=curims_course_assesment_plo_remove" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Remove</a>
       |
-      <input type="checkbox" name="id_assesplo_62base_$tld_idx_" id="id_assesplo_62base_$tld_idx_" value="$tld_id_assesplo_62base_">
+      <input class="w3-check" type="checkbox" name="id_assesplo_62base_$tld_idx_" id="id_assesplo_62base_$tld_idx_" value="$tld_id_assesplo_62base_">
       <!-- end_cgihtml_ //-->
     </td>
 
@@ -71,33 +76,31 @@ Plo
     <td>...</td>
     <td>...</td>
 
-    <td align="center">
+    <td class="w3-center">
       <!-- start_cgihtml_ //-->
-      <a href="index.cgi?link_id=$cgi_link_id_&task=curims_course_assesment_plo_add">Add List</a>
-      |
-      <a href="javascript:document.tld_view_dynamic.task.value='curims_course_assesment_plo_remove'; document.tld_view_dynamic.submit();">Remove Selected</a>
+      <button type="button" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large" onclick="document.tld_view_dynamic.task.value='curims_course_assesment_plo_remove'; document.tld_view_dynamic.submit();">Remove Selected</button>
       <!-- end_cgihtml_ //-->
     </td>
   </tr>
 </table>
 
-<p />
+<!-- <p />
 
   Items/List: <input name="inl_curims_plo" type="text" id="inl_curims_plo" value="$inl_curims_plo_" size="3">
   &nbsp;
 
-  <!-- start_menu_ name=list //-->
+  <!s-- start_menu_ name=list //-s->
     dynamic_menu_items_
-  <!-- end_menu_ //-->
+  <!-s- end_menu_ //--s>
   &nbsp;
 
   List Set Num. :
   <select name="lsn_curims_plo" onChange="document.tld_view_dynamic.submit()">
-    <!-- select_ name=lsn_curims_plo //-->
+    <!-s- select_ name=lsn_curims_plo //-s->
   </select>
 
-  <p />
-
+  <p /> -->
+</div>
 
 </form>
 <!-- end_view_ //-->

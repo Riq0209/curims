@@ -6,9 +6,9 @@
 <!-- start_cgihtml_ //-->
 <b>$cgi_curriculum_name_elective_page_</b><!-- end_cgihtml_ //-->
 &gt;
-Elective
+<a href="javascript:document.tld_view_dynamic.submission_type.value='parent_list'; document.tld_view_dynamic.submit();">Elective</a>
 &gt;
-Add from List
+Add from Elective List
 <p />
 
 <!-- dynamic_content_ name=parent_item_info //-->
@@ -18,35 +18,62 @@ Add from List
 <!-- dynamic_content_ name=db_items_num_end //--> of
 <!-- dynamic_content_ name=db_items_num_total //--> Records to be added.
 <p />
-
+<div class = "w3-container">
+  <div class = "col-6">
+  </div>
+  <div class = "col-6 w3-left">
+  </div>
+</div>
+<div class="w3-container w3-margin-bottom">
+  <div class="w3-row">
+    <div class="w3-half w3-left-align">
+      <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Search for courses.." class="w3-input w3-border w3-round-large" style="width:50%;">
+    </div>
+  </div>
+</div>
 <form name="tld_view_dynamic" method="post" action="index.cgi">
   <!-- dynamic_content_ name=form_hidden_field //-->
   <input type="hidden" name="submission_type">
-<div class="w3-container">
-<table class="w3-table-all">
-  <!-- start_menu_ name=caption //-->
-  <tr>
-    <th>No.</th>
-    <th>Code</th>
-    <th>Name</th>
-    <th>Credit</th>
-    <th>Prerequisite</th>
-    <th>Year</th>
-    <th>Semester</th>
-    <th>Semester No</th>
-    <th>Status</th>
-    <!-- start_cgihtml_ //-->
-    <th class="w3-center">
-      Action
-      <br />
-      <a href="javascript:checkbox_select_all('id_course_62base_', $cgi_inl_curims_course_AFLS_, $cgi_dbisn_curims_course_AFLS_);">All</a> |
-      <a href="javascript:checkbox_select_none('id_course_62base_', $cgi_inl_curims_course_AFLS_, $cgi_dbisn_curims_course_AFLS_);">None</a> |
-      <a href="javascript:checkbox_select_invert('id_course_62base_', $cgi_inl_curims_course_AFLS_, $cgi_dbisn_curims_course_AFLS_);">Invert</a>
-    </th>
-    <!-- end_cgihtml_ //-->
-  </tr>
-  <!-- end_menu_ //-->
 
+<div class="w3-container w3-margin-bottom">
+<table class="w3-table" id="electiveCourseAddTable">
+  <!-- start_menu_ name=caption //-->
+  <colgroup>
+    <col style="width:5%">
+    <col style="width:10%">
+    <col style="width:33%">
+    <col style="width:5%">
+    <col style="width:10%">
+    <col style="width:5%">
+    <col style="width:5%">
+    <col style="width:5%">
+    <col style="width:7%">
+    <col style="width:15%">
+  </colgroup>
+  <thead>
+    <tr class="w3-light-grey">
+      <th>No.</th>
+      <th>Code</th>
+      <th>Name</th>
+      <th>Credit</th>
+      <th>Prerequisite</th>
+      <th>Year</th>
+      <th>Semester</th>
+      <th>Semester No</th>
+      <th>Status</th>
+      <!-- start_cgihtml_ //-->
+      <th class="w3-center">
+        Action
+        <br />
+        <a href="javascript:checkbox_select_all('id_course_62base_', $cgi_inl_curims_course_AFLS_, $cgi_dbisn_curims_course_AFLS_);">All</a> |
+        <a href="javascript:checkbox_select_none('id_course_62base_', $cgi_inl_curims_course_AFLS_, $cgi_dbisn_curims_course_AFLS_);">None</a> |
+        <a href="javascript:checkbox_select_invert('id_course_62base_', $cgi_inl_curims_course_AFLS_, $cgi_dbisn_curims_course_AFLS_);">Invert</a>
+      </th>
+      <!-- end_cgihtml_ //-->
+    </tr>
+  </thead>
+  <!-- end_menu_ //-->
+  <tbody>
   <!-- start_list_ name=main //-->
   <tr class="$tld_row_class_">
     <td align="right">$tld_num_.</td>
@@ -80,23 +107,186 @@ Add from List
       <option value="" selected></option>
       <option value="Core">Core</option>
       <option value="Elective">Elective</option>
+      <option value="General">General</option>
     </select>
   </td>
 
     <td class="w3-center">
-      <input class="w3-check" type="checkbox" name="id_course_62base_$tld_idx_" id="id_course_62base_$tld_idx_" value="$tld_id_course_62base_">
+      <input type="checkbox" name="id_course_62base_$tld_idx_" id="id_course_62base_$tld_idx_" value="$tld_id_course_62base_">
     </td>
 
   </tr>
   <!-- end_list_ //-->
-  <script type="text/javascript">
+    </tbody>
+    <tfoot>
+  <tr bgcolor="#EEEEEE">
+    <td align="right">...</td>
+
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+
+    <td class="w3-center">
+      <button type="button" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large" onclick="document.tld_view_dynamic.submission_type.value='add_selected'; document.tld_view_dynamic.submit();">Add Selected</button>
+    </td>
+  </tr>
+</tfoot>
+</table>
+</div>
+<div class="w3-center">
+  <div class="w3-bar" id="pagination-bar">
+    <!-- Pagination buttons will be inserted here by JavaScript -->
+  </div>
+</div>
+<!-- <p />
+
+  Items/List: <input name="inl_curims_course_AFLS" type="text" id="inl_curims_course_AFLS" value="$inl_curims_course_AFLS_" size="3">
+  &nbsp;
+
+  <!-s- start_menu_ name=list //-s->
+    dynamic_menu_items_
+  <!-s- end_menu_ //-s->
+  &nbsp;
+
+  List Set Num. :
+  <select name="lsn_curims_course_AFLS" onChange="document.tld_view_dynamic.submit()">
+    <!-s- select_ name=lsn_curims_course_AFLS //-s->
+  </select>
+
+  <p /> -->
+  <script>
+    let currentPage = 1;
+    const ROWS_PER_PAGE = 10;
+    let rowsPerPage = ROWS_PER_PAGE;
+    
+    function updateTable() {
+        const searchInput = document.getElementById("searchInput");
+        const filter = searchInput.value.toUpperCase();
+        const table = document.getElementById("electiveCourseAddTable");
+        const tbody = table.getElementsByTagName("tbody")[0];
+        const rows = tbody.getElementsByTagName("tr");
+        const paginationBar = document.getElementById("pagination-bar");
+    
+        const filteredRows = [];
+        for (let i = 0; i < rows.length; i++) {
+            let match = false;
+            const cells = rows[i].getElementsByTagName("td");
+            for (let j = 0; j < cells.length; j++) {
+                if (cells[j]) {
+                    let cellContent = "";
+                    const inputs = cells[j].getElementsByTagName('input');
+                    const selects = cells[j].getElementsByTagName('select');
+                    if (inputs.length > 0 && inputs[0].type !== 'checkbox') {
+                        cellContent = inputs[0].value;
+                    } else if (selects.length > 0) {
+                        cellContent = selects[0].options[selects[0].selectedIndex].text;
+                    } else {
+                        cellContent = cells[j].textContent || cells[j].innerText;
+                    }
+                    if (cellContent.toUpperCase().indexOf(filter) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+            }
+            if (match) {
+                filteredRows.push(rows[i]);
+            }
+        }
+    
+        const isViewingAll = rowsPerPage === Infinity;
+        const pageCount = Math.ceil(filteredRows.length / ROWS_PER_PAGE);
+        
+        if (!isViewingAll && currentPage > pageCount) {
+            currentPage = 1;
+        }
+    
+        for (let i = 0; i < rows.length; i++) {
+            rows[i].style.display = 'none';
+        }
+    
+        const start = isViewingAll ? 0 : (currentPage - 1) * ROWS_PER_PAGE;
+        const end = isViewingAll ? filteredRows.length : start + ROWS_PER_PAGE;
+        for (let i = start; i < end && i < filteredRows.length; i++) {
+            filteredRows[i].style.display = '';
+        }
+    
+        paginationBar.innerHTML = "";
+        if (filteredRows.length > ROWS_PER_PAGE) {
+            if (!isViewingAll) {
+                for (let i = 1; i <= pageCount; i++) {
+                    const btn = document.createElement('a');
+                    btn.href = "#";
+                    btn.innerText = i;
+                    btn.className = "w3-button";
+                    if (i === currentPage) {
+                        btn.classList.add("w3-green");
+                    }
+                    btn.onclick = (function(page) {
+                        return function(event) {
+                            event.preventDefault();
+                            changePage(page);
+                        }
+                    })(i);
+                    paginationBar.appendChild(btn);
+                }
+            }
+    
+            const toggleBtn = document.createElement('a');
+            toggleBtn.href = "#";
+            toggleBtn.className = "w3-button";
+            if (isViewingAll) {
+                toggleBtn.innerText = "Show Paged";
+                toggleBtn.classList.add("w3-green");
+                toggleBtn.onclick = function(event) {
+                    event.preventDefault();
+                    changePage(1);
+                };
+            } else {
+                toggleBtn.innerText = "View All";
+                toggleBtn.onclick = function(event) {
+                    event.preventDefault();
+                    viewAll();
+                };
+            }
+            paginationBar.appendChild(toggleBtn);
+        }
+    }
+    
+    function handleSearch() {
+        currentPage = 1;
+        updateTable();
+    }
+    
+    function viewAll() {
+        rowsPerPage = Infinity;
+        updateTable();
+    }
+    
+    function changePage(page) {
+        currentPage = page;
+        rowsPerPage = ROWS_PER_PAGE;
+        updateTable();
+    }
+    
+    window.onload = function() {
+        if (document.getElementById("electiveCourseAddTable")) {
+            rowsPerPage = ROWS_PER_PAGE;
+            updateTable();
+        }
+    };
+
     function updateSemesterNoElective(idx) {
       const yearSelect = document.getElementById('year_taken_' + idx);
       const semesterSelect = document.getElementById('semester_taken_' + idx);
       const semesterNoSelect = document.getElementById('semester_no_' + idx);
     
       if (!yearSelect || !semesterSelect || !semesterNoSelect) {
-        // console.error('One or more select elements not found for index: ' + idx);
         return;
       }
     
@@ -114,7 +304,7 @@ Add from List
       if (!isNaN(year) && !isNaN(semester) && year >= 1 && year <= 4 && semester >= 1 && semester <= 2) {
         const semesterNo = (year - 1) * 2 + semester;
         if (semesterNo >= 1 && semesterNo <= 8) {
-          semesterNoSelect.value = semesterNo.toString(); // Directly set the value for the input field
+          semesterNoSelect.value = semesterNo.toString();
         } else {
           semesterNoSelect.value = ""; 
         }
@@ -122,45 +312,10 @@ Add from List
         semesterNoSelect.value = "";
       }
     }
-    </script>
     
-  <tr bgcolor="#EEEEEE">
-    <td align="right">...</td>
-
-    <td>...</td>
-    <td>...</td>
-    <td>...</td>
-    <td>...</td>
-    <td>...</td>
-    <td>...</td>
-    <td>...</td>
-    <td>...</td>
-
-    <td class="w3-center">
-      <button type="button" class="w3-button w3-white w3-border w3-border-green w3-round-large" onclick="document.tld_view_dynamic.submission_type.value='add_selected'; document.tld_view_dynamic.submit();">Add Selected</button>
-      |
-      <button type="button" class="w3-button w3-white w3-border w3-border-yellow w3-round-large" onclick="document.tld_view_dynamic.submission_type.value='parent_list'; document.tld_view_dynamic.submit();">Back to Parent List</button>
-    </td>
-  </tr>
-</table>
-</div>
-<p />
-
-  Items/List: <input name="inl_curims_course_AFLS" type="text" id="inl_curims_course_AFLS" value="$inl_curims_course_AFLS_" size="3">
-  &nbsp;
-
-  <!-- start_menu_ name=list //-->
-    dynamic_menu_items_
-  <!-- end_menu_ //-->
-  &nbsp;
-
-  List Set Num. :
-  <select name="lsn_curims_course_AFLS" onChange="document.tld_view_dynamic.submit()">
-    <!-- select_ name=lsn_curims_course_AFLS //-->
-  </select>
-
-  <p />
-
+    // Remove the duplicate updateSemesterNo function since we have updateSemesterNoElective
+    // which serves the same purpose
+    </script>
 
 </form>
 <!-- end_view_ //-->

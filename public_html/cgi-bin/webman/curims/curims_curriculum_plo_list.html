@@ -16,8 +16,8 @@ List
 <!-- dynamic_content_ name=db_items_num_end //--> of
 <!-- dynamic_content_ name=db_items_num_total //--> Records.
 <p />
-<div class = "w3-container">
-    <div class = "w3-right-align">
+<div class = "w3-container w3-margin-bottom">
+    <div class = "w3-right-align" id="admin-add-plo">
       <!-- start_cgihtml_ //-->
       <button type="button" 
         class="w3-button w3-green w3-round-large w3-hover-green" 
@@ -34,14 +34,16 @@ List
 
   <!-- dynamic_content_ name=form_hidden_field //-->
 <div class="w3-container">
-<table class="w3-table-all" >
+<table class="w3-table" >
   <!-- start_menu_ name=caption //-->
    <colgroup>
     <col style="width:3%">
     <col style="width:5%">
     <col style="width:3%">
     <col style="width:40%">
-    <col style="width:10%">
+    <!-- start_cgihtml_ //-->
+    $cgi_admin_col_style_
+    <!-- end_cgihtml_ //-->
   </colgroup>
    <thead>
   <tr class="w3-light-grey">
@@ -50,7 +52,7 @@ List
     <th>Tag</th>
     <th>Description</th>
     <!-- start_cgihtml_ //-->
-    <th class="w3-center">
+    <th class="w3-center" id="action-header-plo">
       Action
       <br />
       <a href="javascript:checkbox_select_all('id_plo_62base_', $cgi_inl_curims_plo_, $cgi_dbisn_curims_plo_);">All</a> |
@@ -70,52 +72,61 @@ List
     <td>$tld_plo_tag_</td>
     <td>$tld_plo_description_</td>
 
-    <td class="w3-center">
+    <td class="w3-center action-cell-plo">
       <input class="w3-check" type="checkbox" name="id_plo_62base_$tld_idx_" id="id_plo_62base_$tld_idx_" value="$tld_id_plo_62base_">
     </td>
   </tr>
   <!-- end_list_ //-->
-
-  <tr bgcolor="#EEEEEE">
-    <td align="right">...</td>
-
-    <td>...</td>
-    <td>...</td>
-    <td>...</td>
-
-    <td class="w3-center">
-      <button type="button" 
-        class="w3-button w3-blue w3-text-white w3-hover-blue w3-round-large" 
-        onclick="document.tld_view_dynamic.task.value='curims_curriculum_plo_multirows_update'; document.tld_view_dynamic.submit();">
-    Edit
-</button>
-      <button type="button" 
-        class="w3-button w3-red w3-text-white w3-hover-red w3-round-large" 
-        onclick="document.tld_view_dynamic.task.value='curims_curriculum_plo_multirows_delete'; document.tld_view_dynamic.submit();">
-    Delete
-</button>
-    </td>
-  </tr>
+  <!-- start_cgihtml_ //-->
+  $cgi_admin_buttons_edit_delete_
+  <!-- end_cgihtml_ //-->
 </table>
 </div>
 
-<p />
+<!-- <p />
 
   Items/List: <input name="inl_curims_plo" type="text" id="inl_curims_plo" value="$inl_curims_plo_" size="3">
   &nbsp;
 
-  <!-- start_menu_ name=list //-->
+  <!-s- start_menu_ name=list //-s->
     dynamic_menu_items_
-  <!-- end_menu_ //-->
+  <!-s- end_menu_ //-s->
   &nbsp;
 
   List Set Num. :
   <select name="lsn_curims_plo" onChange="document.tld_view_dynamic.submit()">
-    <!-- select_ name=lsn_curims_plo //-->
+    <!-s- select_ name=lsn_curims_plo //-s->
   </select>
 
-  <p />
+  <p /> -->
+<script>
+window.onload = function() {
 
+  var admin_flag = <!-- start_cgihtml_ //-->$cgi_is_admin_flag_<!-- end_cgihtml_ //-->
+  const IS_ADMIN = parseInt(admin_flag || '0');
+
+if (IS_ADMIN === 0) {
+    const actionHeader = document.getElementById('action-header-plo');
+    if (actionHeader) {
+        actionHeader.style.display = 'none';
+    }
+    
+    const tfoot = document.querySelector('tfoot');
+    const actionCells = document.querySelectorAll('.action-cell-plo');
+    if (tfoot) {
+        tfoot.style.display = 'none';
+    }
+    actionCells.forEach(cell => {
+        cell.style.display = 'none';
+    });
+    const admin_add = document.getElementById('admin-add-plo');
+    if (admin_add) {
+        admin_add.style.display = 'none';
+    }
+ }
+};
+
+</script>
 
 </form>
 <!-- end_view_ //-->

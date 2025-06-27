@@ -65,6 +65,7 @@ sub make_DBI_Conn { ### 15/05/2009
     
     if ($conn_cnf eq "") {
         $conn_cnf = "./webman/conf/dbi_connection.conf";
+
     }
     
     my %cnf_info = ();

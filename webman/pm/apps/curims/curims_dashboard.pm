@@ -188,6 +188,8 @@ sub customize_TLD {
     $tld->add_Column("curims_course");
     $tld->add_Column("curims_core");
     $tld->add_Column("curims_elective");
+    $tld->add_Column("curims_general");
+    $tld->add_Column("curims_total");
     my $row_class = "row_odd"; ### HTML CSS class
     
     for ($i = 0; $i < $tld->get_Row_Num; $i++) { 
@@ -238,15 +240,27 @@ sub customize_TLD {
         }
         $tld->set_Data($i, "curims_core", $core_count || 0);
 
-        # Count number of 'Elective' courses for this curriculum using direct DBI
+        # Count number of 'Elective' courses for this curriculum, handling 'Choose X' format
         my $elective_count = 0;
         if ($db_conn) { # $db_conn should be available from the parent class
-            my $sql_elective = "SELECT COUNT(*) FROM curims_currcourse WHERE id_curriculum_62base = ? AND status = ?";
+            my $sql_elective = "SELECT c.course_name 
+                              FROM curims_course c
+                              JOIN curims_currcourse cc ON c.id_course_62base = cc.id_course_62base
+                              WHERE cc.id_curriculum_62base = ? AND cc.status = 'Elective'";
             my $sth_elective = $db_conn->prepare($sql_elective);
             if ($sth_elective) {
                 eval {
-                    $sth_elective->execute($id_curr, 'Elective');
-                    ($elective_count) = $sth_elective->fetchrow_array();
+                    $sth_elective->execute($id_curr);
+                    while (my $row = $sth_elective->fetchrow_hashref()) {
+                        my $course_name = $row->{course_name} || '';
+                        
+                        # Check if this is an elective course with "Choose X" format (with or without credits)
+                        if ($course_name =~ /^Elective Courses - Choose (\d+)(?:\s*\([^)]+\))?/) {
+                            $elective_count += $1;  # Add the number after "Choose"
+                        } else {
+                            $elective_count++;  # Regular elective course, count as 1
+                        }
+                    }
                     $sth_elective->finish();
                 };
                 if ($@) {
@@ -260,11 +274,38 @@ sub customize_TLD {
             $cgi->add_Debug_Text("DB_Conn not available for elective count calculation.", __FILE__, __LINE__, "ERROR");
         }
         $tld->set_Data($i, "curims_elective", $elective_count || 0);
+        # Count number of 'General' courses for this curriculum using direct DBI
+        my $general_count = 0;
+        if ($db_conn) { # $db_conn should be available from the parent class
+            my $sql_general = "SELECT COUNT(*) FROM curims_currcourse WHERE id_curriculum_62base = ? AND status = ?";
+            my $sth_general = $db_conn->prepare($sql_general);
+            if ($sth_general) {
+                eval {
+                    $sth_general->execute($id_curr, 'General');
+                    ($general_count) = $sth_general->fetchrow_array();
+                    $sth_general->finish();
+                };
+                if ($@) {
+                    $cgi->add_Debug_Text("DBI execute/fetch error for general count: $@", __FILE__, __LINE__, "ERROR");
+                    $general_count = 0; # Default to 0 on error
+                }
+            } else {
+                $cgi->add_Debug_Text("DBI prepare error for general count: " . ($db_conn->errstr || 'Unknown error'), __FILE__, __LINE__, "ERROR");
+            }
+        } else {
+            $cgi->add_Debug_Text("DB_Conn not available for general count calculation.", __FILE__, __LINE__, "ERROR");
+        }
+        $tld->set_Data($i, "curims_general", $general_count || 0);
+
+        # Calculate total number of courses for this curriculum
+        my $total_count = 0;
+        $total_count = $core_count + $elective_count + $general_count;
+        $tld->set_Data($i, "curims_total", $total_count || 0);
 
         # Conditionally create link for curriculum name (uses total $course_count)
         my $curriculum_name_display;
         if (defined($course_count) && $course_count > 0) {
-            $curriculum_name_display = qq{<a href="index.cgi?link_id=7&task=curims_curriculum_course_list_bysem&id_curriculum_62base=$id_curr">$curriculum_name_string</a>};
+            $curriculum_name_display = qq{<a href="index.cgi?link_id=6&task=curims_curriculum_course_list_bysem&id_curriculum_62base=$id_curr">$curriculum_name_string</a>};
         } else {
             $curriculum_name_display = $curriculum_name_string; # Plain text if no courses
         }

@@ -4,12 +4,13 @@
 <!-- dynamic_content_ name=link_path //-->
 &gt;
 <!-- start_cgihtml_ //-->
-<b>$cgi_curriculum_name_add_page_</b><!-- end_cgihtml_ //-->
+<b>$cgi_curriculum_name_add_page_</b>
 &gt;
-Course
+<a href="javascript:document.tld_view_dynamic.submission_type.value='parent_list'; document.tld_view_dynamic.submit();">Curriculum Course</a>
 &gt;
 Add from List
 <p />
+<!-- end_cgihtml_ //-->
 
 <!-- dynamic_content_ name=parent_item_info //-->
 <p />
@@ -22,181 +23,23 @@ Add from List
   <div class = "col-6">
   </div>
   <div class = "col-6 w3-left">
-    <!-- start_cgihtml_ //-->
-    <i class="material-icons" aria-hidden="true" onclick="document.tld_view_dynamic.submission_type.value='parent_list'; document.tld_view_dynamic.submit();">arrow_back</i>
-    <!-- end_cgihtml_ //-->
   </div>
 </div>
-<div class="w3-container">
+<div class="w3-container w3-margin-bottom">
   <div class="w3-row">
     <div class="w3-half w3-left-align">
       <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Search for courses.." class="w3-input w3-border w3-round-large" style="width:50%;">
     </div>
   </div>
 </div>
-<p/>
 
 <form name="tld_view_dynamic" method="post" action="index.cgi">
   <!-- dynamic_content_ name=form_hidden_field //-->
   <input type="hidden" name="submission_type">
 
-<script>
-let currentPage = 1;
-const ROWS_PER_PAGE = 10;
-let rowsPerPage = ROWS_PER_PAGE;
 
-function updateTable() {
-    const searchInput = document.getElementById("searchInput");
-    const filter = searchInput.value.toUpperCase();
-    const table = document.getElementById("courseAddTable");
-    const tbody = table.getElementsByTagName("tbody")[0];
-    const rows = tbody.getElementsByTagName("tr");
-    const paginationBar = document.getElementById("pagination-bar");
-
-    const filteredRows = [];
-    for (let i = 0; i < rows.length; i++) {
-        let match = false;
-        const cells = rows[i].getElementsByTagName("td");
-        for (let j = 0; j < cells.length; j++) {
-            if (cells[j]) {
-                let cellContent = "";
-                const inputs = cells[j].getElementsByTagName('input');
-                const selects = cells[j].getElementsByTagName('select');
-                if (inputs.length > 0 && inputs[0].type !== 'checkbox') {
-                    cellContent = inputs[0].value;
-                } else if (selects.length > 0) {
-                    cellContent = selects[0].options[selects[0].selectedIndex].text;
-                } else {
-                    cellContent = cells[j].textContent || cells[j].innerText;
-                }
-                if (cellContent.toUpperCase().indexOf(filter) > -1) {
-                    match = true;
-                    break;
-                }
-            }
-        }
-        if (match) {
-            filteredRows.push(rows[i]);
-        }
-    }
-
-    const isViewingAll = rowsPerPage === Infinity;
-    const pageCount = Math.ceil(filteredRows.length / ROWS_PER_PAGE);
-    
-    if (!isViewingAll && currentPage > pageCount) {
-        currentPage = 1;
-    }
-
-    for (let i = 0; i < rows.length; i++) {
-        rows[i].style.display = 'none';
-    }
-
-    const start = isViewingAll ? 0 : (currentPage - 1) * ROWS_PER_PAGE;
-    const end = isViewingAll ? filteredRows.length : start + ROWS_PER_PAGE;
-    for (let i = start; i < end && i < filteredRows.length; i++) {
-        filteredRows[i].style.display = '';
-    }
-
-    paginationBar.innerHTML = "";
-    if (filteredRows.length > ROWS_PER_PAGE) {
-        if (!isViewingAll) {
-            for (let i = 1; i <= pageCount; i++) {
-                const btn = document.createElement('a');
-                btn.href = "#";
-                btn.innerText = i;
-                btn.className = "w3-button";
-                if (i === currentPage) {
-                    btn.classList.add("w3-green");
-                }
-                btn.onclick = (function(page) {
-                    return function(event) {
-                        event.preventDefault();
-                        changePage(page);
-                    }
-                })(i);
-                paginationBar.appendChild(btn);
-            }
-        }
-
-        const toggleBtn = document.createElement('a');
-        toggleBtn.href = "#";
-        toggleBtn.className = "w3-button";
-        if (isViewingAll) {
-            toggleBtn.innerText = "Show Paged";
-            toggleBtn.classList.add("w3-green");
-            toggleBtn.onclick = function(event) {
-                event.preventDefault();
-                changePage(1);
-            };
-        } else {
-            toggleBtn.innerText = "View All";
-            toggleBtn.onclick = function(event) {
-                event.preventDefault();
-                viewAll();
-            };
-        }
-        paginationBar.appendChild(toggleBtn);
-    }
-}
-
-function handleSearch() {
-    currentPage = 1;
-    updateTable();
-}
-
-function viewAll() {
-    rowsPerPage = Infinity;
-    updateTable();
-}
-
-function changePage(page) {
-    currentPage = page;
-    rowsPerPage = ROWS_PER_PAGE;
-    updateTable();
-}
-
-window.onload = function() {
-    if (document.getElementById("courseAddTable")) {
-        rowsPerPage = ROWS_PER_PAGE;
-        updateTable();
-    }
-};
-
-function updateSemesterNo(idx) {
-  const yearSelect = document.getElementById('year_taken_' + idx);
-  const semesterSelect = document.getElementById('semester_taken_' + idx);
-  const semesterNoSelect = document.getElementById('semester_no_' + idx);
-
-  if (!yearSelect || !semesterSelect || !semesterNoSelect) {
-    return;
-  }
-
-  const yearValue = yearSelect.value;
-  const semesterValue = semesterSelect.value;
-
-  if (yearValue === "" || semesterValue === "") {
-    semesterNoSelect.value = "";
-    return;
-  }
-
-  const year = parseInt(yearValue);
-  const semester = parseInt(semesterValue);
-
-  if (!isNaN(year) && !isNaN(semester) && year >= 1 && year <= 4 && semester >= 1 && semester <= 2) {
-    const semesterNo = (year - 1) * 2 + semester;
-    if (semesterNo >= 1 && semesterNo <= 8) {
-      semesterNoSelect.value = semesterNo.toString();
-    } else {
-      semesterNoSelect.value = ""; 
-    }
-  } else {
-    semesterNoSelect.value = "";
-  }
-}
-</script>
-
-  <div class="w3-container">
-    <table class="w3-table-all" id="courseAddTable">
+  <div class="w3-container w3-margin-bottom">
+    <table class="w3-table" id="courseAddTable">
       <!-- start_menu_ name=caption //-->
       <colgroup>
         <col style="width:5%">
@@ -258,13 +101,14 @@ function updateSemesterNo(idx) {
             </select>
           </td>
           <td>
-            <input type="text" name="semester_no_$tld_idx_" id="semester_no_$tld_idx_" class="w3-select w3-border" style="height:36px; background-color:#f1f1f1; color:#555;" readonly>
+            <input type="text" name="semester_no_$tld_idx_" id="semester_no_$tld_idx_" class="w3-select w3-border" style="text-align:center; height:36px; background-color:#f1f1f1; color:#555;" readonly>
           </td>
           <td>
-            <select name="status_$tld_idx_" class="w3-select w3-border" style="height:36px;">
+            <select name="status_$tld_idx_" class="w3-select w3-border" style="height:38px;">
               <option value="" selected></option>
               <option value="Core">Core</option>
               <option value="Elective">Elective</option>
+              <option value="General">General</option>
             </select>
           </td>
           <td class="w3-center">
@@ -328,7 +172,160 @@ function updateSemesterNo(idx) {
   </div> -->
   <!-- end_cgihtml_ //-->
 
-
+  <script>
+    let currentPage = 1;
+    const ROWS_PER_PAGE = 10;
+    let rowsPerPage = ROWS_PER_PAGE;
+    
+    function updateTable() {
+        const searchInput = document.getElementById("searchInput");
+        const filter = searchInput.value.toUpperCase();
+        const table = document.getElementById("courseAddTable");
+        const tbody = table.getElementsByTagName("tbody")[0];
+        const rows = tbody.getElementsByTagName("tr");
+        const paginationBar = document.getElementById("pagination-bar");
+    
+        const filteredRows = [];
+        for (let i = 0; i < rows.length; i++) {
+            let match = false;
+            const cells = rows[i].getElementsByTagName("td");
+            for (let j = 0; j < cells.length; j++) {
+                if (cells[j]) {
+                    let cellContent = "";
+                    const inputs = cells[j].getElementsByTagName('input');
+                    const selects = cells[j].getElementsByTagName('select');
+                    if (inputs.length > 0 && inputs[0].type !== 'checkbox') {
+                        cellContent = inputs[0].value;
+                    } else if (selects.length > 0) {
+                        cellContent = selects[0].options[selects[0].selectedIndex].text;
+                    } else {
+                        cellContent = cells[j].textContent || cells[j].innerText;
+                    }
+                    if (cellContent.toUpperCase().indexOf(filter) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+            }
+            if (match) {
+                filteredRows.push(rows[i]);
+            }
+        }
+    
+        const isViewingAll = rowsPerPage === Infinity;
+        const pageCount = Math.ceil(filteredRows.length / ROWS_PER_PAGE);
+        
+        if (!isViewingAll && currentPage > pageCount) {
+            currentPage = 1;
+        }
+    
+        for (let i = 0; i < rows.length; i++) {
+            rows[i].style.display = 'none';
+        }
+    
+        const start = isViewingAll ? 0 : (currentPage - 1) * ROWS_PER_PAGE;
+        const end = isViewingAll ? filteredRows.length : start + ROWS_PER_PAGE;
+        for (let i = start; i < end && i < filteredRows.length; i++) {
+            filteredRows[i].style.display = '';
+        }
+    
+        paginationBar.innerHTML = "";
+        if (filteredRows.length > ROWS_PER_PAGE) {
+            if (!isViewingAll) {
+                for (let i = 1; i <= pageCount; i++) {
+                    const btn = document.createElement('a');
+                    btn.href = "#";
+                    btn.innerText = i;
+                    btn.className = "w3-button";
+                    if (i === currentPage) {
+                        btn.classList.add("w3-green");
+                    }
+                    btn.onclick = (function(page) {
+                        return function(event) {
+                            event.preventDefault();
+                            changePage(page);
+                        }
+                    })(i);
+                    paginationBar.appendChild(btn);
+                }
+            }
+    
+            const toggleBtn = document.createElement('a');
+            toggleBtn.href = "#";
+            toggleBtn.className = "w3-button";
+            if (isViewingAll) {
+                toggleBtn.innerText = "Show Paged";
+                toggleBtn.classList.add("w3-green");
+                toggleBtn.onclick = function(event) {
+                    event.preventDefault();
+                    changePage(1);
+                };
+            } else {
+                toggleBtn.innerText = "View All";
+                toggleBtn.onclick = function(event) {
+                    event.preventDefault();
+                    viewAll();
+                };
+            }
+            paginationBar.appendChild(toggleBtn);
+        }
+    }
+    
+    function handleSearch() {
+        currentPage = 1;
+        updateTable();
+    }
+    
+    function viewAll() {
+        rowsPerPage = Infinity;
+        updateTable();
+    }
+    
+    function changePage(page) {
+        currentPage = page;
+        rowsPerPage = ROWS_PER_PAGE;
+        updateTable();
+    }
+    
+    window.onload = function() {
+        if (document.getElementById("courseAddTable")) {
+            rowsPerPage = ROWS_PER_PAGE;
+            updateTable();
+        }
+    };
+    
+    function updateSemesterNo(idx) {
+      const yearSelect = document.getElementById('year_taken_' + idx);
+      const semesterSelect = document.getElementById('semester_taken_' + idx);
+      const semesterNoSelect = document.getElementById('semester_no_' + idx);
+    
+      if (!yearSelect || !semesterSelect || !semesterNoSelect) {
+        return;
+      }
+    
+      const yearValue = yearSelect.value;
+      const semesterValue = semesterSelect.value;
+    
+      if (yearValue === "" || semesterValue === "") {
+        semesterNoSelect.value = "";
+        return;
+      }
+    
+      const year = parseInt(yearValue);
+      const semester = parseInt(semesterValue);
+    
+      if (!isNaN(year) && !isNaN(semester) && year >= 1 && year <= 4 && semester >= 1 && semester <= 2) {
+        const semesterNo = (year - 1) * 2 + semester;
+        if (semesterNo >= 1 && semesterNo <= 8) {
+          semesterNoSelect.value = semesterNo.toString();
+        } else {
+          semesterNoSelect.value = ""; 
+        }
+      } else {
+        semesterNoSelect.value = "";
+      }
+    }
+    </script>
 </form>
 <!-- end_view_ //-->
 </body>

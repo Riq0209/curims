@@ -9,7 +9,7 @@
 <!-- dynamic_content_ name=link_path //-->
 &gt;
 <!-- start_cgihtml_ //-->
-<b>???</b> 
+<b>$cgi_topic_name_</b> 
 &gt; 
 <a href="index.cgi?link_id=$cgi_link_id_&task=curims_course_topic_schedule_multirows_insert&button_submit=Cancel">List</a>
 <!-- end_cgihtml_ //-->
@@ -18,21 +18,27 @@ Insert
 <p />
 
 <form method="POST" action="./index.cgi">
-  <!-- start_cgihtml_ //-->
-  <input type="hidden" name="link_id" value="$cgi_link_id_">
-  <b>Row Number:</b>
-  <input type="text" name="irn_curims_schedule" size="3" value="$cgi_irn_curims_schedule_">
-  <!-- end_cgihtml_ //-->
-
-  <input name="button_submit" type="submit" id="button_submit" value="Change" />
+   <!-- start_cgihtml_ //-->
+   <input type="hidden" name="link_id" value="$cgi_link_id_">
+   <b>Row Number:</b>
+   <div class="w3-container" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+     <div class="w3-cell">
+       <input class="w3-input w3-border w3-round-large" type="text" name="irn_curims_schedule" size="3" value="$cgi_irn_curims_schedule_">
+     </div>
+     <div class="w3-cell">
+       <input class="w3-button w3-white w3-border w3-hover-white w3-round-large" name="button_submit" type="submit" id="button_submit" value="Change" />
+     </div>
+   </div>
+ 
+   <!-- end_cgihtml_ //-->
 </form>
 
 <form method="POST" action="./index.cgi">
 <!-- dynamic_content_ name=form_hidden_field //-->
 <div class="w3-container">
-<table class="w3-table-all">
-  <tr>
-    <th align="right" valign="top">Num. </th>
+<table class="w3-table">
+  <tr class="w3-light-grey">
+    <th align="right" valign="top">No.</th>
     <th valign="top">Session</th>
 
     <th valign="top">Semester</th>
@@ -53,19 +59,23 @@ Insert
   	  <b>$row_num_. </b>
   	</td>
     <td valign="top">
-      <input class="w3-input w3-border" name="$db_session_$row_idx" type="text" id="$db_session_$row_idx" value="$db_session_$row_idx_" size="10">
+      <input class="w3-input w3-border" name="$db_session_$row_idx" type="text" id="$db_session_$row_idx" value="$db_session_$row_idx_" size="10" placeholder="2024/2025">
       </br>
       <font color="#FF0000">$fe_session_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <input class="w3-input w3-border" name="$db_semester_$row_idx" type="text" id="$db_semester_$row_idx" value="$db_semester_$row_idx_" size="11">
+      <select class="w3-input w3-border" name="$db_semester_$row_idx" id="$db_semester_$row_idx">
+        <option value="">Select</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+      </select>
       </br>
       <font color="#FF0000">$fe_semester_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <input class="w3-input w3-border" name="$db_week_$row_idx" type="text" id="$db_week_$row_idx" value="$db_week_$row_idx_" size="11">
+      <input class="w3-input w3-border" name="$db_week_$row_idx" type="number" id="$db_week_$row_idx" value="$db_week_$row_idx_" size="1" style="width: 60px;">
       </br>
       <font color="#FF0000">$fe_week_$row_idx_</font>
     </td>
@@ -92,8 +102,8 @@ Insert
   <!-- end_datahtml_ //-->
 
   <tr>
-    <td align="right" colspan="7">
-            <button type="submit" name="button_submit" value="Cancel" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Cancel</button>
+    <td style="text-align: right;" colspan="7">
+      <button type="submit" name="button_submit" value="Cancel" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Cancel</button>
       <button type="submit" name="button_submit" value="Proceed" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large">Proceed</button>
     </td>
   </tr>

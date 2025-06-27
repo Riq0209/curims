@@ -191,11 +191,76 @@ sub process_LIST { ### TE_TYPE_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELEC
     my $this = shift @_;
     my $te = shift @_;
 
+    my $cgi = $this->get_CGI;
+    my $db_conn = $this->get_DB_Conn;
+    my $dbu = $this->get_DBU;
+
     my $tld = $this->{tld};
     my $num_col = $tld->get_Column_Num;
     my $num_row = $tld->get_Row_Num;
 
-    # Return early if there's no data to process.
+    # Get the curriculum ID
+    my $curriculum_id = $cgi->param('id_curriculum_62base');
+    
+    # --- 0. Fetch and Display PLOs ---
+    if ($curriculum_id) {
+        my $plo_query = qq{
+            SELECT plo_code, plo_tag, plo_description,
+                   CAST(SUBSTRING(plo_code, 4) AS UNSIGNED) as plo_number
+            FROM curims_plo 
+            WHERE id_curriculum_62base = ?
+            ORDER BY plo_number ASC
+        };
+        
+        my $sth = $db_conn->prepare($plo_query);
+        $sth->execute($curriculum_id);
+        
+        my @plo_rows;
+        while (my $plo = $sth->fetchrow_hashref) {
+            push @plo_rows, $plo;
+        }
+        $sth->finish;
+        
+        # Only show PLO section if there are PLOs
+        if (@plo_rows) {
+            my $plo_heading = qq{<h3 class="w3-text-black" style="margin: 24px auto; padding: 16px; font-weight: bold; border-bottom: 2px solid #ccc;">Program Learning Outcomes (PLOs)</h3>};
+            my $table_plo_start = qq{<div class="w3-container" style="display: flex; justify-content: center; align-items: center; gap: 10px;"><table class="w3-table w3-striped" style="width:50%; margin-bottom: 20px;">};
+            my $table_plo_end = qq{</table></div>};
+            my $table_plo_header = qq{
+                <thead>
+                    <tr class="w3-light-grey">
+                        <th style="width:5%;">Code</th>
+                        <th style="width:5%;">Tag</th>
+                        <th style="width:60%;">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+            };
+            
+            $this->add_Content($plo_heading);
+            $this->add_Content($table_plo_start);
+            $this->add_Content($table_plo_header);
+            
+            foreach my $plo (@plo_rows) {
+                my $plo_row = qq{
+                    <tr>
+                        <td>$plo->{plo_code}</td>
+                        <td>$plo->{plo_tag}</td>
+                        <td>$plo->{plo_description}</td>
+                    </tr>
+                };
+                $this->add_Content($plo_row);
+            }
+            
+            $this->add_Content("</tbody>");
+            $this->add_Content($table_plo_end);
+            
+            # Add some spacing after PLO section
+            $this->add_Content(qq{<div style="margin-bottom: 40px;"></div>});
+        }
+    }
+
+    # Return early if there's no course data to process.
     return if !$num_row || !$num_col;
 
     # --- 1. Data Preparation ---
@@ -231,32 +296,33 @@ sub process_LIST { ### TE_TYPE_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELEC
     # --- 2. HTML Rendering ---
     my $cumulative_credit_total = 0;
 
-    # Define reusable HTML templates.
-    my $table_start = qq{<div class="w3-container" style="display: flex; justify-content: center; align-items: center; gap: 10px;"><table class="w3-table" style="width:50%; margin-bottom: 20px;">};
+    # Define reusable HTML templates for course tables
+    my $table_start = qq{<div class="w3-container" style="display: flex; justify-content: center; align-items: center; gap: 10px;"><table class="w3-table" style="width:50%; margin-bottom: 20px;};
     my $table_end = qq{</table></div>};
     my $table_header_content = qq{
         <thead>
             <tr class="w3-light-grey">
-                <th>Code</th>
-                <th>Name</th>
-                <th>Credit</th>
-                <th>Prerequisite</th>
-                <th>Elective</th>
-                <th>Status</th>
+                <th style="width:5%;">Code</th>
+                <th style="width:35%;">Name</th>
+                <th style="width:10%;">Credit</th>
+                <th style="width:20%;">Prerequisite</th>
+                <th style="width:10%;">Elective</th>
+                <th style="width:10%;">Status</th>
             </tr>
         </thead>
     };
     my $colgroup_content = qq{
         <colgroup>
-            <col style="width:15%;"> <!-- Code -->
+            <col style="width:5%;"> <!-- No -->
+            <col style="width:5%;"> <!-- Code -->
             <col style="width:35%;"> <!-- Name -->
             <col style="width:10%;"> <!-- Credit Hour -->
             <col style="width:20%;"> <!-- Prerequisite -->
             <col style="width:10%;"> <!-- Elective -->
             <col style="width:10%;"> <!-- Status -->
+            
         </colgroup>
     };
-
     # Loop through each semester and render its table if it has courses.
     for my $semester_no (1..8) {
         my $sem_tld = $tlds[$semester_no];

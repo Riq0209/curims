@@ -44,17 +44,12 @@ sub run_Task {
     my @groups = $this->get_User_Groups;
 
     # Define admin buttons HTML
-    my $admin_buttons_add = '';
     my $admin_buttons_edit_delete = '';
-    my $admin_header_action = '';   
-    my $admin_body_action = '';
-    my $admin_footer_action = '';
     my $is_admin_flag = 0;
     # Check if user is an admin
     foreach my $group (@groups) {
         if (lc($group) eq 'admin') {
             $is_admin_flag = 1;
-            $admin_buttons_add = qq|<button class="w3-button w3-green w3-text-white w3-hover-green w3-round-large" onclick="document.tld_view_dynamic.task.value='curims_curriculum_multirows_insert'; document.tld_view_dynamic.submit();">Add</button>|;
             
             $admin_buttons_edit_delete = qq|
   <tfoot>
@@ -79,7 +74,6 @@ sub run_Task {
             last;
         }
     }
-    $cgi->push_Param("admin_buttons_add", $admin_buttons_add);
     $cgi->push_Param("admin_buttons_edit_delete", $admin_buttons_edit_delete);   
     $cgi->push_Param("is_admin_flag", $is_admin_flag); 
     my $match_group = $this->match_Group($group_name_, @groups);
@@ -216,19 +210,39 @@ sub customize_TLD {
         my $id_curr = $tld->get_Data($i, "id_curriculum_62base");
         my $curriculum_name_string = $tld->get_Data($i, "curriculum_name"); # Get original curriculum name
 
-        # Determine course count for the current curriculum
-        $dbu->set_Table("curims_currcourse");
-        my $course_count = $dbu->count_Item("id_curriculum_62base", $id_curr);
+        # Initialize course count
+        my $course_count = 0;
+        # Get all courses for this curriculum with their names
+        my $sql = "SELECT c.course_name 
+                  FROM curims_course c
+                  JOIN curims_currcourse cc ON c.id_course_62base = cc.id_course_62base
+                  WHERE cc.id_curriculum_62base = ?";
+        my $sth = $db_conn->prepare($sql) or die "Cannot prepare: " . $db_conn->errstr();
+        $sth->execute($id_curr) or die "Cannot execute: " . $sth->errstr();
+        
+        # Count each course, handling elective courses with "Choose X"
+        while (my $row = $sth->fetchrow_hashref()) {
+            my $course_name = $row->{course_name} || '';  # Now this will get the name from curims_course
+            
+            # Check if this is an elective course with "Choose X" format (with or without credits)
+            if ($course_name =~ /^Elective Courses - Choose (\d+)(?:\s*\([^)]+\))?/) {
+                $course_count += $1;  # Add the number after "Choose"
+            } else {
+                $course_count++;  # Regular course, count as 1
+            }
+        }
+        $sth->finish();
         $tld->set_Data($i, "curims_course", $course_count); # Set data for 'Course' column (count)
 
+
         # Conditionally create link for curriculum name
-        my $curriculum_name_display;
-        if ($course_count > 0) {
-            $curriculum_name_display = qq{<a href="index.cgi?link_id=7&task=curims_curriculum_course_list_bysem&id_curriculum_62base=$id_curr">$curriculum_name_string</a>};
-        } else {
-            $curriculum_name_display = $curriculum_name_string; # Plain text if no courses
-        }
-        $tld->set_Data($i, "curriculum_name", $curriculum_name_display); # Update 'curriculum_name' field with HTML or plain text
+        # my $curriculum_name_display;
+        # if ($course_count > 0) {
+        #     $curriculum_name_display = qq{<a href="index.cgi?link_id=7&task=curims_curriculum_course_list_bysem&id_curriculum_62base=$id_curr">$curriculum_name_string</a>};
+        # } else {
+        #     $curriculum_name_display = $curriculum_name_string; 
+        # }
+        # $tld->set_Data($i, "curriculum_name", $curriculum_name_display); 
 
         # Determine PLO count for the current curriculum
         $dbu->set_Table("curims_plo");

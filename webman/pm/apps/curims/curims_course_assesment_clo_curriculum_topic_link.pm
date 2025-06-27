@@ -39,22 +39,18 @@ sub run_Task {
     my @groups = $this->get_User_Groups;
 
     # Define admin buttons HTML
-    my $admin_buttons_add = '';
     my $admin_buttons_edit_delete = '';
-    my $admin_header_action = '';   
-    my $admin_body_action = '';
-    my $admin_footer_action = '';
-    my $admin_col_action = '';
     my $is_admin_flag = 0;
+    my $admin_col_style = '';
     # Check if user is an admin
     foreach my $group (@groups) {
         if (lc($group) eq 'admin') {
             $is_admin_flag = 1;
-            $admin_buttons_add = qq|<button type="button" 
-        class="w3-button w3-green w3-round-large w3-hover-green" 
-        onclick="document.tld_view_dynamic.task.value='curims_course_multirows_insert'; document.tld_view_dynamic.link_id.value='$cgi_link_id_'; document.tld_view_dynamic.submit();">
-        Add
-        </button>|;
+
+            $admin_col_style = qq|
+            <col style="width: 5%">
+            <col style="width: 5%">
+            <col style="width: 5%">|;
             
             $admin_buttons_edit_delete = qq|
   <tfoot id="admin-buttons-tfoot">
@@ -77,28 +73,13 @@ sub run_Task {
       <!-- end_cgihtml_ //-->
     </td>
   </tr>
-  </tfoot>|;    $admin_header_action = qq|          <th class="w3-center">
-            Action
-            <br />
-            <a href="javascript:checkbox_select_all('id_course_62base_', $cgi_inl_curims_course_, $cgi_dbisn_curims_course_);">All</a> /
-            <a href="javascript:checkbox_select_none('id_course_62base_', $cgi_inl_curims_course_, $cgi_dbisn_curims_course_);">None</a> /
-            <a href="javascript:checkbox_select_invert('id_course_62base_', $cgi_inl_curims_course_, $cgi_dbisn_curims_course_);">Invert</a>
-          </th>|;
-        $admin_body_action = qq|<td class="w3-center" >
-      <input class="w3-check" type="checkbox" style="width: 20px; height: 20px; margin-bottom: 10px;" name="id_course_62base_$tld_idx_" id="id_course_62base_$tld_idx_" value="$tld_id_course_62base_" />
-    </td>|;
-        $admin_footer_action = qq|<td></td>|;
-        $admin_col_action = qq|<col style="width: 15%">|;
+  </tfoot>|;    
             last;
         }
     }
-    $cgi->push_Param("admin_buttons_add", $admin_buttons_add);
     $cgi->push_Param("admin_buttons_edit_delete", $admin_buttons_edit_delete);
-    $cgi->push_Param("admin_header_action", $admin_header_action);    
-    $cgi->push_Param("admin_body_action", $admin_body_action);    
-    $cgi->push_Param("admin_footer_action", $admin_footer_action); 
-    $cgi->push_Param("admin_col_action", $admin_col_action); 
     $cgi->push_Param("is_admin", $is_admin_flag); 
+    $cgi->push_Param("admin_col_style", $admin_col_style); 
     my $match_group = $this->match_Group($group_name_, @groups);
 
     # Fetch Total course for the current session

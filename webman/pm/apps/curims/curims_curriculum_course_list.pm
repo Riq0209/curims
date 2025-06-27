@@ -63,7 +63,7 @@ sub run_Task {
         # $total_items += $total_elective if $total_elective;
 
 
-        $this->set_DB_Items_View_Num($total_items);
+        $this->set_DB_Items_View_Num("$total_items");
     # $cgi->push_Param("total_items_course", $total_items);
     
     ### DB item list with multi row operations  
@@ -167,11 +167,16 @@ sub customize_TLD {
         }
         $dbu->set_Table("curims_elective");
         my $count_item = $dbu->count_Item("id_currcourse_62base", $tld->get_Data($i, "id_currcourse_62base"));
-
-        if ($count_item != 0) {
-            $tld->set_Data($i, "curims_course", $count_item." (Elective) ");
-        } else {
+        my $course_name = $tld->get_Data($i, "course_name") || '';
+        
+        if ($course_name =~ /^Elective Courses/) {
+            # For elective courses, always show the count even if it's 0
             $tld->set_Data($i, "curims_course", $count_item);
+        } elsif ($count_item != 0) {
+            # For non-elective courses, only show count if it's not 0
+            $tld->set_Data($i, "curims_course", $count_item);
+        } else {
+            $tld->set_Data($i, "curims_course", "");
         }
         
         # $dbu->set_Table("curims_elective");

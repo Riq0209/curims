@@ -4,7 +4,7 @@
 <!-- dynamic_content_ name=link_path //-->
 &gt;
 <!-- start_cgihtml_ //-->
-<b>???</b> 
+<b>$cgi_course_topic_</b> 
 &gt; 
 <a href="index.cgi?link_id=$cgi_link_id_&task=curims_course_topic_schedule_multirows_update&button_submit=Cancel">List</a>
 <!-- end_cgihtml_ //-->
@@ -14,9 +14,10 @@ Update
 
 <form method="POST" action="./index.cgi">
 <!-- dynamic_content_ name=form_hidden_field //-->
-<table border="1">
-  <tr>
-    <th align="right" valign="top">Num. </th>
+<div class="w3-container">
+  <table class="w3-table">
+    <tr class="w3-light-grey">
+    <th align="right" valign="top">No. </th>
     <th valign="top">Session</th>
 
     <th valign="top">Semester</th>
@@ -33,56 +34,71 @@ Update
 
   <!-- start_datahtml_ name=form_db_field //-->
   <tr>
-  	<td align="right" valign="top">
-  	  <b>$row_num_. </b>
-  	</td>
+ <td align="right" valign="top">
+  <b>$row_num_. </b>
+</td>
 
-    <td valign="top">
-      <input name="$db_session_$row_idx" type="text" id="$db_session_$row_idx" value="$db_session_$row_idx_" size="10">
-      </br>
-      <font color="#FF0000">$fe_session_$row_idx_</font>
-    </td>
+<td valign="top">
+  <input class="w3-input w3-border" name="$db_session_$row_idx" type="text" id="$db_session_$row_idx" value="$db_session_$row_idx_" size="10" placeholder="2024/2025">
+  </br>
+  <font color="#FF0000">$fe_session_$row_idx_</font>
+</td>
 
-    <td valign="top">
-      <input name="$db_semester_$row_idx" type="text" id="$db_semester_$row_idx" value="$db_semester_$row_idx_" size="11">
-      </br>
-      <font color="#FF0000">$fe_semester_$row_idx_</font>
-    </td>
+<td valign="top">
+  <select class="w3-input w3-border" name="$db_semester_$row_idx" id="$db_semester_$row_idx">
+    <option value="">Select</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+  </select>
+  </br>
+  <font color="#FF0000">$fe_semester_$row_idx_</font>
+  
+  <script>
+  // Set the selected semester value from database
+  document.addEventListener('DOMContentLoaded', function() {
+    var semesterValue = "$db_semester_$row_idx_";
+    var semesterSelect = document.getElementById('$db_semester_$row_idx');
+    if (semesterValue && semesterSelect) {
+      semesterSelect.value = semesterValue;
+    }
+  });
+  </script>
+</td>
 
-    <td valign="top">
-      <input name="$db_week_$row_idx" type="text" id="$db_week_$row_idx" value="$db_week_$row_idx_" size="11">
-      </br>
-      <font color="#FF0000">$fe_week_$row_idx_</font>
-    </td>
+<td valign="top">
+  <input class="w3-input w3-border" name="$db_week_$row_idx" type="number" id="$db_week_$row_idx" value="$db_week_$row_idx_" size="1" style="width: 60px;">
+  </br>
+  <font color="#FF0000">$fe_week_$row_idx_</font>
+</td>
 
-    <td valign="top">
-      <input name="$db_date_start_$row_idx" type="text" id="$db_date_start_$row_idx" value="$db_date_start_$row_idx_" size="">
-      </br>
-      <font color="#FF0000">$fe_date_start_$row_idx_</font>
-    </td>
+<td valign="top">
+  <input class="w3-input w3-border" name="$db_date_start_$row_idx" type="date" id="$db_date_start_$row_idx" value="$db_date_start_$row_idx_">
+  </br>
+  <font color="#FF0000">$fe_date_start_$row_idx_</font>
+</td>
 
-    <td valign="top">
-      <input name="$db_date_end_$row_idx" type="text" id="$db_date_end_$row_idx" value="$db_date_end_$row_idx_" size="">
-      </br>
-      <font color="#FF0000">$fe_date_end_$row_idx_</font>
-    </td>
+<td valign="top">
+  <input class="w3-input w3-border" name="$db_date_end_$row_idx" type="date" id="$db_date_end_$row_idx" value="$db_date_end_$row_idx_">
+  </br>
+  <font color="#FF0000">$fe_date_end_$row_idx_</font>
+</td>
 
-    <td valign="top">
-      <input name="$db_info_$row_idx" type="text" id="$db_info_$row_idx" value="$db_info_$row_idx_" size="">
-      </br>
-      
-    </td>
+<td valign="top">
+  <input class="w3-input w3-border" name="$db_info_$row_idx" type="text" id="$db_info_$row_idx" value="$db_info_$row_idx_" size="">
+  </br>
+</td>
 
   </tr>
   <!-- end_datahtml_ //-->
 
   <tr>
-    <td align="right" colspan="7">
-      <input name="button_submit" type="submit" id="button_submit" value="Proceed"/>
-      <input name="button_submit" type="submit" id="button_submit" value="Cancel"/>
+    <td style="text-align: right;" colspan="7">
+      <button type="submit" name="button_submit" value="Cancel" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Cancel</button>
+      <button type="submit" name="button_submit" value="Proceed" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large">Proceed</button>
     </td>
   </tr>
 </table>
+</div>
 </form>
 
 <!-- end_view_ //-->

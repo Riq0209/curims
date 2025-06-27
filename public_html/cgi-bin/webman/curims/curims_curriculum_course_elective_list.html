@@ -17,13 +17,13 @@ List
 <!-- dynamic_content_ name=db_items_num_end //--> of
 <!-- dynamic_content_ name=db_items_num_total //--> Records.
 <p />
-<div class = "w3-container">
+<div class = "w3-container w3-margin-bottom">
   <div class = "col-6">
   </div>
   <div class = "col-6" align="right">
     <!-- start_cgihtml_ //-->
     <button type="button" 
-        class="w3-button w3-white w3-border w3-border-green w3-round-large" 
+        class="w3-button w3-green w3-round-large" 
         onclick="document.tld_view_dynamic.task.value='curims_curriculum_course_elective_add'; document.tld_view_dynamic.link_id.value='$cgi_link_id_'; document.tld_view_dynamic.submit();">
   Add List
 </button>
@@ -37,7 +37,7 @@ List
 
   <!-- dynamic_content_ name=form_hidden_field //-->
   <div class="w3-container">
-    <table class="w3-table-all">
+    <table class="w3-table">
   <!-- start_menu_ name=caption //-->
   <tr>
     <th>No.</th>
@@ -77,7 +77,7 @@ List
     <td class="w3-center">
       <!-- start_cgihtml_ //-->
       <a href="index.cgi?link_id=$cgi_link_id_&id_elective_62base=$tld_id_elective_62base_&task=curims_curriculum_course_elective_remove"
-      class="w3-button w3-white w3-border w3-border-red w3-round-large">
+      class="w3-button w3-red w3-round-large">
      Remove
    </a>
       |
@@ -108,22 +108,22 @@ List
   </tr>
 </table>
 </div>
-<p />
+<!-- <p />
 
   Items/List: <input name="inl_curims_course" type="text" id="inl_curims_course" value="$inl_curims_course_" size="3">
   &nbsp;
 
-  <!-- start_menu_ name=list //-->
+  <!-s- start_menu_ name=list //-s->
     dynamic_menu_items_
-  <!-- end_menu_ //-->
+  <!-s- end_menu_ //-s->
   &nbsp;
 
   List Set Num. :
   <select name="lsn_curims_course" onChange="document.tld_view_dynamic.submit()">
-    <!-- select_ name=lsn_curims_course //-->
+    <!-s- select_ name=lsn_curims_course //-s->
   </select>
 
-  <p />
+  <p /> -->
 
 
 </form>

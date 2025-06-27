@@ -4,45 +4,68 @@
 <!-- dynamic_content_ name=link_path //-->
 &gt;
 <!-- start_cgihtml_ //-->
-<b>???</b><!-- end_cgihtml_ //-->
+<b>$cgi_course_curriculum_name_link_</b><!-- end_cgihtml_ //-->
 &gt;
-Plo
+<a href="javascript:document.tld_view_dynamic.submission_type.value='parent_list'; document.tld_view_dynamic.submit();">PLO</a>
 &gt;
 Add from List
 <p />
 
 <!-- dynamic_content_ name=parent_item_info //-->
 <p />
-
 <!-- dynamic_content_ name=db_items_num_begin //--> -
 <!-- dynamic_content_ name=db_items_num_end //--> of
 <!-- dynamic_content_ name=db_items_num_total //--> Records to be added.
 <p />
+<div class = "w3-container">
+  <div class = "col-6">
+  </div>
+  <div class = "col-6 w3-left">
+  </div>
+</div>
+<div class="w3-container w3-margin-bottom">
+  <div class="w3-row">
+    <div class="w3-half w3-left-align">
+      <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Search for plo.." class="w3-input w3-border w3-round-large" style="width:50%;">
+    </div>
+  </div>
+</div>
 
 <form name="tld_view_dynamic" method="post" action="index.cgi">
   <!-- dynamic_content_ name=form_hidden_field //-->
   <input type="hidden" name="submission_type">
 
-<table border="1">
+  <div class="w3-container w3-margin-bottom">
+  <table class="w3-table" id="ploAddTable">
   <!-- start_menu_ name=caption //-->
-  <tr>
-    <th>Num.</th>
-    <th>menu_item0_</th>
-    <th>menu_item1_</th>
-    <th>menu_item2_</th>
+   <colgroup>
+    <col style="width: 3%">
+    <col style="width: 3%">
+    <col style="width: 3%">
+    <col style="width: 35%">
+    <col style="width: 3%">
+    <col style="width: 10%">
+   </colgroup>
+   <thead>
+  <tr class="w3-light-grey">
+    <th>No.</th>
+    <th>Code</th>
+    <th>Tag</th>
+    <th>Description</th>
     <th>Percentage</th>
     <!-- start_cgihtml_ //-->
-    <th align="center">
-      Selection &amp; Operations
+    <th class="w3-center">
+      Action
       <br />
       <a href="javascript:checkbox_select_all('id_plo_62base_', $cgi_inl_curims_plo_AFLS_, $cgi_dbisn_curims_plo_AFLS_);">All</a> |
       <a href="javascript:checkbox_select_none('id_plo_62base_', $cgi_inl_curims_plo_AFLS_, $cgi_dbisn_curims_plo_AFLS_);">None</a> |
       <a href="javascript:checkbox_select_invert('id_plo_62base_', $cgi_inl_curims_plo_AFLS_, $cgi_dbisn_curims_plo_AFLS_);">Invert</a>
     </th>
+    </thead>
     <!-- end_cgihtml_ //-->
   </tr>
   <!-- end_menu_ //-->
-
+<tbody>
   <!-- start_list_ name=main //-->
   <tr class="$tld_row_class_">
     <td align="right">$tld_num_.</td>
@@ -50,15 +73,16 @@ Add from List
   <td>$tld_plo_code_</td>
   <td>$tld_plo_tag_</td>
   <td>$tld_plo_description_</td>
-  <td><input type="text" name="percentage_$tld_idx_" size="10"></td>
+  <td><input class="w3-input w3-border" type="number" name="percentage_$tld_idx_" size="10"></td>
 
-    <td align="center">
-      <input type="checkbox" name="id_plo_62base_$tld_idx_" id="id_plo_62base_$tld_idx_" value="$tld_id_plo_62base_">
+    <td class="w3-center">
+      <input class="w3-check" type="checkbox" name="id_plo_62base_$tld_idx_" id="id_plo_62base_$tld_idx_" value="$tld_id_plo_62base_">
     </td>
 
   </tr>
   <!-- end_list_ //-->
-
+</tbody>
+<tfoot>
   <tr bgcolor="#EEEEEE">
     <td align="right">...</td>
 
@@ -67,31 +91,154 @@ Add from List
     <td>...</td>
     <td>...</td>
 
-    <td align="center">
-      <a href="javascript:document.tld_view_dynamic.submission_type.value='add_selected'; document.tld_view_dynamic.submit();">Add Selected</a>
-      |
-      <a href="javascript:document.tld_view_dynamic.submission_type.value='parent_list'; document.tld_view_dynamic.submit();">Back to Parent List</a>
+    <td class="w3-center">
+      <button type="button" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large" onclick="document.tld_view_dynamic.submission_type.value='add_selected'; document.tld_view_dynamic.submit();">Add Selected</button>
     </td>
   </tr>
+</tfoot>
 </table>
-
-<p />
-
-  Items/List: <input name="inl_curims_plo_AFLS" type="text" id="inl_curims_plo_AFLS" value="$inl_curims_plo_AFLS_" size="3">
+</div>
+<div class="w3-center">
+  <div class="w3-bar" id="pagination-bar">
+  </div>
+</div>
+  <!-- Items/List: <input name="inl_curims_plo_AFLS" type="text" id="inl_curims_plo_AFLS" value="$inl_curims_plo_AFLS_" size="3">
   &nbsp;
 
-  <!-- start_menu_ name=list //-->
+  <!s-- start_menu_ name=list //-s->
     dynamic_menu_items_
-  <!-- end_menu_ //-->
+  <!s-- end_menu_ //-s->
   &nbsp;
 
   List Set Num. :
   <select name="lsn_curims_plo_AFLS" onChange="document.tld_view_dynamic.submit()">
-    <!-- select_ name=lsn_curims_plo_AFLS //-->
+    <!-s- select_ name=lsn_curims_plo_AFLS //--s>
   </select>
 
-  <p />
-
+  <p /> -->   
+  <script>
+    let currentPage = 1;
+    const ROWS_PER_PAGE = 10;
+    let rowsPerPage = ROWS_PER_PAGE;
+    
+    function updateTable() {
+        const searchInput = document.getElementById("searchInput");
+        const filter = searchInput.value.toUpperCase();
+        const table = document.getElementById("ploAddTable");
+        const tbody = table.getElementsByTagName("tbody")[0];
+        const rows = tbody.getElementsByTagName("tr");
+        const paginationBar = document.getElementById("pagination-bar");
+    
+        const filteredRows = [];
+        for (let i = 0; i < rows.length; i++) {
+            let match = false;
+            const cells = rows[i].getElementsByTagName("td");
+            for (let j = 0; j < cells.length; j++) {
+                if (cells[j]) {
+                    let cellContent = "";
+                    const inputs = cells[j].getElementsByTagName('input');
+                    const selects = cells[j].getElementsByTagName('select');
+                    if (inputs.length > 0 && inputs[0].type !== 'checkbox') {
+                        cellContent = inputs[0].value;
+                    } else if (selects.length > 0) {
+                        cellContent = selects[0].options[selects[0].selectedIndex].text;
+                    } else {
+                        cellContent = cells[j].textContent || cells[j].innerText;
+                    }
+                    if (cellContent.toUpperCase().indexOf(filter) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+            }
+            if (match) {
+                filteredRows.push(rows[i]);
+            }
+        }
+    
+        const isViewingAll = rowsPerPage === Infinity;
+        const pageCount = Math.ceil(filteredRows.length / ROWS_PER_PAGE);
+        
+        if (!isViewingAll && currentPage > pageCount) {
+            currentPage = 1;
+        }
+    
+        for (let i = 0; i < rows.length; i++) {
+            rows[i].style.display = 'none';
+        }
+    
+        const start = isViewingAll ? 0 : (currentPage - 1) * ROWS_PER_PAGE;
+        const end = isViewingAll ? filteredRows.length : start + ROWS_PER_PAGE;
+        for (let i = start; i < end && i < filteredRows.length; i++) {
+            filteredRows[i].style.display = '';
+        }
+    
+        paginationBar.innerHTML = "";
+        if (filteredRows.length > ROWS_PER_PAGE) {
+            if (!isViewingAll) {
+                for (let i = 1; i <= pageCount; i++) {
+                    const btn = document.createElement('a');
+                    btn.href = "#";
+                    btn.innerText = i;
+                    btn.className = "w3-button";
+                    if (i === currentPage) {
+                        btn.classList.add("w3-green");
+                    }
+                    btn.onclick = (function(page) {
+                        return function(event) {
+                            event.preventDefault();
+                            changePage(page);
+                        }
+                    })(i);
+                    paginationBar.appendChild(btn);
+                }
+            }
+    
+            const toggleBtn = document.createElement('a');
+            toggleBtn.href = "#";
+            toggleBtn.className = "w3-button";
+            if (isViewingAll) {
+                toggleBtn.innerText = "Show Paged";
+                toggleBtn.classList.add("w3-green");
+                toggleBtn.onclick = function(event) {
+                    event.preventDefault();
+                    changePage(1);
+                };
+            } else {
+                toggleBtn.innerText = "View All";
+                toggleBtn.onclick = function(event) {
+                    event.preventDefault();
+                    viewAll();
+                };
+            }
+            paginationBar.appendChild(toggleBtn);
+        }
+    }
+    
+    function handleSearch() {
+        currentPage = 1;
+        updateTable();
+    }
+    
+    function viewAll() {
+        rowsPerPage = Infinity;
+        updateTable();
+    }
+    
+    function changePage(page) {
+        currentPage = page;
+        rowsPerPage = ROWS_PER_PAGE;
+        updateTable();
+    }
+    
+    window.onload = function() {
+        if (document.getElementById("ploAddTable")) {
+            rowsPerPage = ROWS_PER_PAGE;
+            updateTable();
+        }
+    };
+    
+    </script>
 
 </form>
 <!-- end_view_ //-->

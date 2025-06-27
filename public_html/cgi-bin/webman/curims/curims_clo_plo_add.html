@@ -1,0 +1,109 @@
+<html>
+<body>
+<!-- start_view_ //-->
+  <!-- dynamic_content_ name=link_path //-->
+  &gt;
+<!-- start_cgihtml_ //-->
+<b>$cgi_course_clo_</b><!-- end_cgihtml_ //-->
+&gt;
+<a href="javascript:document.tld_view_dynamic.submission_type.value='parent_list'; document.tld_view_dynamic.submit();">PLO Mapping</a>
+&gt;
+Add from List
+<p />
+
+<!-- dynamic_content_ name=parent_item_info //-->
+<p />
+
+<!-- dynamic_content_ name=db_items_num_begin //--> -
+<!-- dynamic_content_ name=db_items_num_end //--> of
+<!-- dynamic_content_ name=db_items_num_total //--> Records to be added.
+<p />
+<div class="w3-container w3-margin-bottom">
+  <div class="w3-row">
+    <div class="w3-half w3-left-align">
+      <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Search for plo.." class="w3-input w3-border w3-round-large" style="width:50%;">
+    </div>
+  </div>
+</div>
+<form name="tld_view_dynamic" method="post" action="index.cgi">
+  <!-- dynamic_content_ name=form_hidden_field //-->
+  <input type="hidden" name="submission_type">
+
+  <div class="w3-container w3-margin-bottom">
+    <table class="w3-table" id="ploAddTable">
+  <!-- start_menu_ name=caption //-->
+  <colgroup>
+    <col style="width: 3%">
+    <col style="width: 3%">
+    <col style="width: 3%">
+    <col style="width: 35%">
+    <col style="width: 10%">
+   </colgroup>
+  <tr class="w3-light-grey">
+    <th>No.</th>
+    <th>Code</th>
+    <th>Tag</th>
+    <th>Description</th>
+    <!-- start_cgihtml_ //-->
+    <th class="w3-center">
+      Action
+      <br />
+      <a href="javascript:checkbox_select_all('id_plo_62base_', $cgi_inl_curims_plo_AFLS_, $cgi_dbisn_curims_plo_AFLS_);">All</a> |
+      <a href="javascript:checkbox_select_none('id_plo_62base_', $cgi_inl_curims_plo_AFLS_, $cgi_dbisn_curims_plo_AFLS_);">None</a> |
+      <a href="javascript:checkbox_select_invert('id_plo_62base_', $cgi_inl_curims_plo_AFLS_, $cgi_dbisn_curims_plo_AFLS_);">Invert</a>
+    </th>
+    <!-- end_cgihtml_ //-->
+  </tr>
+  <!-- end_menu_ //-->
+
+  <!-- start_list_ name=main //-->
+  <tr class="$tld_row_class_">
+    <td align="right">$tld_num_.</td>
+
+  <td>$tld_plo_code_</td>
+  <td>$tld_plo_tag_</td>
+  <td>$tld_plo_description_</td>
+
+    <td class="w3-center">
+      <input class="w3-check" type="checkbox" name="id_plo_62base_$tld_idx_" id="id_plo_62base_$tld_idx_" value="$tld_id_plo_62base_">
+    </td>
+
+  </tr>
+  <!-- end_list_ //-->
+
+  <tr bgcolor="#EEEEEE">
+    <td align="right">...</td>
+
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+
+    <td class="w3-center">
+      <button type="button" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large" onclick="document.tld_view_dynamic.submission_type.value='add_selected'; document.tld_view_dynamic.submit();">Add Selected</button>
+    </td>
+  </tr>
+</table>
+</div>
+
+<!-- <p />
+
+  Items/List: <input name="inl_curims_plo_AFLS" type="text" id="inl_curims_plo_AFLS" value="$inl_curims_plo_AFLS_" size="3">
+  &nbsp;
+
+  <!-s- start_menu_ name=list //-s->
+    dynamic_menu_items_
+  <!-s- end_menu_ //-s->
+  &nbsp;
+
+  List Set Num. :
+  <select name="lsn_curims_plo_AFLS" onChange="document.tld_view_dynamic.submit()">
+    <!-s- select_ name=lsn_curims_plo_AFLS //-s->
+  </select>
+
+  <p /> -->
+
+
+</form>
+<!-- end_view_ //-->
+</body>
+</html>

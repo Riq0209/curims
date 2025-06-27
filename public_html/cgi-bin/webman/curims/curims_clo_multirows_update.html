@@ -1,0 +1,79 @@
+<html>
+<body>
+<!-- start_view_ //-->
+<!-- dynamic_content_ name=link_path //-->
+&gt;
+<!-- start_cgihtml_ //-->
+<b>$cgi_course_clo_</b> 
+&gt; 
+
+<a href="index.cgi?link_id=$cgi_link_id_&task=curims_course_clo_update&button_submit=Cancel">List</a>
+<!-- end_cgihtml_ //-->
+&gt;
+Update
+<p />
+
+<form method="POST" action="./index.cgi">
+<!-- dynamic_content_ name=form_hidden_field //-->
+<div class="w3-container">
+<table class="w3-table" style="width:100%">
+  <colgroup>
+    <col style="width:5%">
+    <col style="width:10%">
+    <col style="width:35%">
+    <col style="width:15%">
+  </colgroup>
+  <tr class="w3-light-grey">
+    <th align="right" valign="top">No. </th>
+    <th valign="top">Clo Code</th>
+
+    <th valign="top">Clo Description</th>
+
+    <th valign="top">T&L Methods</th>
+
+  </tr>
+
+  <!-- start_datahtml_ name=form_db_field //-->
+  <tr>
+  	<td align="right" valign="top">
+  	  <b>$row_num_. </b>
+  	</td>
+
+    <td valign="top">
+      <input class="w3-input w3-border" name="$db_clo_code_$row_idx" type="text" id="$db_clo_code_$row_idx" value="$db_clo_code_$row_idx_" size="10">
+      </br>
+      <font color="#FF0000">$fe_clo_code_$row_idx_</font>
+    </td>
+
+    <td valign="top">
+      <textarea class="w3-input w3-border" name="$db_clo_description_$row_idx" id="$db_clo_description_$row_idx" cols="50" rows="1">$db_clo_description_$row_idx_</textarea>
+      </br>
+      
+    </td>
+
+    <td valign="top">
+      <input class="w3-input w3-border" name="$db_clo_tl_methods_$row_idx" id="$db_clo_tl_methods_$row_idx" value="$db_clo_tl_methods_$row_idx_" type="text">
+      <br>
+  </td>
+
+  </tr>
+  <!-- end_datahtml_ //-->
+
+  <tr>
+    <td style="text-align: right;" colspan="4">
+      <button type="submit" name="button_submit" value="Cancel" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Cancel</button>
+      <button type="submit" name="button_submit" value="Proceed" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large">Proceed</button>
+    </td>
+  </tr>
+</table>
+<small class="w3-text-grey" style="text-align: left; display: block; margin-top: 10px;">
+  <strong>P/S:</strong> Please insert the T&L Methods manually and seperate by ",".
+  <br>
+  <strong>Example:</strong> Active learning, Collaborative Learning, Lab works & Tutorial, Project-based learning, Research-led teaching, Online learning
+</small>
+</div>
+</form>
+
+<!-- end_view_ //-->
+</body>
+</html>

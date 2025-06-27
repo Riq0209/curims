@@ -42,6 +42,21 @@ sub run_Task {
     
     ### DB item dynamic list with multi row insert/update/delete  
     ### operations support need this to behave correctly 
+
+    my $course_id = $cgi->param("id_course_62base");
+
+    # Lookup curriculum_name and intake_session and push combined label to CGI
+    if ($course_id) {
+        $dbu->set_Table("curims_course");
+        my $course_name   = $dbu->get_Item("course_name",   "id_course_62base", $course_id);
+        my $course_code    = $dbu->get_Item("course_code",    "id_course_62base", $course_id);
+
+        my $label = "$course_code - $course_name";
+
+        # Set into CGI so that works in template
+        $cgi->push_Param("course_clo", $label);
+    }
+
     if (!$cgi->param_Exist("task")) {
         $cgi->push_Param("task", "");
     }
@@ -82,7 +97,8 @@ sub customize_TLD {
     my $get_data = undef;
     
     $tld->add_Column("row_class");
-    
+    $tld->add_Column("curims_plo");
+
     my $row_class = "row_odd"; ### HTML CSS class
     
     for ($i = 0; $i < $tld->get_Row_Num; $i++) { 
@@ -102,6 +118,9 @@ sub customize_TLD {
             $row_class = "row_odd";
         }        
         
+        $dbu->set_Table("curims_cloplo");
+        my $count_item = $dbu->count_Item("id_clo_62base", $tld->get_Data($i, "id_clo_62base"));
+        $tld->set_Data($i, "curims_plo", $count_item);
     }
     
     return $tld;

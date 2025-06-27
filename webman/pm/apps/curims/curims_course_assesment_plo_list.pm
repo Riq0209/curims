@@ -45,7 +45,22 @@ sub run_Task {
     #if (!$cgi->param_Exist("task")) {
     #    $cgi->push_Param("task", "");
     #}
+    my $id_course_62base = $cgi->param('id_course_62base');
+    if ($id_course_62base) {
+        $cgi->push_Param('cgi_id_course_62base', $id_course_62base);
+    }
     
+    my $get_data = $cgi->generate_GET_Data("link_id");
+    my @cgi_var_list = $cgi->var_Name;
+    
+    my $submission_type = $cgi->param('submission_type');
+    if ($submission_type && $submission_type eq "parent_list") {
+        $cgi->push_Param("task", "curims_course_assesment_plo_link");
+        if ($id_course_62base) {
+            $get_data .= "&id_course_62base=$id_course_62base";
+        }
+        $cgi->redirect_Page("index.cgi?$get_data");
+    }
     
     $this->SUPER::run_Task();
 }

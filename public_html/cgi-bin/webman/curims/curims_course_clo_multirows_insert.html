@@ -4,7 +4,7 @@
 <!-- dynamic_content_ name=link_path //-->
 &gt;
 <!-- start_cgihtml_ //-->
-<b>???</b> 
+<b>$cgi_course_clo_</b> 
 &gt; 
 <a href="index.cgi?link_id=$cgi_link_id_&task=curims_course_clo_multirows_insert&button_submit=Cancel">List</a>
 <!-- end_cgihtml_ //-->
@@ -16,20 +16,29 @@ Insert
   <!-- start_cgihtml_ //-->
   <input type="hidden" name="link_id" value="$cgi_link_id_">
   <b>Row Number:</b>
-  <input type="text" name="irn_curims_clo" size="3" value="$cgi_irn_curims_clo_">
-  <!-- end_cgihtml_ //-->
+  <div class="w3-container w3-margin-top" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+    <div class="w3-cell">
+      <input class="w3-input w3-border w3-round-large" type="text" name="irn_curims_clo" size="3" value="$cgi_irn_curims_clo_">
+    </div>
+    <div class="w3-cell">
+      <input class="w3-button w3-white w3-border w3-hover-white w3-round-large" name="button_submit" type="submit" id="button_submit" value="Change" />
+    </div>
+  </div>
 
-  <input name="button_submit" type="submit" id="button_submit" value="Change" />
+  <!-- end_cgihtml_ //-->
 </form>
 
 <form method="POST" action="./index.cgi">
 <!-- dynamic_content_ name=form_hidden_field //-->
-<table border="1">
-  <tr>
-    <th align="right" valign="top">Num. </th>
+<div class="w3-container">
+<table class="w3-table">
+  <tr class="w3-light-grey">
+    <th align="right" valign="top">No. </th>
     <th valign="top">Clo Code</th>
 
     <th valign="top">Clo Description</th>
+
+    <th valign="top">T&L Methods</th>
 
   </tr>
 
@@ -39,27 +48,42 @@ Insert
   	  <b>$row_num_. </b>
   	</td>
     <td valign="top">
-      <input name="$db_clo_code_$row_idx" type="text" id="$db_clo_code_$row_idx" value="$db_clo_code_$row_idx_" size="10">
+      <input class="w3-input w3-border" name="$db_clo_code_$row_idx" type="text" id="$db_clo_code_$row_idx" value="$db_clo_code_$row_idx_" size="10">
       </br>
       <font color="#FF0000">$fe_clo_code_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <textarea name="$db_clo_description_$row_idx" id="$db_clo_description_$row_idx" cols="50">$db_clo_description_$row_idx_</textarea>
+      <textarea class="w3-input w3-border" name="$db_clo_description_$row_idx" id="$db_clo_description_$row_idx" cols="50" rows="1">$db_clo_description_$row_idx_</textarea>
       </br>
       
+    </td>
+
+    <td valign="top">
+      <select class="w3-input w3-border" name="$db_clo_tl_methods_$row_idx" id="$db_clo_tl_methods_$row_idx" cols="50" rows="1">
+        <option value="">Select T&L Methods</option>
+        <option value="Active learning">Active learning</option>
+        <option value="Collaborative Learning">Collaborative Learning</option>
+        <option value="Lab works & Tutorial">Lab works & Tutorial</option>
+        <option value="Project-based learning">Project-based learning</option>
+        <option value="Research-led teaching">Research-led teaching</option>
+        <option value="Online learning">Online learning</option>
+      </select>
+      </br>
+
     </td>
 
   </tr>
   <!-- end_datahtml_ //-->
 
   <tr>
-    <td align="right" colspan="3">
-      <input name="button_submit" type="submit" id="button_submit" value="Proceed" />
-      <input name="button_submit" type="submit" id="button_submit" value="Cancel" />
+    <td colspan="4" style="text-align: right;">
+      <button type="submit" name="button_submit" value="Cancel" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Cancel</button>
+      <button type="submit" name="button_submit" value="Proceed" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large">Proceed</button>
     </td>
   </tr>
 </table>
+</div>
 </form>
 
 <!-- end_view_ //-->

@@ -40,12 +40,39 @@ sub run_Task {
     
     my $match_group = $this->match_Group($group_name_, @groups);
     
+    my $total_items = 0;
+
+
+    # Count from curims_course_lecturer
+    my $sql_course_lecturer = "SELECT COUNT(*) FROM curims_course_lecturer";
+    my $sth_course_lecturer = $db_conn->prepare($sql_course_lecturer);
+    $sth_course_lecturer->execute();
+    my ($total_course_lecturer) = $sth_course_lecturer->fetchrow_array();
+    $total_items += $total_course_lecturer if $total_course_lecturer;
+
+
+    $this->set_DB_Items_View_Num("$total_items");
+
     ### DB item list with multi row operations  
     ### support need this to behave correctly 
     #if (!$cgi->param_Exist("task")) {
     #    $cgi->push_Param("task", "");
     #}
-    
+    # 🟢 Get lecturer ID from query param
+    my $lecturer_id = $cgi->param("id_lecturer_62base");
+
+    # Lookup curriculum_name and intake_session and push combined label to CGI
+    if ($lecturer_id) {
+        $dbu->set_Table("curims_lecturer");
+        my $lecturer_name   = $dbu->get_Item("name",   "id_lecturer_62base", $lecturer_id);
+
+        my $label = "$lecturer_name";
+
+        # Set into CGI so that $cgi_cgi_curriculum_name_ works in template
+        $cgi->push_Param("lecturer_course", $label);
+    }
+
+    my $id_lecturer_62base = $cgi->param('id_lecturer_62base');
     
     $this->SUPER::run_Task();
 }

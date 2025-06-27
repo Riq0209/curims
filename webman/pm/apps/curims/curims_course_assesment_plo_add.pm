@@ -100,16 +100,63 @@ sub run_Task {
                 $cgi->param_Shift("\$db_percentage");
             }                
         }
-        
-        ### enable the next 2 code lines to 
-        ### directly going back to the parent list
-        #$cgi->push_Param("task", undef);
-        #$cgi->redirect_Page("index.cgi?$get_data");
-    }    
+
+    }
+
+    ### enable the next 2 code lines to 
+    ### directly going back to the parent list
+    #$cgi->push_Param("task", undef);
+    #$cgi->redirect_Page("index.cgi?$get_data");    
     
     ###########################################################################
+        
+        my $id_assesment_62base = $cgi->param('id_assesment_62base');
+        my $id_course_62base = $cgi->param('id_course_62base');
+        my $total_items = 0;
+        
+        if ($id_assesment_62base && $id_course_62base) {    
+            # First, get the curriculum ID based on the course prefix
+            my $sql_course = "SELECT UPPER(SUBSTRING(TRIM(LEADING FROM course_code), 1, 4)) as course_prefix 
+                             FROM curims_course 
+                             WHERE id_course_62base = ?";
+            my $sth_course = $db_conn->prepare($sql_course);
+            $sth_course->execute($id_course_62base);
+            my $course_data = $sth_course->fetchrow_hashref();
+            $sth_course->finish();
+            
+            if ($course_data && $course_data->{course_prefix}) {
+                # Get curriculum ID using the course prefix
+                my $sql_curriculum = "SELECT id_curriculum_62base 
+                                    FROM curims_curriculum 
+                                    WHERE UPPER(SUBSTRING(TRIM(curriculum_code), 1, 4)) = ?";
+                my $sth_curriculum = $db_conn->prepare($sql_curriculum);
+                $sth_curriculum->execute($course_data->{course_prefix});
+                my $curriculum_data = $sth_curriculum->fetchrow_hashref();
+                $sth_curriculum->finish();
+
+                if ($curriculum_data && $curriculum_data->{id_curriculum_62base}) {
+                    # Count PLOs for this curriculum that are not already in the assessment
+                    my $sql_plo = "SELECT COUNT(*) FROM curims_plo 
+                                 WHERE id_curriculum_62base = $curriculum_data->{id_curriculum_62base}";
+                    my $sth_plo = $db_conn->prepare($sql_plo);
+                    $sth_plo->execute();
+                    ($total_items) = $sth_plo->fetchrow_array();
+                    $sth_plo->finish();
+                }
+                else {
+                    my $sql_plo = "SELECT COUNT(*) FROM curims_plo";
+                    my $sth_plo = $db_conn->prepare($sql_plo);
+                    $sth_plo->execute();
+                    ($total_items) = $sth_plo->fetchrow_array();
+                    $sth_plo->finish();
+                }
+            }
+        }
+        
+        $this->set_DB_Items_View_Num($total_items || 0);
+
     
-    $this->SUPER::run_Task();
+        $this->SUPER::run_Task();
 }
 
 sub process_DYNAMIC { ### TE_TYPE_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELECT, DATAHTML
@@ -174,6 +221,59 @@ sub customize_SQL {
     ### Next to customize the $sql string
     ### ???
     
+    my $id_assesment_62base = $cgi->param('id_assesment_62base');
+    my $id_course_62base = $cgi->param('id_course_62base');
+    
+    if ($id_assesment_62base && $id_course_62base) {
+        # First, get the curriculum ID based on the course prefix
+        my $sql_course = "SELECT UPPER(SUBSTRING(TRIM(LEADING FROM course_code), 1, 4)) as course_prefix 
+                         FROM curims_course 
+                         WHERE id_course_62base = ?";
+        my $sth_course = $db_conn->prepare($sql_course);
+        $sth_course->execute($id_course_62base);
+        my $course_data = $sth_course->fetchrow_hashref();
+        $sth_course->finish();
+        
+        if ($course_data && $course_data->{course_prefix}) {
+            # Get curriculum ID using the course prefix
+            my $sql_curriculum = "SELECT id_curriculum_62base 
+                                FROM curims_curriculum 
+                                WHERE UPPER(SUBSTRING(TRIM(curriculum_code), 1, 4)) = ?";
+            my $sth_curriculum = $db_conn->prepare($sql_curriculum);
+            $sth_curriculum->execute($course_data->{course_prefix});
+            my $curriculum_data = $sth_curriculum->fetchrow_hashref();
+            $sth_curriculum->finish();
+            my $sql_filter;
+            my @sql_part = split(/ order by /i, $sql);
+            my $base_query = $sql_part[0];
+            my $order_by_clause = $sql_part[1] ? "ORDER BY " . $sql_part[1] : "";
+
+            if ($curriculum_data && $curriculum_data->{id_curriculum_62base}) {
+                
+                # Filter PLOs by curriculum
+                $sql_filter = "id_plo_62base IN (
+                    SELECT id_plo_62base FROM curims_plo 
+                    WHERE id_curriculum_62base = '$curriculum_data->{id_curriculum_62base}'
+                    )";
+                
+                if ($base_query =~ / where /i) {
+                    $sql = "$base_query AND ($sql_filter) $order_by_clause";
+                } else {
+                    $sql = "$base_query WHERE $sql_filter $order_by_clause";
+                }
+            } else {
+                # No curriculum filter - show all PLOs
+                $sql = "select * from curims_plo";
+            }
+            
+            # Prepare and execute the statement
+            my $sth = $db_conn->prepare($sql) or die "Cannot prepare: " . $db_conn->errstr();
+            $sth->execute() or die "Cannot execute: " . $sth->errstr();
+            $sql = $sth->{Statement};
+            $sth->finish();
+        }
+    }
+
     return $sql;
 }
 

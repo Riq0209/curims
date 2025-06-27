@@ -31,11 +31,11 @@ Insert
 <form method="POST" action="./index.cgi">
 <!-- dynamic_content_ name=form_hidden_field //-->
 <div class="w3-container" id="flex-container">
-<table class="w3-table" style="width:70%">
+<table class="w3-table" style="width:60%">
   <colgroup>
-    <col style="width: 5%">
+    <col style="width: 2%">
     <col style="width: 10%">
-    <col style="width: 5%">
+    <col style="width: 2%">
     <col style="width: 15%">
 
   </colgroup>
@@ -48,7 +48,7 @@ Insert
 
     <th valign="top">Name</th>
     </tr>
-  </thead>
+  </thead> 
 
   <!-- start_datahtml_ name=form_db_field //-->
   <tr>
@@ -56,13 +56,17 @@ Insert
   	  <b>$row_num_. </b>
   	</td>
     <td valign="top">
-      <input class="w3-input w3-border" name="$db_type_$row_idx" type="text" id="$db_type_$row_idx" value="$db_type_$row_idx_" size="45">
+      <select class="w3-select w3-border" name="$db_type_$row_idx" id="$db_type_$row_idx">
+        <option value="">Select Type</option>
+        <option value="Continous Assessment">Continuous Assessment</option>
+        <option value="Final Assessment">Final Assessment</option>
+      </select>
       </br>
       <font color="#FF0000">$fe_type_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <input class="w3-input w3-border" name="$db_sequence_$row_idx" type="text" id="$db_sequence_$row_idx" value="$db_sequence_$row_idx_" size="11">
+      <input class="w3-input w3-border" name="$db_sequence_$row_idx" type="number" id="$db_sequence_$row_idx" value="$db_sequence_$row_idx_" size="11">
       </br>
       <font color="#FF0000">$fe_sequence_$row_idx_</font>
     </td>

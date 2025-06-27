@@ -42,6 +42,21 @@ sub run_Task {
     
     ### DB item dynamic list with multi row insert/update/delete  
     ### operations support need this to behave correctly 
+
+    my $topic_id = $cgi->param("id_topic_62base");
+
+    # Lookup curriculum_name and intake_session and push combined label to CGI
+    if ($topic_id) {
+        $dbu->set_Table("curims_topic");
+        my $topic_no   = $dbu->get_Item("topic_no",   "id_topic_62base", $topic_id);
+        my $title    = $dbu->get_Item("title",    "id_topic_62base", $topic_id);
+
+        my $label = "Topic $topic_no - $title";
+
+        # Set into CGI so that $cgi_cgi_curriculum_name_ works in template
+        $cgi->push_Param("topic_name", $label);
+    }
+
     if (!$cgi->param_Exist("task")) {
         $cgi->push_Param("task", "");
     }

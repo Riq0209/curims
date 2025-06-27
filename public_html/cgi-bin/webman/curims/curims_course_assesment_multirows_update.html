@@ -14,16 +14,25 @@ Update
 
 <form method="POST" action="./index.cgi">
 <!-- dynamic_content_ name=form_hidden_field //-->
-<table border="1">
-  <tr>
-    <th align="right" valign="top">Num. </th>
+<div class="w3-container" id = "flex-container">
+<table class="w3-table" style="width: 60%;">
+  <colgroup>
+    <col style="width: 2%">
+    <col style="width: 10%">
+    <col style="width: 2%">
+    <col style="width: 15%">
+
+  </colgroup>
+  <thead>
+  <tr class="w3-light-grey">
+    <th align="right" valign="top">No. </th>
     <th valign="top">Type</th>
 
     <th valign="top">Sequence</th>
 
     <th valign="top">Name</th>
-
   </tr>
+  </thead>
 
   <!-- start_datahtml_ name=form_db_field //-->
   <tr>
@@ -32,19 +41,23 @@ Update
   	</td>
 
     <td valign="top">
-      <input name="$db_type_$row_idx" type="text" id="$db_type_$row_idx" value="$db_type_$row_idx_" size="45">
+      <select class="w3-input w3-border" name="$db_type_$row_idx" id="$db_type_$row_idx" value="$db_type_$row_idx_">
+        <option value="">Select Type</option>
+        <option value="Continous Assessment">Continous Assessment</option>
+        <option value="Final Assessment">Final Assessment</option>
+      </select>
       </br>
       <font color="#FF0000">$fe_type_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <input name="$db_sequence_$row_idx" type="text" id="$db_sequence_$row_idx" value="$db_sequence_$row_idx_" size="11">
+      <input class="w3-input w3-border" name="$db_sequence_$row_idx" type="number" id="$db_sequence_$row_idx" value="$db_sequence_$row_idx_">
       </br>
       <font color="#FF0000">$fe_sequence_$row_idx_</font>
     </td>
 
     <td valign="top">
-      <input name="$db_name_$row_idx" type="text" id="$db_name_$row_idx" value="$db_name_$row_idx_" size="50">
+      <input class="w3-input w3-border" name="$db_name_$row_idx" type="text" id="$db_name_$row_idx" value="$db_name_$row_idx_" size="50">
       </br>
       <font color="#FF0000">$fe_name_$row_idx_</font>
     </td>
@@ -53,12 +66,13 @@ Update
   <!-- end_datahtml_ //-->
 
   <tr>
-    <td align="right" colspan="4">
-      <input name="button_submit" type="submit" id="button_submit" value="Proceed"/>
-      <input name="button_submit" type="submit" id="button_submit" value="Cancel"/>
+    <td colspan="4" style="text-align: right;">
+      <button type="submit" name="button_submit" value="Cancel" class="w3-button w3-red w3-text-white w3-hover-red w3-round-large">Cancel</button>
+      <button type="submit" name="button_submit" value="Proceed" class="w3-button w3-green w3-text-white w3-hover-green w3-round-large">Proceed</button>
     </td>
   </tr>
 </table>
+</div>
 </form>
 
 <!-- end_view_ //-->

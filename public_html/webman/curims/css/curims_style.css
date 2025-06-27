@@ -14,6 +14,32 @@ a.w3-button:hover {
     opacity: 0.8; /* Reduce opacity on hover */
 }
 
+.header-nav-bar { 
+    /*background-color: #5c1b1b;*/
+    color: #FDE047;
+    padding: 10px 20px;
+  }
+
+.header-nav-bar a:link {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .header-nav-bar a:visited {
+    color: white;  
+    text-decoration: none;
+  }
+  
+  .header-nav-bar a:hover {
+    color: #FDE047;
+    text-decoration: none;
+  }
+  
+  .header-nav-bar a:active {
+    color: #FDE047;
+    text-decoration: none;
+  }
+
 a:link {color:#0000FF; text-decoration:none;}
 a:visited {color:#0000FF; text-decoration:none;}
 a:hover {color:#0000FF; text-decoration:underline;}

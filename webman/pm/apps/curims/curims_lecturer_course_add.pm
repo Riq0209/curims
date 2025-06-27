@@ -104,7 +104,36 @@ sub run_Task {
     }    
     
     ###########################################################################
-    
+     # 🟢 Get lecturer ID from query param
+    my $lecturer_id = $cgi->param("id_lecturer_62base");
+
+    # Lookup curriculum_name and intake_session and push combined label to CGI
+    if ($lecturer_id) {
+        $dbu->set_Table("curims_lecturer");
+        my $lecturer_name   = $dbu->get_Item("name",   "id_lecturer_62base", $lecturer_id);
+
+        my $label = "$lecturer_name";
+
+        # Set into CGI so that $cgi_cgi_curriculum_name_ works in template
+        $cgi->push_Param("lecturer_name_course", $label);
+    }
+
+    my $id_lecturer_62base = $cgi->param('id_lecturer_62base');
+    my $total_items = 0;
+
+    if ($id_lecturer_62base) {
+        # Count courses available to be added (i.e., not already in this curriculum)
+        my $sql = "SELECT COUNT(*) FROM curims_course 
+                   WHERE id_course_62base NOT IN 
+                       (SELECT id_course_62base FROM curims_course_lecturer 
+                        WHERE id_lecturer_62base = ?)";
+        my $sth = $db_conn->prepare($sql);
+        $sth->execute($id_lecturer_62base);
+        ($total_items) = $sth->fetchrow_array();
+        $sth->finish();
+    }
+
+    $this->set_DB_Items_View_Num($total_items || 0);
     $this->SUPER::run_Task();
 }
 

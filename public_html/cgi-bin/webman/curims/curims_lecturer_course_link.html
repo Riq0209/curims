@@ -107,7 +107,35 @@ List
   // Get the admin flag once and store it globally for the script.
   var admin_flag = <!-- start_cgihtml_ //-->$cgi_is_admin_<!-- end_cgihtml_ //-->
   const IS_ADMIN = parseInt(admin_flag || '0');
-  console.log('DEBUG: The value of IS_ADMIN is:', IS_ADMIN);
+  
+  if (IS_ADMIN === 0) {
+          const actionHeader = document.getElementById('action-header');
+          if (actionHeader) {
+              actionHeader.style.display = 'none';
+          }
+          
+          const tfoot = document.querySelector('tfoot');
+          if (tfoot) {
+              const footerActionCell = tfoot.querySelector('.action-cell');
+              if (footerActionCell) {
+                  footerActionCell.style.display = 'none';
+              }
+          }
+
+          
+          const admin_add = document.getElementById('admin_add');
+          if (admin_add) {
+              admin_add.style.display = 'none';
+          }
+          const action_col = document.getElementById('action-col');
+          if (action_col) {
+              action_col.style.display = 'none';
+          }
+          const admin_edit_delete = document.getElementById('admin_edit_delete');
+          if (admin_edit_delete) {
+              admin_edit_delete.style.display = 'none';
+          }
+      }
   
   
   function updateTable() {
@@ -240,34 +268,6 @@ List
       }
       // On page load, hide the main header and the footer cell if not an admin.
       // The table body cells are handled by updateTable().
-      if (IS_ADMIN === 0) {
-          const actionHeader = document.getElementById('action-header');
-          if (actionHeader) {
-              actionHeader.style.display = 'none';
-          }
-          
-          const tfoot = document.querySelector('tfoot');
-          if (tfoot) {
-              const footerActionCell = tfoot.querySelector('.action-cell');
-              if (footerActionCell) {
-                  footerActionCell.style.display = 'none';
-              }
-          }
-
-          
-          const admin_add = document.getElementById('admin_add');
-          if (admin_add) {
-              admin_add.style.display = 'none';
-          }
-          const action_col = document.getElementById('action-col');
-          if (action_col) {
-              action_col.style.display = 'none';
-          }
-          const admin_edit_delete = document.getElementById('admin_edit_delete');
-          if (admin_edit_delete) {
-              admin_edit_delete.style.display = 'none';
-          }
-      }
   };
   </script>
 </form>
