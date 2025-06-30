@@ -5,7 +5,6 @@
 &gt;
 List
 <p />
-
 <!-- dynamic_content_ name=db_items_num_begin //--> -
 <!-- dynamic_content_ name=db_items_num_end //--> of
 <!-- dynamic_content_ name=db_items_num_total //--> Records.
@@ -46,7 +45,7 @@ List
         <col style="width: 10%">
         <col style="width: 10%">
 <!-- start_cgihtml_ //-->
- $cgi_admin_col_style_
+ $cgi_course_owner_col_style_
  <!-- end_cgihtml_ //-->
        </colgroup>
       <thead>
@@ -94,9 +93,27 @@ List
         </tr>
         <!-- end_list_ //-->
       </tbody>
-      <!-- start_cgihtml_ //-->
-      $cgi_admin_buttons_edit_delete_
-      <!-- end_cgihtml_ //-->
+      <tfoot id="admin-buttons-tfoot">
+        <tr class="w3-light-grey">
+          <td align="right"></td>
+      
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <!-- start_cgihtml_ //-->
+          $cgi_course_owner_td_style_
+          <!-- end_cgihtml_ //-->
+          
+          <td class="w3-center" id="action-button-edit-delete">
+            <!-- start_cgihtml_ //-->
+            <button class="w3-button w3-blue w3-text-white w3-hover-blue w3-round-large" onclick="document.tld_view_dynamic.task.value='curims_course_multirows_update'; document.tld_view_dynamic.submit();">Edit</button> <button class="w3-button w3-red w3-text-white w3-hover-red w3-round-large" onclick="document.tld_view_dynamic.task.value='curims_course_multirows_delete'; document.tld_view_dynamic.submit();">Delete</button>
+            <!-- end_cgihtml_ //-->
+          </td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 <div class="w3-center">
@@ -143,14 +160,19 @@ List
   <b><font color="#557755">]</font></b>
   </div> -->
   <!-- end_cgihtml_ //-->
+   <!-- start_cgihtml_ //-->
   <script>
     let currentPage = 1;
     const ROWS_PER_PAGE = 10;
     let rowsPerPage = ROWS_PER_PAGE;
     
     // Get the admin flag once and store it globally for the script.
-    var admin_flag = <!-- start_cgihtml_ //-->$cgi_is_admin_<!-- end_cgihtml_ //-->
+    var admin_flag = $cgi_is_admin_
     const IS_ADMIN = parseInt(admin_flag || '0');
+
+    var course_owner_flag = $cgi_is_course_owner_
+    const IS_COURSE_OWNER = parseInt(course_owner_flag || '0');
+
     
     function updateTable() {
         const searchInput = document.getElementById("searchInput");
@@ -276,9 +298,13 @@ List
           if (admin_add) {
               admin_add.style.display = 'none';
           }
+          const action_button_edit_delete = document.getElementById('action-button-edit-delete');
+          if (action_button_edit_delete) {
+              action_button_edit_delete.style.display = 'none';
+          }
       }
 
-      if (IS_ADMIN === 0) {
+      if (IS_COURSE_OWNER === 0) {
           document.querySelectorAll('.clo-link-header').forEach(function(el) { el.style.display = 'none'; });
           document.querySelectorAll('.topic-link-header').forEach(function(el) { el.style.display = 'none'; });
           document.querySelectorAll('.assesment-link-header').forEach(function(el) { el.style.display = 'none'; });
@@ -290,6 +316,7 @@ List
         
     };
     </script>
+    <!-- end_cgihtml_ //--> 
 </form>
 <!-- end_view_ //-->
 </body>

@@ -41,16 +41,16 @@ sub run_Task {
     # Define admin buttons HTML
     my $admin_buttons_edit_delete = '';
     my $is_admin_flag = 0;
-    my $admin_col_style = '';
+    my $is_course_owner_flag = 0;
+    my $course_owner_col_style = '';
+    my $course_owner_td_style = '';
     # Check if user is an admin
+    # This @groups is retrieved from parent class webman_CGI_component
+    # which is set by function get_User_Groups
     foreach my $group (@groups) {
         if (lc($group) eq 'admin') {
             $is_admin_flag = 1;
 
-            $admin_col_style = qq|
-            <col style="width: 5%">
-            <col style="width: 5%">
-            <col style="width: 5%">|;
             
             $admin_buttons_edit_delete = qq|
   <tfoot id="admin-buttons-tfoot">
@@ -76,10 +76,29 @@ sub run_Task {
   </tfoot>|;    
             last;
         }
+
+        if (lc($group) eq 'course_owner') {
+            $is_course_owner_flag = 1;
+                       
+            $course_owner_col_style = qq|
+            <col style="width: 5%">
+            <col style="width: 5%">
+            <col style="width: 5%">|;
+
+            $course_owner_td_style = qq|
+            <td></td>
+            <td></td>
+            <td></td>
+            |;
+            last;
+        }
     }
+    
     $cgi->push_Param("admin_buttons_edit_delete", $admin_buttons_edit_delete);
     $cgi->push_Param("is_admin", $is_admin_flag); 
-    $cgi->push_Param("admin_col_style", $admin_col_style); 
+    $cgi->push_Param("course_owner_col_style", $course_owner_col_style); 
+    $cgi->push_Param("is_course_owner", $is_course_owner_flag); 
+    $cgi->push_Param("course_owner_td_style", $course_owner_td_style); 
     my $match_group = $this->match_Group($group_name_, @groups);
 
     # Fetch Total course for the current session
