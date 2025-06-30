@@ -1,0 +1,255 @@
+/*!999999\- enable the sandbox mode */ 
+-- MariaDB dump 10.19-11.4.2-MariaDB, for Win64 (AMD64)
+--
+-- Host: localhost    Database: db_webman
+-- ------------------------------------------------------
+-- Server version	11.4.2-MariaDB
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*M!100616 SET @OLD_NOTE_VERBOSITY=@@NOTE_VERBOSITY, NOTE_VERBOSITY=0 */;
+
+--
+-- Table structure for table `curims_currcourse`
+--
+
+DROP TABLE IF EXISTS `curims_currcourse`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `curims_currcourse` (
+  `id_currcourse_62base` binary(6) NOT NULL,
+  `id_curriculum_62base` binary(6) NOT NULL,
+  `id_course_62base` binary(6) NOT NULL,
+  `year_taken` int(11) DEFAULT NULL,
+  `semester_taken` int(11) DEFAULT NULL,
+  `semester_no` int(11) DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id_currcourse_62base`),
+  KEY `fk_curriculum` (`id_curriculum_62base`),
+  KEY `fk_course` (`id_course_62base`),
+  CONSTRAINT `fk_course` FOREIGN KEY (`id_course_62base`) REFERENCES `curims_course` (`id_course_62base`),
+  CONSTRAINT `fk_curriculum` FOREIGN KEY (`id_curriculum_62base`) REFERENCES `curims_curriculum` (`id_curriculum_62base`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `curims_currcourse`
+--
+
+LOCK TABLES `curims_currcourse` WRITE;
+/*!40000 ALTER TABLE `curims_currcourse` DISABLE KEYS */;
+INSERT INTO `curims_currcourse` (`id_currcourse_62base`, `id_curriculum_62base`, `id_course_62base`, `year_taken`, `semester_taken`, `semester_no`, `status`) VALUES ('0Ii6SK','EoGi6B','VvffOs',4,2,8,'Core'),
+('0S3u8n','ZvA8fl','jx11Su',3,2,6,'Core'),
+('0TI5kO','rPkHvc','5wwGpR',3,1,5,'Core'),
+('0jFPky','RW7vPh','EX6IJ6',4,2,8,'Core'),
+('0rhYR8','ZvA8fl','syGrFk',3,1,5,'General'),
+('0xJV78','ZvA8fl','sQBcE0',1,1,1,'General'),
+('1VAB5X','EoGi6B','haLk5f',4,1,7,'Core'),
+('1gj2eh','Qb4Jeb','f1IwYH',3,2,6,'Core'),
+('1riPV6','ZvA8fl','DYFLof',2,1,3,'Core'),
+('1wbb2D','EoGi6B','f1IwYH',3,2,6,'General'),
+('29LpaM','RW7vPh','f1IwYH',3,1,5,'General'),
+('2HI0Pd','EoGi6B','SaRwqt',4,1,7,'Core'),
+('2jKMKr','RW7vPh','2HPep1',4,1,7,'Core'),
+('2thSdQ','RW7vPh','5dYi4p',4,2,8,'Core'),
+('2ysANL','rPkHvc','7gv4VK',3,2,6,'Core'),
+('3Whcsm','EoGi6B','cqw31D',2,1,3,'Core'),
+('3YGhaB','ZvA8fl','dxaR9H',3,2,6,'Core'),
+('3lZ6pe','RW7vPh','qGh9NH',2,2,4,'General'),
+('4ES0VX','Qb4Jeb','mKquKF',1,2,2,'Core'),
+('4bJnPe','Qb4Jeb','gK7MsX',2,2,4,'Core'),
+('5yMnJA','EoGi6B','tksy5g',3,1,5,'General'),
+('6FAZyP','Qb4Jeb','i59Xns',1,2,2,'Core'),
+('71icYt','rPkHvc','mKquKF',1,2,2,'Core'),
+('7NqAVG','Qb4Jeb','cqw31D',2,1,3,'Core'),
+('7sH9J5','ZvA8fl','YeoLjx',2,2,4,'General'),
+('87cYtp','RW7vPh','APfEcV',1,1,1,'Core'),
+('8PJgi2','EoGi6B','gK7MsX',2,2,4,'Core'),
+('8YYIlH','Qb4Jeb','n0aP0N',4,2,8,'Core'),
+('8jIKsZ','ZvA8fl','lNhaEI',1,1,1,'Core'),
+('8qmCcl','EoGi6B','APfEcV',1,1,1,'Core'),
+('9WolGh','rPkHvc','u2SAHa',1,2,2,'General'),
+('9aVUtX','EoGi6B','lTWF3g',3,1,5,'Elective'),
+('9u3vN1','EoGi6B','5dyHJU',1,1,1,'Core'),
+('A1ZHEn','rPkHvc','cqw31D',2,1,3,'Core'),
+('AFrx45','rPkHvc','sVgf9o',3,2,6,'Elective'),
+('AJOfsZ','EoGi6B','hw9V0i',1,1,1,'General'),
+('AQFdtR','ZvA8fl','f1IwYH',3,2,6,'General'),
+('BDR5sR','rPkHvc','YSsVeJ',2,1,3,'Core'),
+('Bctl4X','EoGi6B','DYFLof',2,1,3,'Core'),
+('BmcgIv','EoGi6B','fIP0UA',3,2,6,'Elective'),
+('C4CTpE','rPkHvc','wCfLka',2,2,4,'Core'),
+('CrwcPs','EoGi6B','Etv49u',4,2,8,'Core'),
+('CtktoX','rPkHvc','fqTDfl',4,1,7,'Core'),
+('CwLNeU','RW7vPh','gK7MsX',2,2,4,'Core'),
+('DSCYBC','Qb4Jeb','0j8N6p',4,2,8,'Core'),
+('DcSLaV','Qb4Jeb','Kls83J',4,2,8,'Core'),
+('EYpt7A','EoGi6B','AcJHjM',1,2,2,'Core'),
+('EddBEU','Qb4Jeb','qGh9NH',2,2,4,'General'),
+('EgQQBc','rPkHvc','H4dnVq',1,2,2,'Core'),
+('FOVRRB','ZvA8fl','H4dnVq',1,2,2,'Core'),
+('Fbc5Nb','ZvA8fl','syGrFk',3,1,5,'General'),
+('Fis0Wt','rPkHvc','f1IwYH',3,2,6,'General'),
+('FkKnFb','EoGi6B','lNhaEI',1,1,1,'Core'),
+('GGZBjI','rPkHvc','tksy5g',3,1,5,'General'),
+('GSGuM6','EoGi6B','qGh9NH',2,2,4,'General'),
+('GXC8ZW','RW7vPh','1Rwwl2',3,1,5,'Elective'),
+('GgCvVO','EoGi6B','0j8N6p',4,2,8,'Core'),
+('HKM9Bo','ZvA8fl','cqw31D',2,1,3,'Core'),
+('HVFEMe','rPkHvc','DYFLof',2,1,3,'Core'),
+('HsdYvm','RW7vPh','syGrFk',3,1,5,'Core'),
+('I8Bar1','Qb4Jeb','YeoLjx',2,2,4,'General'),
+('IBYxkI','ZvA8fl','tfKCcU',1,2,2,'Core'),
+('ILMx5Z','Qb4Jeb','wCfLka',2,2,4,'Core'),
+('IYRLAn','RW7vPh','DYFLof',2,1,3,'Core'),
+('IcYtIU','rPkHvc','5dyHJU',1,1,1,'Core'),
+('IgmJLF','Qb4Jeb','tfKCcU',1,2,2,'Core'),
+('Iq7WXs','RW7vPh','5dyHJU',1,1,1,'Core'),
+('J1Euw0','RW7vPh','qHdw4q',2,2,4,'Elective'),
+('JZHVyV','EoGi6B','i59Xns',2,1,3,'Core'),
+('Jm62xb','Qb4Jeb','9SiKQ5',3,1,5,'Elective'),
+('L1GH6f','RW7vPh','5wwGpR',3,1,5,'Core'),
+('LEhgOX','RW7vPh','OUpWFo',2,1,3,'General'),
+('LHYC4F','Qb4Jeb','DYFLof',2,1,3,'Core'),
+('LeWwG8','EoGi6B','XnG91i',2,2,4,'Elective'),
+('LhtAlM','rPkHvc','I6W4nh',1,2,2,'General'),
+('LsAW7a','EoGi6B','nrMTyA',2,2,4,'Core'),
+('Lt2GMx','Qb4Jeb','I6W4nh',1,2,2,'General'),
+('MEKOta','EoGi6B','u2SAHa',1,2,2,'General'),
+('MffB7j','EoGi6B','wCfLka',2,2,4,'Core'),
+('MnaEeW','rPkHvc','bwaPhq',3,2,6,'General'),
+('N7uGhP','rPkHvc','APfEcV',1,1,1,'Core'),
+('NccieG','rPkHvc','Kls83J',3,2,6,'Core'),
+('PFFE7C','rPkHvc','syGrFk',3,1,5,'General'),
+('QYKKDa','Qb4Jeb','syGrFk',3,1,5,'General'),
+('QaYASy','rPkHvc','0j8N6p',3,2,6,'Core'),
+('Qe1XR2','Qb4Jeb','OUpWFo',2,1,3,'General'),
+('R3P66F','rPkHvc','tfKCcU',1,2,2,'Core'),
+('RAaqha','ZvA8fl','6A5YcI',4,1,7,'Core'),
+('RB8L64','ZvA8fl','YSsVeJ',2,1,3,'Core'),
+('RK2F1s','RW7vPh','H4dnVq',1,2,2,'Core'),
+('Red9Tj','RW7vPh','JLTpGx',2,1,3,'Elective'),
+('Rohkps','RW7vPh','aQiSp3',2,1,3,'Core'),
+('SCooIt','EoGi6B','7lyRpl',2,1,3,'Core'),
+('SaOf7s','Qb4Jeb','lNhaEI',1,1,1,'Core'),
+('Sd19F7','Qb4Jeb','pg0ylu',1,1,1,'General'),
+('SpFvkB','ZvA8fl','bwaPhq',3,2,6,'General'),
+('TSDuCm','ZvA8fl','Kls83J',2,2,4,'Core'),
+('TdW2BI','Qb4Jeb','A90hPP',1,2,2,'Core'),
+('U3YVC5','RW7vPh','bwaPhq',3,2,6,'General'),
+('UsEI0u','rPkHvc','YeoLjx',2,2,4,'General'),
+('V4ZF00','ZvA8fl','OUpWFo',2,1,3,'Core'),
+('V5DTod','ZvA8fl','cVhkPB',3,2,6,'Core'),
+('VD6MLZ','EoGi6B','I6W4nh',1,2,2,'General'),
+('VdYZg7','EoGi6B','YSsVeJ',2,1,3,'Core'),
+('Vg1kYa','ZvA8fl','jX3sm8',2,2,4,'Core'),
+('VthW3g','RW7vPh','7lyRpl',1,2,2,'Core'),
+('WDsYRl','rPkHvc','gK7MsX',2,2,4,'Core'),
+('WU06Sj','EoGi6B','A90hPP',1,2,2,'Core'),
+('WcCGjO','ZvA8fl','VCoHry',2,2,4,'Core'),
+('X61fmv','EoGi6B','Kls83J',4,2,8,'Core'),
+('XMCLCR','rPkHvc','aQiSp3',2,1,3,'Core'),
+('XnU6e7','Qb4Jeb','aQiSp3',2,1,3,'Core'),
+('Y3nceg','Qb4Jeb','APfEcV',1,1,1,'Core'),
+('YGHRRQ','ZvA8fl','7lyRpl',2,1,3,'Core'),
+('YLGEMx','ZvA8fl','wCfLka',2,2,4,'Core'),
+('YsRWnw','RW7vPh','cqw31D',2,1,3,'Core'),
+('Ze3Eph','ZvA8fl','CjfgWZ',4,2,8,'Core'),
+('ZeDbo1','RW7vPh','YSsVeJ',2,1,3,'Core'),
+('akuVNw','ZvA8fl','gK7MsX',2,2,4,'Core'),
+('alVUGK','ZvA8fl','GoE9uH',3,2,6,'Core'),
+('bB5AdK','Qb4Jeb','tksy5g',3,1,5,'General'),
+('bF4aGP','ZvA8fl','qGh9NH',2,2,4,'General'),
+('bdIT0L','rPkHvc','nrMTyA',2,2,4,'Core'),
+('cCyabC','rPkHvc','0O5Gxy',4,2,8,'Core'),
+('cJpuoV','RW7vPh','tfKCcU',1,2,2,'Core'),
+('cKo1HG','rPkHvc','7lyRpl',2,1,3,'Core'),
+('cPGyjJ','ZvA8fl','I6W4nh',1,2,2,'General'),
+('cjEVub','EoGi6B','1B68an',1,1,1,'Core'),
+('dNGq0x','ZvA8fl','mKquKF',1,2,2,'Core'),
+('dOvcWa','Qb4Jeb','5dyHJU',1,1,1,'Core'),
+('dym6p0','RW7vPh','YeoLjx',2,2,4,'General'),
+('fZqlY1','RW7vPh','i59Xns',1,2,2,'Core'),
+('feVCVu','RW7vPh','VYuJLT',4,2,8,'Core'),
+('gCicfK','rPkHvc','Rq3UXS',4,1,7,'Core'),
+('h9fLbV','RW7vPh','EV6QcK',4,1,7,'Core'),
+('hq5QhR','EoGi6B','YeoLjx',2,2,4,'General'),
+('i1j4Y7','Qb4Jeb','a3nATB',3,2,6,'Elective'),
+('iBbDUp','ZvA8fl','nrMTyA',2,2,4,'Core'),
+('iXtejH','ZvA8fl','Q2xGqk',3,1,5,'Core'),
+('iZcqRZ','Qb4Jeb','u2SAHa',1,2,2,'General'),
+('ik6po7','Qb4Jeb','bwaPhq',3,2,6,'Core'),
+('jBovVE','rPkHvc','A90hPP',1,2,2,'Core'),
+('jCV1as','RW7vPh','1B68an',1,1,1,'Core'),
+('jIOWFs','ZvA8fl','u2SAHa',1,2,2,'General'),
+('jTBYja','EoGi6B','syGrFk',3,1,5,'General'),
+('kBIvKS','RW7vPh','0wptQu',4,1,7,'Core'),
+('kREbNL','ZvA8fl','f1IwYH',3,2,6,'General'),
+('kSVKEk','ZvA8fl','5wwGpR',3,1,5,'Core'),
+('kUNMVs','Qb4Jeb','7lyRpl',2,1,3,'Core'),
+('kafSlo','RW7vPh','BlnUB2',3,1,5,'Core'),
+('l8WtVo','Qb4Jeb','qoIsZA',4,1,7,'Core'),
+('lKt9XU','RW7vPh','I6W4nh',1,2,2,'General'),
+('lQemP1','ZvA8fl','i59Xns',1,1,2,'Core'),
+('lZPjnL','Qb4Jeb','1B68an',1,1,1,'Core'),
+('lpcmhp','ZvA8fl','aQiSp3',2,1,3,'Core'),
+('mAIPwN','Qb4Jeb','YSsVeJ',2,1,3,'Core'),
+('mnWyBx','rPkHvc','6E8wts',2,2,4,'Elective'),
+('mpuXgf','RW7vPh','7JDfLG',3,2,6,'Elective'),
+('oLuVQT','rPkHvc','nrMTyA',2,2,4,'Core'),
+('oV8OCN','RW7vPh','PRaLWU',1,1,1,'Core'),
+('oiAgt9','EoGi6B','H4dnVq',1,2,2,'Core'),
+('pNYCTc','Qb4Jeb','1Z1pJK',4,1,7,'Core'),
+('pp1M4f','ZvA8fl','0j8N6p',3,2,6,'Core'),
+('psbE7D','EoGi6B','tfKCcU',1,2,2,'Core'),
+('qIBZVY','RW7vPh','u2SAHa',1,2,2,'General'),
+('qTVOIk','ZvA8fl','VH9Uip',3,1,5,'Core'),
+('qaJa0m','EoGi6B','sQBcE0',1,1,1,'General'),
+('qmNVCp','EoGi6B','aQiSp3',1,2,2,'Core'),
+('qnEfFd','RW7vPh','bctZVM',4,1,7,'Core'),
+('qpfTeq','Qb4Jeb','XVVMcV',4,2,8,'Elective'),
+('riWNHa','ZvA8fl','5dyHJU',1,1,1,'Core'),
+('sbrZ4S','ZvA8fl','tksy5g',3,1,5,'General'),
+('siFw5G','rPkHvc','lNhaEI',1,1,1,'Core'),
+('spopg8','rPkHvc','1B68an',1,1,1,'Core'),
+('srXyEI','Qb4Jeb','H4dnVq',1,2,2,'Core'),
+('t5Pmqy','ZvA8fl','APfEcV',1,1,1,'Core'),
+('tIyDUG','RW7vPh','nrMTyA',2,2,4,'Core'),
+('tf447y','rPkHvc','OUpWFo',2,1,3,'General'),
+('u7KvSc','EoGi6B','bwaPhq',3,2,6,'General'),
+('uVUdZh','EoGi6B','6FAP7B',3,2,6,'Core'),
+('uwBt34','rPkHvc','i59Xns',1,2,2,'Core'),
+('uytGnK','ZvA8fl','1B68an',1,1,1,'Core'),
+('vKuhGg','RW7vPh','pg0ylu',1,1,1,'General'),
+('vLi0JR','rPkHvc','qGh9NH',2,2,4,'General'),
+('w0XBQ3','ZvA8fl','A90hPP',1,2,2,'Core'),
+('w4T7Gp','ZvA8fl','xAADvu',3,1,5,'Core'),
+('wKi0pp','Qb4Jeb','XYKvHF',3,2,6,'Core'),
+('wWBytr','rPkHvc','tGUT4P',4,2,8,'Elective'),
+('wj7iPA','ZvA8fl','IAAJTw',4,1,7,'Core'),
+('wpsCS7','EoGi6B','OUpWFo',2,1,3,'General'),
+('x2TQSR','ZvA8fl','TLgFLH',4,2,8,'Core'),
+('x8JSB7','RW7vPh','A90hPP',1,2,2,'Core'),
+('xu0mtq','Qb4Jeb','6tcpxh',2,2,4,'Elective'),
+('y2dl20','rPkHvc','sQBcE0',1,1,1,'General'),
+('ymhrpn','rPkHvc','vanMg5',3,1,5,'Core');
+/*!40000 ALTER TABLE `curims_currcourse` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
+
+-- Dump completed on 2025-07-01  3:05:20
