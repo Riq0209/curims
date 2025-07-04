@@ -4,31 +4,30 @@
   <meta charset="UTF-8">
   <title>CURIMS Login Page</title>
   <link rel="stylesheet" href="Presentation/Login/login_page.css">
-  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> <!-- Load Vue -->
-  <script src="Service/Login/login_page.js" defer></script>
-
-
 </head>
 
 <body>
 
-<div id="app" class="login-card">
+<div class="login-card">
   <img src="img/utm-logo.png" alt="UTM Logo">
 
   <br>
 
-  <button class="guest-button" type="button" @click="guestLogin">Guest</button>
+  <!-- Guest Button -->
+  <button class="guest-button" type="button" onclick="guestLogin()">Guest</button>
 
-  <form @submit.prevent="submitForm">
+  <!-- Login Form -->
+  <form id="login-form" method="POST" action="index.cgi">
     <div style="text-align: left; font-weight: bold; margin-bottom: 5px;">User ID</div>
-    <input type="text" v-model="login" required>
+    <input type="text" name="login" id="login" required>
 
     <div style="text-align: left; font-weight: bold; margin-top: 15px; margin-bottom: 5px;">Password</div>
-    <input type="password" v-model="password" required>
+    <input type="password" name="password" id="password" required>
 
     <input type="submit" value="Login">
   </form>
 </div>
 
+<script src="Service/Login/login_page.js"></script>
 </body>
 </html>

@@ -383,28 +383,43 @@ sub process_LIST { ### TE_TYPE_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELEC
         $this->add_Content("<div class='w3-panel w3-red'><p>Error fetching lecturer data: $@</p></div>");
     }
 
-    if ($lecturers && @$lecturers) {
-        my $rowspan = @$lecturers + 1;
-        my $lecturer_html = qq{
+    # Always show the table, even if no lecturers found
+    my $rowspan = 2; # Default to 2 (header + 1 empty row) if no lecturers
+    $rowspan = @$lecturers + 1 if ($lecturers && @$lecturers);
+    
+    my $lecturer_html = qq{
 <div class="w3-container">
 <table class="w3-table w3-bordered w3-centered" id="no-rounded-table" style="width:100%">
     <tbody>
         <tr>
-            <td class=" w3-container w3-border" style="font-weight:bold;">Course Synopsis</td>
-            <td class=" w3-container w3-border" style="text-align: left;" colspan="4">$course_synopsis</td>
+            <td class="w3-container w3-border" style="font-weight:bold;">Course Synopsis</td>
+            <td class="w3-container w3-border" style="text-align: left;" colspan="4">$course_synopsis</td>
         </tr>
         <tr>
-            <td class=" w3-container w3-border" style="font-weight:bold;">Course Coordinator</td>
-            <td class=" w3-container w3-border"style="text-align: left;" colspan="4">N/A</td>
+            <td class="w3-container w3-border" style="font-weight:bold;">Course Coordinator</td>
+            <td class="w3-container w3-border" style="text-align: left;" colspan="4">N/A</td>
         </tr>
         <tr>
             <td rowspan="$rowspan" class="w3-border w3-container w3-center" style="font-weight:bold;">Course lecturer(s)</td>
-            <td class=" w3-container w3-border" style="font-weight:bold;">Name</td>
-            <td class=" w3-container w3-border" style="font-weight:bold;">Office</td>
-            <td class=" w3-container w3-border" style="font-weight:bold;">Contact</td>
-            <td class=" w3-container w3-border" style="font-weight:bold;">Email</td>
+            <td class="w3-container w3-border" style="font-weight:bold;">Name</td>
+            <td class="w3-container w3-border" style="font-weight:bold;">Office</td>
+            <td class="w3-container w3-border" style="font-weight:bold;">Contact</td>
+            <td class="w3-container w3-border" style="font-weight:bold;">Email</td>
         </tr>
 };
+
+    # If no lecturers found, add a single row with all dashes
+    unless ($lecturers && @$lecturers) {
+        $lecturer_html .= qq{
+        <tr>
+            <td class="w3-container w3-border">-</td>
+            <td class="w3-container w3-border">-</td>
+            <td class="w3-container w3-border">-</td>
+            <td class="w3-container w3-border">-</td>
+        </tr>
+};
+    } else {
+        # Add rows for each lecturer
         foreach my $lecturer (@$lecturers) {
             my $name    = $lecturer->{name} || '-';
             my $office  = $lecturer->{office} || '-';
@@ -413,30 +428,22 @@ sub process_LIST { ### TE_TYPE_ can be: VIEW, DYNAMIC, LIST, MENU, DBHTML, SELEC
             
             $lecturer_html .= qq{
         <tr>
-            <td class=" w3-container w3-border">$name</td>
-            <td class=" w3-container w3-border">$office</td>
-            <td class=" w3-container w3-border">$contact</td>
-            <td class=" w3-container w3-border">$email</td>
+            <td class="w3-container w3-border">$name</td>
+            <td class="w3-container w3-border">$office</td>
+            <td class="w3-container w3-border">$contact</td>
+            <td class="w3-container w3-border">$email</td>
         </tr>
 };
         }
+    }
 
-        $lecturer_html .= qq{
+    $lecturer_html .= qq{
     </tbody>
 </table>
 </div>
 <br>
 };
-        $this->add_Content($lecturer_html);
-    } else {
-        # If no lecturers are found, display a message.
-        my $no_lecturer_html = qq{
-<div class="w3-container">
-<p>No lecturer information found for this course.</p>
-</div>
-};
-        $this->add_Content($no_lecturer_html);
-    }
+$this->add_Content($lecturer_html);
 
     # --- PLO Mapping Table ---
     my $plo_title = qq{
@@ -495,8 +502,8 @@ Learning (T&L) methods and Assessment methods:</b>
         $this->add_Content("<div class='w3-panel w3-red'><p>Error fetching CLO data: $@</p></div>");
     }
 
-    if ($clos && @$clos) {
-        my $clo_html = qq{
+    # Always show the CLO table, even if no CLOs found
+    my $clo_html = qq{
 <div class="w3-container">
 <table class="w3-table w3-bordered" id="no-rounded-table" style="width:100%">
   <thead>
@@ -509,36 +516,44 @@ Learning (T&L) methods and Assessment methods:</b>
   </thead>
   <tbody>
 };
+
+    if ($clos && @$clos) {
+        # Add rows for each CLO if they exist
         foreach my $clo (@$clos) {
-            my $clo_code = $clo->{clo_code} || 'N/A';
-            my $clo_desc = $clo->{clo_description} || 'N/A';
-            my $plo_code_list = $clo->{plo_code_list} || 'N/A';
-            my $plo_tag_list = $clo->{plo_tag_list} || 'N/A';
-            my $clo_tl_methods = $clo->{clo_tl_methods} || 'N/A';
+            my $clo_code = $clo->{clo_code} || '-';
+            my $clo_desc = $clo->{clo_description} || '-';
+            my $plo_code_list = $clo->{plo_code_list} || '-';
+            my $plo_tag_list = $clo->{plo_tag_list} ? "($clo->{plo_tag_list})" : '';
+            my $clo_tl_methods = $clo->{clo_tl_methods} || '-';
+            
             $clo_html .= qq{
     <tr>
       <td class="w3-container w3-border">$clo_code</td>
       <td class="w3-container w3-border">$clo_desc</td>
-      <td class="w3-container w3-border">$plo_code_list ($plo_tag_list)</td>
+      <td class="w3-container w3-border">$plo_code_list $plo_tag_list</td>
       <td class="w3-container w3-border">$clo_tl_methods</td>
     </tr>
 };
         }
+    } else {
+        # Add a single empty row if no CLOs found
         $clo_html .= qq{
+    <tr>
+      <td class="w3-container w3-border">-</td>
+      <td class="w3-container w3-border">-</td>
+      <td class="w3-container w3-border">-</td>
+      <td class="w3-container w3-border">-</td>
+    </tr>
+};
+    }
+    
+    $clo_html .= qq{
   </tbody>
 </table>
 </div>
 <br>
 };
-        $this->add_Content($clo_html);
-    } else {
-        my $no_clo_html = qq{
-<div class="w3-container">
-<p>No CLOs found for this course.</p>
-</div>
-};
-        $this->add_Content($no_clo_html);
-    }
+$this->add_Content($clo_html);
 
     # --- Weekly Schedule Table ---
     my $schedule_title = qq{
@@ -573,19 +588,22 @@ Learning (T&L) methods and Assessment methods:</b>
         $this->add_Content("<div class='w3-panel w3-red'><p>Error fetching schedule data: $@</p></div>");
     }
 
-    if ($schedule_data && @$schedule_data) {
-        my $schedule_html = qq{
+    # Always show the schedule table, even if no schedule data found
+    my $schedule_html = qq{
 <div class="w3-container">
 <table class="w3-table w3-bordered" id="no-rounded-table" style="width:100%">
   <tbody>
 };
+
+    if ($schedule_data && @$schedule_data) {
+        # Add rows for each schedule item if they exist
         foreach my $item (@$schedule_data) {
-            my $week = $item->{week} || '';
-            my $date_start = $item->{date_start_f} || '';
-            my $date_end = $item->{date_end_f} || '';
-            my $title = $item->{title} || '';
-            my $subtopic = $item->{subtopic} || '';
-            my $info = $item->{info} || '';
+            my $week = $item->{week} || '-';
+            my $date_start = $item->{date_start_f} || '-';
+            my $date_end = $item->{date_end_f} || '-';
+            my $title = $item->{title} || '-';
+            my $subtopic = $item->{subtopic} ? $item->{subtopic} : '-';
+            my $info = $item->{info} || '-';
             $subtopic =~ s/\n/<br>/g; # Replace newlines with <br> for HTML display
 
             $schedule_html .= qq{
@@ -595,21 +613,23 @@ Learning (T&L) methods and Assessment methods:</b>
     </tr>
 };
         }
+    } else {
+        # Add a single empty row if no schedule data found
         $schedule_html .= qq{
+    <tr>
+      <td style="width:20%;" class="w3-container w3-border">Week -<br>--<br>-</td>
+      <td class="w3-container w3-border"><b>-</b><br>-</td>
+    </tr>
+};
+    }
+    
+    $schedule_html .= qq{
   </tbody>
 </table>
 </div>
 <br>
 };
-        $this->add_Content($schedule_html);
-    } else {
-        my $no_schedule_html = qq{
-<div class="w3-container">
-<p>No weekly schedule found for this course.</p>
-</div>
-};
-        $this->add_Content($no_schedule_html);
-    }
+$this->add_Content($schedule_html);
 
     # --- Assessment Table Generation (New Format) ---
     my $assessment_section_title_html = qq{
@@ -644,18 +664,16 @@ Learning (T&L) methods and Assessment methods:</b>
         $sth_assessment->finish();
     };
 
-    if ($@) {
-        $this->add_Content(qq{<div class="w3-panel w3-red w3-padding"><p>Error fetching assessment data: $@</p></div>});
-    } elsif (@assessment_data_raw) {
-        my %assessments_processed;
-        my $grand_total_percentage = 0;
-
+    my $grand_total_percentage = 0;
+    my %assessments_processed;
+    
+    unless ($@) {
         for my $row (@assessment_data_raw) {
             my $ass_id = $row->{id_assesment_62base};
             unless (exists $assessments_processed{$ass_id}) {
                 $assessments_processed{$ass_id} = {
                     id       => $ass_id,
-                    name     => $row->{name} || 'N/A',
+                    name     => $row->{name} || '-',
                     type     => $row->{type} || 'Uncategorized',
                     sequence => $row->{sequence},
                     plo_info => {}, # Hash to store plo_tag => percentage
@@ -679,29 +697,47 @@ Learning (T&L) methods and Assessment methods:</b>
             push @{$data_by_type{$type}}, $ass_info;
         }
 
-        my $assessment_table_html = qq{<div class="w3-container">
+    # Always show the table structure
+    my $assessment_table_html = qq{<div class="w3-container">
 <table class="w3-table w3-bordered" id="no-rounded-table" style="width:100%">
   <tbody>
+    <tr>
+      <th class="w3-container w3-border" style="width:5%;">No.</th>
+      <th class="w3-container w3-border" style="width:45%;">Assessment</th>
+      <th class="w3-container w3-border w3-center" style="width:25%;">PLO</th>
+      <th class="w3-container w3-border w3-center" style="width:25%;">Percentage</th>
+    </tr>
 };
-        my $has_content = 0;
 
+    my $has_content = 0;
+    
+    if (%assessments_processed) {
+        my %data_by_type;
+        my @sorted_assessment_ids = sort {
+            ($assessments_processed{$a}{type} cmp $assessments_processed{$b}{type}) ||
+            ($assessments_processed{$a}{sequence} <=> $assessments_processed{$b}{sequence})
+        } keys %assessments_processed;
+
+        for my $ass_id (@sorted_assessment_ids) {
+            my $ass_info = $assessments_processed{$ass_id};
+            my $type = $ass_info->{type};
+            push @{$data_by_type{$type} ||= []}, $ass_info;
+        }
+
+        my $item_number = 1;
         for my $type (sort keys %data_by_type) {
             my $assessments_in_type = $data_by_type{$type};
             if ($assessments_in_type && @$assessments_in_type) {
                 $has_content = 1;
                 $assessment_table_html .= qq{
     <tr>
-      <th class="w3-container w3-border" style="width:5%;">No.</th>
-      <th class="w3-container w3-border" style="width:45%;">$type</th>
-      <th class="w3-container w3-border w3-center" style="width:25%;">PLO</th>
-      <th class="w3-container w3-border w3-center" style="width:25%;">Percentage</th>
+      <td colspan="4" class="w3-container w3-border" style="font-weight:bold; background-color:#f1f1f1;">$type</td>
     </tr>
 };
-                my $item_number = 1;
                 foreach my $ass_info (@$assessments_in_type) {
                     my @plo_tags = sort keys %{$ass_info->{plo_info}};
-                    my $plo_tags_str;
-                    my $percentages_str;
+                    my $plo_tags_str = '-';
+                    my $percentages_str = '-';
 
                     if (@plo_tags) {
                         my @percentages;
@@ -711,15 +747,12 @@ Learning (T&L) methods and Assessment methods:</b>
                         }
                         $plo_tags_str = join("<br>", @plo_tags);
                         $percentages_str = join("<br>", @percentages);
-                    } else {
-                        $plo_tags_str = '-';
-                        $percentages_str = '-';
                     }
 
                     $assessment_table_html .= qq{
     <tr>
       <td class="w3-center w3-border w3-container">$item_number</td>
-      <td class="w3-border w3-container">} . ($ass_info->{name} || 'N/A') . qq{</td>
+      <td class="w3-border w3-container">} . ($ass_info->{name} || '-') . qq{</td>
       <td class="w3-center w3-border w3-container">$plo_tags_str</td>
       <td class="w3-center w3-border w3-container">$percentages_str</td>
     </tr>
@@ -728,9 +761,22 @@ Learning (T&L) methods and Assessment methods:</b>
                 }
             }
         }
+    }
 
-        if ($has_content) {
-            $assessment_table_html .= qq{
+    # Add empty row if no content
+    unless ($has_content) {
+        $assessment_table_html .= qq{
+    <tr>
+      <td class="w3-center w3-border w3-container">-</td>
+      <td class="w3-border w3-container">-</td>
+      <td class="w3-center w3-border w3-container">-</td>
+      <td class="w3-center w3-border w3-container">-</td>
+    </tr>
+};
+    }
+
+    # Always add grand total row
+    $assessment_table_html .= qq{
     <tr>
       <td colspan="3" class="w3-right-align w3-padding w3-container w3-border"><b>Grand Total</b></td>
       <td class="w3-center w3-padding w3-container w3-border"><b>$grand_total_percentage%</b></td>
@@ -740,19 +786,15 @@ Learning (T&L) methods and Assessment methods:</b>
 </div>
 <br>
 };
-            my $print_container_end = qq{
-</div>
-};
-            $this->add_Content($assessment_table_html);
-            # $this->add_Content($print_container_end);
-        } else {
-             $this->add_Content(qq{<div class="w3-container"><p>No assessment data found for this course.</p></div><br>});
-        }
-    } else {
-        $this->add_Content(qq{<div class="w3-container"><p>No assessment data found for this course.</p></div><br>});
+    $this->add_Content($assessment_table_html);
+    
+    if ($@) {
+        $this->add_Content(qq{<div class="w3-panel w3-red w3-padding"><p>Error fetching assessment data: $@</p></div>});
     }
 
 
+
+}
 
 }
 

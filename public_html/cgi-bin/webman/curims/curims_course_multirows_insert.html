@@ -93,38 +93,7 @@ Insert
       
       <br>
       <font color="#FF0000">$fe_course_name_$row_idx_</font>
-      
-      <script>
-      // Initialize on page load
-      document.addEventListener('DOMContentLoaded', function() {
-        var currentValue = "$db_course_name_$row_idx_";
-        if (currentValue.includes("Elective Courses - Choose")) {
-          document.getElementById('course_type_$row_idx').value = 'elective';
-          var count = currentValue.split("Choose ")[1];
-          document.getElementById('elective_count_$row_idx').value = count;
-          toggleCourseInput('$row_idx');
-        }
-      });
-      
-      function toggleCourseInput(rowIdx) {
-        var courseType = document.getElementById('course_type_' + rowIdx).value;
-        if (courseType === 'normal') {
-          document.getElementById('normal_input_' + rowIdx).style.display = 'block';
-          document.getElementById('elective_input_' + rowIdx).style.display = 'none';
-        } else {
-          document.getElementById('normal_input_' + rowIdx).style.display = 'none';
-          document.getElementById('elective_input_' + rowIdx).style.display = 'block';
-          updateElectiveValue(rowIdx);
-        }
-      }
-      
-      function updateElectiveValue(rowIdx) {
-        var count = document.getElementById('elective_count_' + rowIdx).value;
-        if (count) {
-          document.getElementById('$db_course_name_' + rowIdx).value = 'Elective Courses - Choose ' + count;
-        }
-      }
-      </script>
+
     </td>
 
     <td valign="top">
@@ -168,8 +137,15 @@ Insert
     </td>
 
     <td valign="top">
-      <textarea class="w3-input w3-border" name="$db_course_synopsis_$row_idx" type="text" id="$db_course_synopsis_$row_idx" value="$db_course_synopsis_$row_idx_" size="50" rows="1"></textarea>
-    </td>
+      <div id="course_synopsis_input_$row_idx">
+          <textarea class="w3-input w3-border" name="$db_course_synopsis_$row_idx" id="$db_course_synopsis_$row_idx" rows="1" placeholder="Enter course synopsis..."></textarea>
+      </div>
+  
+      <div id="course_synopsis_disabled_$row_idx" style="display:none;">
+          <textarea class="w3-input w3-border w3-light-grey" disabled rows="1" placeholder="No synopsis available for this course"></textarea>
+      </div>
+      </br>
+  </td>
 
   </tr>
   <!-- end_datahtml_ //-->
@@ -186,6 +162,64 @@ Insert
   Insert elective course code format example: SECJ3XXX for SECJ3104, SECJ3303, SECJ3323.
 </small>
 </div>
+
+<script>
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    var currentValue = "$db_course_name_$row_idx_";
+    if (currentValue.includes("Elective Courses - Choose")) {
+      document.getElementById('course_type_$row_idx').value = 'elective';
+      var count = currentValue.split("Choose ")[1];
+      document.getElementById('elective_count_$row_idx').value = count;
+      toggleCourseInput('$row_idx');
+    }
+  });
+  
+  function toggleCourseInput(rowIdx) {
+    var courseType = document.getElementById('course_type_' + rowIdx).value;
+    if (courseType === 'normal') {
+      document.getElementById('normal_input_' + rowIdx).style.display = 'block';
+      document.getElementById('elective_input_' + rowIdx).style.display = 'none';
+    } else {
+      document.getElementById('normal_input_' + rowIdx).style.display = 'none';
+      document.getElementById('elective_input_' + rowIdx).style.display = 'block';
+      updateElectiveValue(rowIdx);
+    }
+  }
+  
+  function updateElectiveValue(rowIdx) {
+    var count = document.getElementById('elective_count_' + rowIdx).value;
+    if (count) {
+      document.getElementById('$db_course_name_' + rowIdx).value = 'Elective Courses - Choose ' + count;
+    }
+  }
+
+  function toggleCourseInput(rowIdx) {
+        var courseType = document.getElementById('course_type_' + rowIdx).value;
+        
+        // Toggle course name inputs
+        if (courseType === 'normal') {
+          document.getElementById('normal_input_' + rowIdx).style.display = 'block';
+          document.getElementById('elective_input_' + rowIdx).style.display = 'none';
+          // Toggle prerequisite inputs
+          document.getElementById('prereq_normal_input_' + rowIdx).style.display = 'block';
+          document.getElementById('prereq_elective_input_' + rowIdx).style.display = 'none';
+          //toggle course synopsis input
+          document.getElementById('course_synopsis_input_' + rowIdx).style.display = 'block';
+          document.getElementById('course_synopsis_disabled_' + rowIdx).style.display = 'none';
+        } else {
+          document.getElementById('normal_input_' + rowIdx).style.display = 'none';
+          document.getElementById('elective_input_' + rowIdx).style.display = 'block';
+          // Toggle prerequisite inputs
+          document.getElementById('prereq_normal_input_' + rowIdx).style.display = 'none';
+          document.getElementById('prereq_elective_input_' + rowIdx).style.display = 'block';
+          //toggle course synopsis input
+          document.getElementById('course_synopsis_input_' + rowIdx).style.display = 'none';
+          document.getElementById('course_synopsis_disabled_' + rowIdx).style.display = 'block';
+          updateElectiveValue(rowIdx);
+        }
+      }
+  </script>
 </form>
 <!-- end_view_ //-->
 </body>

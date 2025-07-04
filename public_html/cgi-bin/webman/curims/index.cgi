@@ -268,6 +268,9 @@ if ($session_id == -1) {
     
     $dbu->set_Table("webman_" . $app_name . "_user_group");
     my @groups = $dbu->get_Items("group_name", "login_name", "$login");
+
+    $dbu->set_Table("webman_" . $app_name . "_user");
+    my $user_type = $dbu->get_Item("description", "login_name", "$login");#2025
     
     my $user_groups = undef;
     foreach my $item (@groups) {
@@ -278,6 +281,7 @@ if ($session_id == -1) {
     #$content =~ s/\$user_full_name_/$user_full_name/;
     $content =~ s/\$user_full_name_/$user_full_name/g;
     $content =~ s/\$user_groups_/$user_groups/;
+    $content =~ s/\$user_type_/$user_type/;#2025
     
     $content = &process_Main_Template_Dynamic_Info($content);   
 }
