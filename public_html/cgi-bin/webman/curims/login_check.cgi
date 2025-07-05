@@ -1,4 +1,4 @@
-#! #!/usr/bin/perl
+#! /usr/bin/perl
 
 unshift (@INC, "../../../../webman/pm/core");
 unshift (@INC, "../../../../webman/pm/comp");

@@ -1,4 +1,4 @@
-#! #!/usr/bin/perl
+#! /usr/bin/perl
 
 my $perl_bin_path_latest = $ARGV[0];
 
