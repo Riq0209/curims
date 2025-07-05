@@ -1,4 +1,4 @@
-#! C:/xampp/perl/bin/perl
+#! #!/usr/bin/perl
 
 unshift (@INC, "./pm/cli_tool");
 unshift (@INC, "./pm/core");

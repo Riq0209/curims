@@ -1,0 +1,20 @@
+# .gitignore
+# Ignore system files
+*.swp
+*.log
+.DS_Store
+Thumbs.db
+
+# Ignore editor configs
+.vscode/
+.idea/
+
+# Ignore database dumps or compiled binaries
+*.db
+*.bak
+*.tar
+*.zip
+
+# Ignore local dev tools
+node_modules/
+.env

@@ -1,4 +1,4 @@
-#! C:/xampp/perl/bin/perl
+#! #!/usr/bin/perl
 
 print("Content-Type: text/plain\n\n");
 
