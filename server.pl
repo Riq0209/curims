@@ -10,7 +10,7 @@ my $app = builder {
     mount "/" => Plack::App::File->new(root => "./public_html")->to_app;
 
     # Serve CGI scripts from cgi-bin
-    mount "/cgi-bin" => Plack::App::CGIBin->new(root => "./public_html/cgi-bin");
+   mount "/cgi-bin" => Plack::App::CGIBin->new(root => "./public_html/cgi-bin");
 };
 
 $app;

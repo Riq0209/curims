@@ -11,7 +11,7 @@ WORKDIR /app
 COPY . .
 
 # Ensure CGI scripts are executable
-RUN chmod -R +x public_html/cgi-bin
+RUN chmod +x public_html/cgi-bin/webman/test.cgi
 
 # Expose port for Railway (default 3000)
 EXPOSE 3000
